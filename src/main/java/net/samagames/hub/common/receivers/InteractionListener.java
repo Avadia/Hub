@@ -19,18 +19,15 @@ import net.samagames.hub.Hub;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class InteractionListener implements IPacketsReceiver
-{
+public class InteractionListener implements IPacketsReceiver {
     private final Hub hub;
 
-    public InteractionListener(Hub hub)
-    {
+    public InteractionListener(Hub hub) {
         this.hub = hub;
     }
 
     @Override
-    public void receive(String channel, String packet)
-    {
+    public void receive(String channel, String packet) {
         /*String type = packet.split(":")[0];
         String playerName = packet.split(":")[1];
 

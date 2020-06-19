@@ -1,11 +1,7 @@
 package net.samagames.hub.npcs;
 
 import net.samagames.tools.tutorials.Tutorial;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.function.BiConsumer;
 
@@ -25,18 +21,15 @@ import java.util.function.BiConsumer;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class NPCTutorial extends Tutorial
-{
+class NPCTutorial extends Tutorial {
     private BiConsumer<Player, Boolean> consumer;
 
     @Override
-    protected void onTutorialEnds(Player player, boolean interrupted)
-    {
+    protected void onTutorialEnds(Player player, boolean interrupted) {
         this.consumer.accept(player, interrupted);
     }
 
-    public void onTutorialEnds(BiConsumer<Player, Boolean> consumer)
-    {
+    public void onTutorialEnds(BiConsumer<Player, Boolean> consumer) {
         this.consumer = consumer;
     }
 }

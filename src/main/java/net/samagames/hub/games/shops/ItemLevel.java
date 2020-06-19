@@ -16,31 +16,26 @@ package net.samagames.hub.games.shops;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class ItemLevel
-{
+class ItemLevel {
     private final int storageId;
     private final String description;
     private final int cost;
 
-    ItemLevel(int storageId, String description, int cost)
-    {
+    ItemLevel(int storageId, String description, int cost) {
         this.storageId = storageId;
         this.description = description;
         this.cost = cost;
     }
 
-    public int getStorageId()
-    {
+    public int getStorageId() {
         return this.storageId;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.description;
     }
 
-    public int getCost()
-    {
+    public int getCost() {
         return this.cost;
     }
 }

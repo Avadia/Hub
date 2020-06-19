@@ -3,7 +3,7 @@ package net.samagames.hub.cosmetics.particles.effects;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 
 import java.util.Random;
 
@@ -23,12 +23,10 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class MusicEffect extends Effect
-{
-    private Random random;
+public class MusicEffect extends Effect {
+    private final Random random;
 
-    public MusicEffect(EffectManager effectManager)
-    {
+    public MusicEffect(EffectManager effectManager) {
         super(effectManager);
         this.type = EffectType.REPEATING;
         this.period = 4;
@@ -37,12 +35,10 @@ public class MusicEffect extends Effect
         this.random = new Random();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void onRun()
-    {
+    public void onRun() {
         double dx = this.random.nextDouble() % 0.2F;
         double dz = this.random.nextDouble() % 0.2F;
-        ParticleEffect.NOTE.display(this.getEntity().getLocation().add(dx, 2D, dz), visibleRange, 0, 0, 0, .5F, 1);
+        display(Particle.NOTE, this.getEntity().getLocation().add(dx, 2D, dz));
     }
 }

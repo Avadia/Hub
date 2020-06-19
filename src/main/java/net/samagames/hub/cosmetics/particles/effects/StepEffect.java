@@ -1,15 +1,14 @@
 package net.samagames.hub.cosmetics.particles.effects;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.util.Vector;
-
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
 import de.slikey.effectlib.util.VectorUtils;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 /*
  * This file is part of Hub.
@@ -27,13 +26,11 @@ import de.slikey.effectlib.util.VectorUtils;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class StepEffect extends Effect
-{
+public class StepEffect extends Effect {
     private boolean p = false;
     private Location last = null;
 
-    public StepEffect(EffectManager effectManager)
-    {
+    public StepEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
         period = 4;
@@ -42,8 +39,7 @@ public class StepEffect extends Effect
     }
 
     @Override
-    public void onRun()
-    {
+    public void onRun() {
         // Prevents an excess of particles
         if (last != null && last.getX() == getEntity().getLocation().getX() && last.getZ() == getEntity().getLocation().getZ())
             return;
@@ -58,10 +54,9 @@ public class StepEffect extends Effect
             loc.setY(block.getY());
             loc = loc.add(0, 1 + Math.random() / 100, 0);
             Vector dir = VectorUtils.rotateAroundAxisY(getEntity().getLocation().getDirection().setY(0).normalize(), p ? 90 : -90).multiply(0.25);
-            display(ParticleEffect.FOOTSTEP, loc.add(dir.getX(), 0, dir.getZ()), 7, 0);
+            display(Particle.FOOTSTEP, loc.add(dir.getX(), 0, dir.getZ()), 7, 0);
 
             p = !p;
         }
     }
-
 }

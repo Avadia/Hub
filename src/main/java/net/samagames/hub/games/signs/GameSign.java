@@ -6,7 +6,6 @@ import net.samagames.api.parties.IParty;
 import net.samagames.hub.Hub;
 import net.samagames.hub.games.AbstractGame;
 import net.samagames.hub.utils.RestrictedVersion;
-import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
@@ -33,9 +32,7 @@ import java.util.concurrent.TimeUnit;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GameSign
-{
-    private final Hub hub;
+public class GameSign {
     private final AbstractGame game;
     private final String map;
     private final ChatColor color;
@@ -54,9 +51,7 @@ public class GameSign
     private int playerWaitFor;
     private int totalPlayerOnServers;
 
-    public GameSign(Hub hub, AbstractGame game, String map, ChatColor color, String template, RestrictedVersion restrictedVersion, Sign sign)
-    {
-        this.hub = hub;
+    public GameSign(Hub hub, AbstractGame game, String map, ChatColor color, String template, RestrictedVersion restrictedVersion, Sign sign) {
         this.game = game;
         this.map = map;
         this.color = color;
@@ -72,15 +67,30 @@ public class GameSign
         this.updateTask = hub.getServer().getScheduler().runTaskTimerAsynchronously(hub, this::update, 20L, 20L);
     }
 
-    public void onDelete()
-    {
+    public static void addToQueue(Player player, String template) {
+        Bukkit.getScheduler().runTaskAsynchronously(Hub.getInstance(), () ->
+        {
+            IParty party = SamaGamesAPI.get().getPartiesManager().getPartyForPlayer(player.getUniqueId());
+
+            if (party == null) {
+                Hub.getInstance().getHydroangeasManager().addPlayerToQueue(player.getUniqueId(), template);
+            } else {
+                if (!party.getLeader().equals(player.getUniqueId())) {
+                    player.sendMessage(ChatColor.RED + "Vous n'êtes pas le leader de votre partie, vous ne pouvez donc pas l'ajouter dans une file d'attente.");
+                    return;
+                }
+
+                Hub.getInstance().getHydroangeasManager().addPartyToQueue(player.getUniqueId(), party.getParty(), template);
+            }
+        });
+    }
+
+    public void onDelete() {
         this.updateTask.cancel();
     }
 
-    public void update()
-    {
-        if (this.isSoon)
-        {
+    public void update() {
+        if (this.isSoon) {
             this.sign.setLine(0, "-*--*-");
             this.sign.setLine(1, "Prochainement");
             this.sign.setLine(2, "...");
@@ -90,8 +100,7 @@ public class GameSign
             return;
         }
 
-        if (this.isMaintenance)
-        {
+        if (this.isMaintenance) {
             this.sign.setLine(0, "");
             this.sign.setLine(1, ChatColor.DARK_RED + "Jeu en");
             this.sign.setLine(2, ChatColor.DARK_RED + "maintenance !");
@@ -111,9 +120,8 @@ public class GameSign
         this.updateSign();
     }
 
-    public void updateSign()
-    {
-        IChatBaseComponent[] lines = new IChatBaseComponent[] {
+    public void updateSign() {
+        IChatBaseComponent[] lines = new IChatBaseComponent[]{
                 new ChatComponentText(this.sign.getLine(0)),
                 new ChatComponentText(this.sign.getLine(1)),
                 new ChatComponentText(this.sign.getLine(2)),
@@ -134,19 +142,16 @@ public class GameSign
         this.sign.getWorld().getNearbyEntities(this.sign.getLocation(), 30, 30, 30).stream().filter(entity -> entity instanceof Player).forEach(entity -> ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet));
     }
 
-    public void updateMapName()
-    {
+    public void updateMapName() {
         this.sign.setLine(1, this.color + "» " + ChatColor.BOLD + this.scrolledMapName + ChatColor.RESET + this.color + " «");
         this.updateSign();
     }
 
-    public void scrollMapName()
-    {
+    public void scrollMapName() {
         if (this.isMaintenance || this.isSoon)
             return;
 
-        if (this.map.length() <= 10)
-        {
+        if (this.map.length() <= 10) {
             this.scrolledMapName = this.map;
             return;
         }
@@ -154,14 +159,12 @@ public class GameSign
         int start = this.scrollIndex;
         int end = this.scrollIndex + 10;
 
-        if (end > this.map.length())
-        {
+        if (end > this.map.length()) {
             this.scrollVector = -1;
             this.scrollIndex = this.map.length() - 10;
             return;
         }
-        if (start < 0)
-        {
+        if (start < 0) {
             this.scrollVector = 1;
             this.scrollIndex = 0;
             return;
@@ -173,33 +176,23 @@ public class GameSign
         this.updateMapName();
     }
 
-    public void click(Player player)
-    {
-        if (this.isSoon)
-        {
+    public void click(Player player) {
+        if (this.isSoon) {
             player.sendMessage(ChatColor.RED + "Ce jeu n'est pas encore disponible.");
             return;
-        }
-        else if (this.isMaintenance)
-        {
+        } else if (this.isMaintenance) {
             player.sendMessage(ChatColor.RED + "Ce jeu est actuellement en maintenance.");
             return;
         }
 
-        if (this.restrictedVersion != null && !this.restrictedVersion.canAccess(player))
-        {
+        if (this.restrictedVersion != null && !this.restrictedVersion.canAccess(player)) {
             player.sendMessage(ChatColor.RED + "Vous ne pouvez pas jouer à ce jeu avec votre version de Minecraft actuelle !");
 
-            if (this.restrictedVersion.getOperator() == RestrictedVersion.Operator.EQUALS)
-            {
+            if (this.restrictedVersion.getOperator() == RestrictedVersion.Operator.EQUALS) {
                 player.sendMessage(ChatColor.RED + "Veuillez utiliser la version " + this.restrictedVersion.getLiteralVersion() + " pour pouvoir jouer.");
-            }
-            else if (this.restrictedVersion.getOperator() == RestrictedVersion.Operator.GREATER_OR_EQUALS)
-            {
+            } else if (this.restrictedVersion.getOperator() == RestrictedVersion.Operator.GREATER_OR_EQUALS) {
                 player.sendMessage(ChatColor.RED + "Veuillez utiliser une version supérieure ou égale à la version " + this.restrictedVersion.getLiteralVersion() + " pour pouvoir jouer.");
-            }
-            else if (this.restrictedVersion.getOperator() == RestrictedVersion.Operator.LESS_OR_EQUALS)
-            {
+            } else if (this.restrictedVersion.getOperator() == RestrictedVersion.Operator.LESS_OR_EQUALS) {
                 player.sendMessage(ChatColor.RED + "Veuillez utiliser une version inférieure ou égale à la version " + this.restrictedVersion.getLiteralVersion() + " pour pouvoir jouer.");
             }
 
@@ -212,31 +205,7 @@ public class GameSign
         addToQueue(player, template);
     }
 
-    public static void addToQueue(Player player, String template)
-    {
-        Bukkit.getScheduler().runTaskAsynchronously(Hub.getInstance(), () ->
-        {
-            IParty party = SamaGamesAPI.get().getPartiesManager().getPartyForPlayer(player.getUniqueId());
-
-            if (party == null)
-            {
-                Hub.getInstance().getHydroangeasManager().addPlayerToQueue(player.getUniqueId(), template);
-            }
-            else
-            {
-                if (!party.getLeader().equals(player.getUniqueId()))
-                {
-                    player.sendMessage(ChatColor.RED + "Vous n'êtes pas le leader de votre partie, vous ne pouvez donc pas l'ajouter dans une file d'attente.");
-                    return;
-                }
-
-                Hub.getInstance().getHydroangeasManager().addPartyToQueue(player.getUniqueId(), party.getParty(), template);
-            }
-        });
-    }
-
-    public void developperClick(Player player)
-    {
+    public void developperClick(Player player) {
         player.sendMessage(ChatColor.GOLD + "----------------------------------------");
         player.sendMessage(ChatColor.GOLD + "Informations du panneau de jeu :");
         player.sendMessage(ChatColor.GOLD + "> " + ChatColor.AQUA + "Template : " + ChatColor.GREEN + this.template);
@@ -249,54 +218,44 @@ public class GameSign
         player.sendMessage(ChatColor.GOLD + "----------------------------------------");
     }
 
-    public void setPlayerPerGame(int playerPerGame)
-    {
+    public void setPlayerPerGame(int playerPerGame) {
         this.playerPerGame = playerPerGame;
     }
 
-    public void setPlayerWaitFor(int playerWaitFor)
-    {
+    public void setPlayerWaitFor(int playerWaitFor) {
         this.playerWaitFor = playerWaitFor;
     }
 
-    public void setTotalPlayerOnServers(int totalPlayerOnServers)
-    {
-        this.totalPlayerOnServers = totalPlayerOnServers;
-    }
-
-    public void setMaintenance(boolean isMaintenance)
-    {
+    public void setMaintenance(boolean isMaintenance) {
         this.isMaintenance = isMaintenance;
         this.update();
     }
 
-    public Sign getSign()
-    {
+    public Sign getSign() {
         return this.sign;
     }
 
-    public String getTemplate()
-    {
+    public String getTemplate() {
         return this.template;
     }
 
-    public String getMap()
-    {
+    public String getMap() {
         return this.map;
     }
 
-    public ChatColor getColor()
-    {
+    public ChatColor getColor() {
         return this.color;
     }
 
-    public int getTotalPlayerOnServers()
-    {
+    public int getTotalPlayerOnServers() {
         return this.totalPlayerOnServers;
     }
 
-    public void setSoon(boolean isSoon)
-    {
+    public void setTotalPlayerOnServers(int totalPlayerOnServers) {
+        this.totalPlayerOnServers = totalPlayerOnServers;
+    }
+
+    public void setSoon(boolean isSoon) {
         this.isSoon = isSoon;
         this.update();
     }

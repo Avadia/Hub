@@ -28,29 +28,23 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class RainbowWalkDisplayer extends AbstractDisplayer
-{
-    public RainbowWalkDisplayer(Hub hub, Player player)
-    {
+public class RainbowWalkDisplayer extends AbstractDisplayer {
+    public RainbowWalkDisplayer(Hub hub, Player player) {
         super(hub, player);
     }
 
     @Override
-    public void display()
-    {
-        new BukkitRunnable()
-        {
+    public void display() {
+        new BukkitRunnable() {
             private int times = 0;
 
+            @SuppressWarnings("deprecation")
             @Override
-            public void run()
-            {
-                if (this.times < 50)
-                {
+            public void run() {
+                if (this.times < 50) {
                     Block block = RainbowWalkDisplayer.this.player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
-                    if (block.getType() != Material.AIR && !RainbowWalkDisplayer.this.isBlockGloballyUsed(block.getLocation()))
-                    {
+                    if (block.getType() != Material.AIR && !RainbowWalkDisplayer.this.isBlockGloballyUsed(block.getLocation())) {
                         SimpleBlock simpleBlock = new SimpleBlock(Material.STAINED_CLAY, DyeColor.values()[new Random().nextInt(DyeColor.values().length)].getWoolData());
                         RainbowWalkDisplayer.this.addBlockToUse(block.getLocation(), simpleBlock);
 
@@ -59,9 +53,7 @@ public class RainbowWalkDisplayer extends AbstractDisplayer
 
                         RainbowWalkDisplayer.this.hub.getServer().getScheduler().runTaskLater(RainbowWalkDisplayer.this.hub, () -> RainbowWalkDisplayer.this.restore(block.getLocation()), 20L * 5);
                     }
-                }
-                else if (this.times == 150)
-                {
+                } else if (this.times == 150) {
                     RainbowWalkDisplayer.this.restore();
                     RainbowWalkDisplayer.this.end();
 
@@ -74,17 +66,16 @@ public class RainbowWalkDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
     @Override
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 }

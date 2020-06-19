@@ -26,33 +26,11 @@ import java.util.function.BiConsumer;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ClothCosmetic extends AbstractCosmetic
-{
-    enum ArmorSlot
-    {
-        HELMET((player, stack) -> player.getInventory().setHelmet(stack)),
-        CHESTPLATE((player, stack) -> player.getInventory().setChestplate(stack)),
-        LEGGINGS((player, stack) -> player.getInventory().setLeggings(stack)),
-        BOOTS((player, stack) -> player.getInventory().setBoots(stack));
-
-        private final BiConsumer<Player, ItemStack> consumer;
-
-        ArmorSlot(BiConsumer<Player, ItemStack> consumer)
-        {
-            this.consumer = consumer;
-        }
-
-        public void equip(Player player, ItemStack stack)
-        {
-            this.consumer.accept(player, stack);
-        }
-    }
-
+public class ClothCosmetic extends AbstractCosmetic {
     private final ArmorSlot slot;
     private final ItemStack piece;
 
-    ClothCosmetic(Hub hub, int storageId, ArmorSlot slot) throws Exception
-    {
+    ClothCosmetic(Hub hub, int storageId, ArmorSlot slot) throws Exception {
         super(hub, "Habit", storageId);
 
         this.slot = slot;
@@ -60,8 +38,7 @@ public class ClothCosmetic extends AbstractCosmetic
     }
 
     @Override
-    public ItemStack getIcon(Player player)
-    {
+    public ItemStack getIcon(Player player) {
         ItemStack stack = super.getIcon(player);
         ItemMeta meta = stack.getItemMeta();
 
@@ -75,13 +52,28 @@ public class ClothCosmetic extends AbstractCosmetic
         return stack;
     }
 
-    public ArmorSlot getSlot()
-    {
+    public ArmorSlot getSlot() {
         return this.slot;
     }
 
-    public ItemStack getPiece()
-    {
+    public ItemStack getPiece() {
         return this.piece;
+    }
+
+    enum ArmorSlot {
+        HELMET((player, stack) -> player.getInventory().setHelmet(stack)),
+        CHESTPLATE((player, stack) -> player.getInventory().setChestplate(stack)),
+        LEGGINGS((player, stack) -> player.getInventory().setLeggings(stack)),
+        BOOTS((player, stack) -> player.getInventory().setBoots(stack));
+
+        private final BiConsumer<Player, ItemStack> consumer;
+
+        ArmorSlot(BiConsumer<Player, ItemStack> consumer) {
+            this.consumer = consumer;
+        }
+
+        public void equip(Player player, ItemStack stack) {
+            this.consumer.accept(player, stack);
+        }
     }
 }

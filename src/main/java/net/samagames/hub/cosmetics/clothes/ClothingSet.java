@@ -27,21 +27,18 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ClothingSet
-{
+public class ClothingSet {
     private final int storageId;
     private final ItemStack icon;
     private final ClothCosmetic[] set;
 
-    ClothingSet(Hub hub, int storageId, ClothCosmetic[] set) throws Exception
-    {
+    ClothingSet(Hub hub, int storageId, ClothCosmetic[] set) throws Exception {
         this.storageId = storageId;
         this.icon = PersistanceUtils.makeStack(hub, SamaGamesAPI.get().getShopsManager().getItemDescription(storageId));
         this.set = set;
     }
 
-    public ItemStack getIcon(Player player)
-    {
+    public ItemStack getIcon(Player player) {
         ItemStack personalIcon = this.icon.clone();
         ItemMeta meta = personalIcon.getItemMeta();
 
@@ -61,23 +58,19 @@ public class ClothingSet
         return personalIcon;
     }
 
-    public int getStorageId()
-    {
+    public int getStorageId() {
         return this.storageId;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return ChatColor.stripColor(this.icon.getItemMeta().getDisplayName());
     }
 
-    public ClothCosmetic[] getSet()
-    {
+    public ClothCosmetic[] getSet() {
         return this.set;
     }
 
-    private String getFormattedUnlockedPieces(Player player)
-    {
+    private String getFormattedUnlockedPieces(Player player) {
         int unlocked = 0;
 
         for (ClothCosmetic clothCosmetic : this.set)

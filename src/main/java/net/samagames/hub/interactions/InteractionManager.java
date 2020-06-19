@@ -28,8 +28,7 @@ import java.io.File;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class InteractionManager extends AbstractManager
-{
+public class InteractionManager extends AbstractManager {
     private final YodelsManager yodelManager;
     private final SonicSquidManager sonicSquidManager;
     private final BumperManager bumperManager;
@@ -37,8 +36,8 @@ public class InteractionManager extends AbstractManager
     private final GraouManager graouManager;
     private final WellManager wellManager;
 
-    public InteractionManager(Hub hub)
-    {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public InteractionManager(Hub hub) {
         super(hub);
 
         File interactionsDirectory = new File(hub.getDataFolder(), "interactions");
@@ -55,8 +54,7 @@ public class InteractionManager extends AbstractManager
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.yodelManager.onDisable();
         this.sonicSquidManager.onDisable();
         this.bumperManager.onDisable();
@@ -66,8 +64,7 @@ public class InteractionManager extends AbstractManager
     }
 
     @Override
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         this.yodelManager.onLogin(player);
         this.sonicSquidManager.onLogin(player);
         this.bumperManager.onLogin(player);
@@ -77,8 +74,7 @@ public class InteractionManager extends AbstractManager
     }
 
     @Override
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         this.yodelManager.onLogout(player);
         this.sonicSquidManager.onLogout(player);
         this.bumperManager.onLogout(player);
@@ -87,8 +83,7 @@ public class InteractionManager extends AbstractManager
         this.wellManager.onLogout(player);
     }
 
-    public boolean isInteracting(Player player)
-    {
+    public boolean isInteracting(Player player) {
         if (this.yodelManager.hasPlayer(player))
             return true;
         else if (this.sonicSquidManager.hasPlayer(player))
@@ -99,24 +94,18 @@ public class InteractionManager extends AbstractManager
             return true;
         else if (this.graouManager.hasPlayer(player))
             return true;
-        else if (this.wellManager.hasPlayer(player))
-            return true;
-
-        return false;
+        else return this.wellManager.hasPlayer(player);
     }
 
-    public MeowManager getMeowManager()
-    {
+    public MeowManager getMeowManager() {
         return this.meowManager;
     }
 
-    public GraouManager getGraouManager()
-    {
+    public GraouManager getGraouManager() {
         return this.graouManager;
     }
 
-    public WellManager getWellManager()
-    {
+    public WellManager getWellManager() {
         return this.wellManager;
     }
 }

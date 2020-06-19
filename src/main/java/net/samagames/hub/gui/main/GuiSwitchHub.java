@@ -34,20 +34,17 @@ import java.util.Map;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiSwitchHub extends AbstractGui
-{
+public class GuiSwitchHub extends AbstractGui {
     private final int page;
 
-    GuiSwitchHub(Hub hub, int page)
-    {
+    GuiSwitchHub(Hub hub, int page) {
         super(hub);
 
         this.page = page;
     }
 
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         this.inventory = this.hub.getServer().createInventory(null, 54, "Changer de hub (Page " + this.page + ")");
         this.update(player);
 
@@ -55,10 +52,9 @@ public class GuiSwitchHub extends AbstractGui
     }
 
     @Override
-    public void update(Player player)
-    {
+    public void update(Player player) {
         Map<Integer, JsonHub> hubs = this.hub.getHubRefresher().getHubs();
-        int[] baseSlots = { 10, 11, 12, 13, 14, 15, 16 };
+        int[] baseSlots = {10, 11, 12, 13, 14, 15, 16};
         int line = 0;
         int slot = 0;
 
@@ -68,15 +64,11 @@ public class GuiSwitchHub extends AbstractGui
         int i = 0;
         boolean more = false;
 
-        for (JsonHub hub : hubs.values())
-        {
-            if (i < (7 * (this.page - 1)))
-            {
+        for (JsonHub hub : hubs.values()) {
+            if (i < (7 * (this.page - 1))) {
                 i++;
                 continue;
-            }
-            else if (i > ((7 * (this.page - 1) + (baseSlots.length * 3))))
-            {
+            } else if (i > ((7 * (this.page - 1) + (baseSlots.length * 3)))) {
                 more = true;
                 break;
             }
@@ -84,8 +76,7 @@ public class GuiSwitchHub extends AbstractGui
             this.setSlotData(this.getHubItem(hub), baseSlots[slot] + (9 * line), "Hub_" + hub.getHubNumber());
             slot++;
 
-            if (slot == baseSlots.length)
-            {
+            if (slot == baseSlots.length) {
                 slot = 0;
                 line++;
             }
@@ -100,18 +91,14 @@ public class GuiSwitchHub extends AbstractGui
             this.setSlotData(ChatColor.YELLOW + "Page " + (this.page + 1) + " »", Material.PAPER, this.inventory.getSize() - 1, null, "page_next");
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
-    public void onClick(Player player, ItemStack stack, String action, ClickType clickType)
-    {
-        if (action.startsWith("Hub_"))
-        {
-            if (action.split("_")[1].equals(SamaGamesAPI.get().getServerName().split("_")[1]))
-            {
+    public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
+        if (action.startsWith("Hub_")) {
+            if (action.split("_")[1].equals(SamaGamesAPI.get().getServerName().split("_")[1])) {
                 player.sendMessage(ChatColor.RED + "Vous ne pouvez pas aller sur votre hub actuel !");
                 return;
-            }
-            else if (this.hub.getHubRefresher().getHubByID(Integer.parseInt(action.split("_")[1])).getConnectedPlayers() >= 120)
-            {
+            } else if (this.hub.getHubRefresher().getHubByID(Integer.parseInt(action.split("_")[1])).getConnectedPlayers() >= 120) {
                 player.sendMessage(ChatColor.RED + "Le hub sélectionné est plein !");
                 return;
             }
@@ -123,58 +110,41 @@ public class GuiSwitchHub extends AbstractGui
 
             // TODO: Use API
             // SamaGamesAPI.get().getPlayerManager().connectToServer(player.getUniqueId(), action);
-        }
-        else if (action.equals("page_back"))
-        {
+        } else if (action.equals("page_back")) {
             this.hub.getGuiManager().openGui(player, new GuiSwitchHub(this.hub, (this.page - 1)));
-        }
-        else if (action.equals("page_next"))
-        {
+        } else if (action.equals("page_next")) {
             this.hub.getGuiManager().openGui(player, new GuiSwitchHub(this.hub, (this.page + 1)));
-        }
-        else if (action.equals("back"))
-        {
+        } else if (action.equals("back")) {
             this.hub.getGuiManager().openGui(player, new GuiMain(this.hub));
         }
     }
 
     @SuppressWarnings("deprecation")
-    private ItemStack getHubItem(JsonHub hub)
-    {
+    private ItemStack getHubItem(JsonHub hub) {
         ItemStack glass = new ItemStack(Material.STAINED_GLASS, 1);
         ItemMeta meta = glass.getItemMeta();
         String baseName = "Hub " + hub.getHubNumber() + " (" + hub.getConnectedPlayers() + " joueur" + (hub.getConnectedPlayers() > 1 ? "s" : "") + ")";
 
-        if (hub.getHubNumber() == Integer.parseInt(SamaGamesAPI.get().getServerName().split("_")[1]))
-        {
+        if (hub.getHubNumber() == Integer.parseInt(SamaGamesAPI.get().getServerName().split("_")[1])) {
             glass.setDurability(DyeColor.LIGHT_BLUE.getWoolData());
             meta.setDisplayName(ChatColor.AQUA + baseName);
-        }
-        else if (hub.getConnectedPlayers() <= 40)
-        {
+        } else if (hub.getConnectedPlayers() <= 40) {
             glass.setDurability(DyeColor.GREEN.getWoolData());
             meta.setDisplayName(ChatColor.GREEN + baseName);
-        }
-        else if (hub.getConnectedPlayers() <= 80)
-        {
+        } else if (hub.getConnectedPlayers() <= 80) {
             glass.setDurability(DyeColor.YELLOW.getWoolData());
             meta.setDisplayName(ChatColor.YELLOW + baseName);
-        }
-        else if (hub.getConnectedPlayers() < 100)
-        {
+        } else if (hub.getConnectedPlayers() < 100) {
             glass.setDurability(DyeColor.RED.getWoolData());
             meta.setDisplayName(ChatColor.RED + baseName);
-        }
-        else
-        {
+        } else {
             glass.setDurability(DyeColor.RED.getWoolData());
             meta.setDisplayName(ChatColor.RED + baseName);
         }
 
         List<String> lore = new ArrayList<>();
 
-        for (String group : hub.getPlayersDetails().keySet())
-        {
+        for (String group : hub.getPlayersDetails().keySet()) {
             int value = hub.getPlayersDetails().get(group);
             String finalGroup = (value <= 1 ? group : group.substring(0, group.length() - 1));
 

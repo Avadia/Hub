@@ -7,7 +7,6 @@ import net.samagames.hub.games.leaderboards.HubLeaderboard;
 import net.samagames.hub.games.shops.ShopCategory;
 import net.samagames.hub.games.signs.GameSign;
 import net.samagames.hub.utils.RestrictedVersion;
-import net.samagames.tools.RulesBook;
 import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -37,22 +36,16 @@ import java.util.Map;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractGame
-{
-    public enum State { OPENED, NEW, POPULAR, SOON, LOCKED }
-
+public abstract class AbstractGame {
     protected final Hub hub;
     private final Map<String, List<GameSign>> signs;
 
-    public AbstractGame(Hub hub)
-    {
+    public AbstractGame(Hub hub) {
         this.hub = hub;
 
-        this.signs = new HashMap<String, List<GameSign>>()
-        {
+        this.signs = new HashMap<String, List<GameSign>>() {
             @Override
-            public void clear()
-            {
+            public void clear() {
                 this.values().forEach(list -> list.forEach(GameSign::onDelete));
                 super.clear();
             }
@@ -60,42 +53,53 @@ public abstract class AbstractGame
     }
 
     public abstract String getCodeName();
+
     public abstract String getName();
+
     public abstract String getCategory();
+
     public abstract ItemStack getIcon();
+
     public abstract String[] getDescription();
+
     public abstract String[] getDevelopers();
+
     public abstract String getWebsiteDescriptionURL();
+
     public abstract int getSlotInMainMenu();
+
     public abstract ShopCategory getShopConfiguration();
+
     public abstract Location getLobbySpawn();
+
     public abstract Location getWebsiteDescriptionSkull();
+
     public abstract List<HubLeaderboard> getLeaderBoards();
+
     public abstract State getState();
+
     public abstract boolean hasResourcesPack();
+
     public abstract boolean isPlayerFirstGame(IPlayerStats playerStats);
+
     public abstract boolean isGroup();
 
-    public void addSignForMap(String map, ChatColor color, String template, RestrictedVersion restrictedVersion, Sign sign)
-    {
+    public void addSignForMap(String map, ChatColor color, String template, RestrictedVersion restrictedVersion, Sign sign) {
         GameSign gameSign = new GameSign(this.hub, this, map, color, template, restrictedVersion, sign);
 
         Jedis jedis = SamaGamesAPI.get().getBungeeResource();
 
         if (jedis != null && jedis.exists("hub:maintenance:" + this.getCodeName() + ":" + template))
-            gameSign.setMaintenance(Boolean.valueOf(jedis.get("hub:maintenance:" + this.getCodeName() + ":" + template)));
+            gameSign.setMaintenance(Boolean.parseBoolean(jedis.get("hub:maintenance:" + this.getCodeName() + ":" + template)));
         if (jedis != null && jedis.exists("hub:soon:" + this.getCodeName() + ":" + template))
-            gameSign.setSoon(Boolean.valueOf(jedis.get("hub:soon:" + this.getCodeName() + ":" + template)));
+            gameSign.setSoon(Boolean.parseBoolean(jedis.get("hub:soon:" + this.getCodeName() + ":" + template)));
 
         if (jedis != null)
             jedis.close();
 
-        if (this.signs.containsKey(map))
-        {
+        if (this.signs.containsKey(map)) {
             this.signs.get(map).add(gameSign);
-        }
-        else
-        {
+        } else {
             List<GameSign> list = new ArrayList<>();
             list.add(gameSign);
 
@@ -103,13 +107,11 @@ public abstract class AbstractGame
         }
     }
 
-    public void clearSigns()
-    {
+    public void clearSigns() {
         this.signs.clear();
     }
 
-    public void showRulesWarning(Player player)
-    {
+    public void showRulesWarning(Player player) {
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
 
         new FancyMessage("Il s'agit de votre première partie sur ce jeu ! Nous vous conseillons d'aller d'abord lire les règles en").color(ChatColor.GREEN)
@@ -120,16 +122,11 @@ public abstract class AbstractGame
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
     }
 
-    public List<GameSign> getGameSignsByMap(String map)
-    {
-        if (this.signs.containsKey(map))
-            return this.signs.get(map);
-        else
-            return null;
+    public List<GameSign> getGameSignsByMap(String map) {
+        return this.signs.getOrDefault(map, null);
     }
 
-    public List<GameSign> getGameSignsByTemplate(String template)
-    {
+    public List<GameSign> getGameSignsByTemplate(String template) {
         for (List<GameSign> list : this.signs.values())
             if (list.get(0).getTemplate().equals(template))
                 return list;
@@ -137,8 +134,7 @@ public abstract class AbstractGame
         return null;
     }
 
-    public int getOnlinePlayers()
-    {
+    public int getOnlinePlayers() {
         int players = 0;
 
         for (List<GameSign> list : this.signs.values())
@@ -147,13 +143,13 @@ public abstract class AbstractGame
         return players;
     }
 
-    public Map<String, List<GameSign>> getSigns()
-    {
+    public Map<String, List<GameSign>> getSigns() {
         return this.signs;
     }
 
-    public boolean hasShop()
-    {
+    public boolean hasShop() {
         return this.getShopConfiguration() != null;
     }
+
+    public enum State {OPENED, NEW, POPULAR, SOON, LOCKED}
 }

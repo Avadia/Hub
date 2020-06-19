@@ -25,8 +25,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class ClothPreviewTask extends BukkitRunnable
-{
+class ClothPreviewTask extends BukkitRunnable {
     private static final double RADIUS = 5.0D;
 
     private final Location center;
@@ -34,8 +33,7 @@ class ClothPreviewTask extends BukkitRunnable
     private final CustomNPC fakePlayer;
     private double i;
 
-    ClothPreviewTask(Hub hub, Player player, ItemStack[] armorContent)
-    {
+    ClothPreviewTask(Hub hub, Player player, ItemStack[] armorContent) {
         this.center = player.getLocation().clone();
 
         this.camera = SamaGamesAPI.get().getCameraManager().createCamera(this.center, false);
@@ -53,8 +51,7 @@ class ClothPreviewTask extends BukkitRunnable
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         Location location = new Location(this.center.getWorld(), this.center.getX() + Math.cos(this.i) * RADIUS, this.center.getY() + 1D, this.center.getZ() + Math.sin(this.i) * RADIUS);
         location.setDirection(this.center.clone().subtract(location).toVector().setY(location.getY()));
         location.setPitch(0.0F);
@@ -67,16 +64,14 @@ class ClothPreviewTask extends BukkitRunnable
             this.i = 0.0D;
     }
 
-    public void stop()
-    {
+    public void stop() {
         SamaGamesAPI.get().getCameraManager().removeCamera(this.camera, this.center);
         SamaGamesAPI.get().getNPCManager().removeNPC(this.fakePlayer);
 
         this.cancel();
     }
 
-    public Location getCenter()
-    {
+    public Location getCenter() {
         return this.center;
     }
 }

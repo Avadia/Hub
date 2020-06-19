@@ -18,9 +18,10 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-interface EntryPoints
-{
+interface EntryPoints {
     void onDisable();
+
     void onLogin(Player player);
+
     void onLogout(Player player);
 }

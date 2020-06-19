@@ -8,7 +8,6 @@ import net.samagames.hub.games.leaderboards.HubLeaderboard;
 import net.samagames.hub.games.shops.ShopCategory;
 import net.samagames.hub.games.shops.ShopDependsItem;
 import net.samagames.hub.games.shops.ShopImprovableItem;
-import net.samagames.tools.RulesBook;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -32,41 +31,34 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class QuakeGame extends AbstractGame
-{
-    public QuakeGame(Hub hub)
-    {
+public class QuakeGame extends AbstractGame {
+    public QuakeGame(Hub hub) {
         super(hub);
     }
 
     @Override
-    public String getCodeName()
-    {
+    public String getCodeName() {
         return "quake";
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "Quake";
     }
 
     @Override
-    public String getCategory()
-    {
+    public String getCategory() {
         return "Match à mort";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.DIAMOND_HOE, 1);
     }
 
     @Override
-    public String[] getDescription()
-    {
-        return new String[] {
+    public String[] getDescription() {
+        return new String[]{
                 "Même si vous n'êtes pas un fermier,",
                 "tirez sur vos adversaires avec",
                 "votre houe !"
@@ -74,34 +66,29 @@ public class QuakeGame extends AbstractGame
     }
 
     @Override
-    public String[] getDevelopers()
-    {
-        return new String[] {
+    public String[] getDevelopers() {
+        return new String[]{
                 "Silvanosky"
         };
     }
 
     @Override
-    public String getWebsiteDescriptionURL()
-    {
+    public String getWebsiteDescriptionURL() {
         return null;
     }
 
     @Override
-    public int getSlotInMainMenu()
-    {
+    public int getSlotInMainMenu() {
         return 24;
     }
 
     @Override
-    public ShopCategory getShopConfiguration()
-    {
-        try
-        {
+    public ShopCategory getShopConfiguration() {
+        try {
             ShopCategory shopCategory = new ShopCategory(this.hub, this, 80, 0);
             ShopCategory hoesCategory = new ShopCategory(this.hub, this, 88, 21);
 
-            int[] hoesIds = new int[]{ 82, 83, 84, 85, 86, 87 };
+            int[] hoesIds = new int[]{82, 83, 84, 85, 86, 87};
 
             ShopDependsItem woodenHoe = new ShopDependsItem(this.hub, "Houe", 81, 31, hoesIds, null).defaultItem();
             hoesCategory.addContent(woodenHoe);
@@ -133,29 +120,24 @@ public class QuakeGame extends AbstractGame
             shopCategory.addContent(shopImprovableItem);
 
             return shopCategory;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public Location getLobbySpawn()
-    {
+    public Location getLobbySpawn() {
         return new Location(this.hub.getWorld(), 31D, 102.0D, -31D, -90.0F, 0.0F);
     }
 
     @Override
-    public Location getWebsiteDescriptionSkull()
-    {
+    public Location getWebsiteDescriptionSkull() {
         return null;
     }
 
     @Override
-    public List<HubLeaderboard> getLeaderBoards()
-    {
+    public List<HubLeaderboard> getLeaderBoards() {
         List<HubLeaderboard> leaderBoards = new ArrayList<>();
 
         List<HubLeaderboard.HubLeaderBoardStand> leaderBoardStands1 = new ArrayList<>();
@@ -174,26 +156,22 @@ public class QuakeGame extends AbstractGame
     }
 
     @Override
-    public State getState()
-    {
+    public State getState() {
         return State.LOCKED;
     }
 
     @Override
-    public boolean hasResourcesPack()
-    {
+    public boolean hasResourcesPack() {
         return false;
     }
 
     @Override
-    public boolean isPlayerFirstGame(IPlayerStats playerStats)
-    {
+    public boolean isPlayerFirstGame(IPlayerStats playerStats) {
         return playerStats.getQuakeStatistics().getPlayedGames() == 0;
     }
 
     @Override
-    public boolean isGroup()
-    {
+    public boolean isGroup() {
         return false;
     }
 }

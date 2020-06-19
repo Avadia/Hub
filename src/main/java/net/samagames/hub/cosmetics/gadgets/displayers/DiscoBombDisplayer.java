@@ -28,13 +28,11 @@ import org.bukkit.scheduler.BukkitTask;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DiscoBombDisplayer extends AbstractDisplayer
-{
+public class DiscoBombDisplayer extends AbstractDisplayer {
     private BukkitTask loopTask;
     private boolean music;
 
-    public DiscoBombDisplayer(Hub hub, Player player)
-    {
+    public DiscoBombDisplayer(Hub hub, Player player) {
         super(hub, player);
 
         this.music = false;
@@ -51,37 +49,30 @@ public class DiscoBombDisplayer extends AbstractDisplayer
 
     @SuppressWarnings("deprecation")
     @Override
-    public void display()
-    {
-        for (Location block : this.blocksUsed.keySet())
-        {
+    public void display() {
+        for (Location block : this.blocksUsed.keySet()) {
             block.getBlock().setType(this.blocksUsed.get(block).getType());
 
-            if (this.blocksUsed.get(block).getType() == Material.STAINED_GLASS)
-            {
+            if (this.blocksUsed.get(block).getType() == Material.STAINED_GLASS) {
                 DyeColor random = DyeColor.values()[GadgetManager.RANDOM.nextInt(DyeColor.values().length)];
                 block.getBlock().setData(random.getWoolData());
             }
         }
 
-        if (this.hub.getCosmeticManager().getJukeboxManager().getCurrentSong() == null)
-        {
+        if (this.hub.getCosmeticManager().getJukeboxManager().getCurrentSong() == null) {
             JukeboxUtils.playRecord(this.baseLocation, Material.RECORD_7);
             this.music = true;
         }
 
-        this.loopTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable()
-        {
+        this.loopTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable() {
             int timer = 0;
             int ticks = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 this.ticks++;
 
-                if (ticks == 20)
-                {
+                if (ticks == 20) {
                     this.ticks = 0;
                     this.timer++;
 
@@ -95,8 +86,7 @@ public class DiscoBombDisplayer extends AbstractDisplayer
 
                 ParticleEffect.NOTE.display(1.0F, 1.0F, 1.0F, 0.25F, 2, baseLocation, 160.0);
 
-                if (timer == 15)
-                {
+                if (timer == 15) {
                     baseLocation.getWorld().createExplosion(baseLocation.getX(), baseLocation.getY(), baseLocation.getZ(), 5, false, false);
 
                     restore();
@@ -108,21 +98,19 @@ public class DiscoBombDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 
-    private void callback()
-    {
+    private void callback() {
         this.loopTask.cancel();
 
         if (this.music)

@@ -31,8 +31,7 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class NPCHostGame
-{
+public class NPCHostGame {
     private final Hub hub;
 
     private final UUID event;
@@ -43,12 +42,11 @@ public class NPCHostGame
 
     private final String templateId;
 
-    private HashMap<UUID, Boolean> clicked = new HashMap<>();
+    private final HashMap<UUID, Boolean> clicked = new HashMap<>();
 
-    private CustomNPC npc;
+    private final CustomNPC npc;
 
-    public NPCHostGame(Hub hub, int index, Location location, HostGameInfoToHubPacket packet)
-    {
+    public NPCHostGame(Hub hub, int index, Location location, HostGameInfoToHubPacket packet) {
         this.hub = hub;
 
         this.event = packet.getEvent();
@@ -60,7 +58,7 @@ public class NPCHostGame
 
         hub.getHostGameManager().log(Level.INFO, "Creation NPC HOST uuid:" + this.creator);
 
-        this.npc = SamaGamesAPI.get().getNPCManager().createNPC(location, packet.getCreator(), new String[] {
+        this.npc = SamaGamesAPI.get().getNPCManager().createNPC(location, packet.getCreator(), new String[]{
                 ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Nouvel Evenement !"
         });
 
@@ -68,9 +66,8 @@ public class NPCHostGame
         this.update(packet);
     }
 
-    public void connect(Player player)
-    {
-        if(clicked.containsKey(player.getUniqueId()))
+    public void connect(Player player) {
+        if (clicked.containsKey(player.getUniqueId()))
             return;
 
         clicked.put(player.getUniqueId(), null);
@@ -82,23 +79,20 @@ public class NPCHostGame
         //SamaGamesAPI.get().getPubSub().send("join." + this.serverName, player.getUniqueId().toString());
     }
 
-    public void update(HostGameInfoToHubPacket packet)
-    {
-        if(!packet.getEvent().equals(this.event) || this.npc == null)
+    public void update(HostGameInfoToHubPacket packet) {
+        if (!packet.getEvent().equals(this.event) || this.npc == null)
             return;
 
         Hologram hologram = this.npc.getHologram();
         hologram.change(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Evènement " + this.name,
-                ChatColor.GOLD + "" + packet.getTotalPlayerOnServers() + ChatColor.AQUA +  "/" + ChatColor.RED + packet.getPlayerMaxForMap());
+                ChatColor.GOLD + "" + packet.getTotalPlayerOnServers() + ChatColor.AQUA + "/" + ChatColor.RED + packet.getPlayerMaxForMap());
     }
 
-    public void remove()
-    {
+    public void remove() {
         SamaGamesAPI.get().getNPCManager().removeNPC(this.npc);
     }
 
-    public int getIndex()
-    {
+    public int getIndex() {
         return this.index;
     }
 }

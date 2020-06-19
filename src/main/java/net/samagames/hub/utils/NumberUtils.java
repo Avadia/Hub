@@ -19,17 +19,10 @@ import java.text.DecimalFormatSymbols;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class NumberUtils
-{
+public class NumberUtils {
     private static final DecimalFormat DECIMAL_FORMAT;
 
-    public static String format(long number)
-    {
-        return DECIMAL_FORMAT.format(number);
-    }
-
-    static
-    {
+    static {
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
         decimalFormatSymbols.setGroupingSeparator(' ');
 
@@ -37,5 +30,9 @@ public class NumberUtils
         DECIMAL_FORMAT.setDecimalFormatSymbols(decimalFormatSymbols);
         DECIMAL_FORMAT.setGroupingSize(3);
         DECIMAL_FORMAT.setMaximumFractionDigits(64);
+    }
+
+    public static String format(long number) {
+        return DECIMAL_FORMAT.format(number);
     }
 }

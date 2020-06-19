@@ -21,16 +21,13 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandPlaylistNext extends AbstractCommand
-{
-    public CommandPlaylistNext(Hub hub)
-    {
+public class CommandPlaylistNext extends AbstractCommand {
+    public CommandPlaylistNext(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
         this.hub.getCosmeticManager().getJukeboxManager().skipSong(false);
         return true;
     }

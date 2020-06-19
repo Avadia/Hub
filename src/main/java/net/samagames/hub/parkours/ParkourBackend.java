@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /*
@@ -29,37 +30,29 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class ParkourBackend
-{
+class ParkourBackend {
     private BukkitTask checkingTask;
     private BukkitTask nearingTask;
 
-    ParkourBackend(Hub hub, Parkour parkour)
-    {
+    ParkourBackend(Hub hub, Parkour parkour) {
         this.startCheckingTask(hub, parkour);
         this.startNearingTask(hub, parkour);
     }
 
-    void stop()
-    {
+    void stop() {
         this.checkingTask.cancel();
         this.nearingTask.cancel();
     }
 
-    private void startCheckingTask(Hub hub, Parkour parkour)
-    {
+    private void startCheckingTask(Hub hub, Parkour parkour) {
         this.checkingTask = hub.getServer().getScheduler().runTaskTimerAsynchronously(hub, () ->
         {
-            for (UUID uuid : parkour.getPlayersIn().keySet())
-            {
+            for (UUID uuid : parkour.getPlayersIn().keySet()) {
                 Player player = hub.getServer().getPlayer(uuid);
 
-                if (player == null || !player.isOnline())
-                {
-                    parkour.removePlayer(player);
-                }
-                else
-                {
+                if (player == null || !player.isOnline()) {
+                    parkour.removePlayer(Objects.requireNonNull(player));
+                } else {
                     Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
                     if (parkour instanceof WhitelistBasedParkour && !((WhitelistBasedParkour) parkour).isWhitelisted(block.getType()) && block.getType().isSolid())
@@ -69,15 +62,12 @@ class ParkourBackend
         }, 20L, 20L);
     }
 
-    private void startNearingTask(Hub hub, Parkour parkour)
-    {
-        this.nearingTask = hub.getServer().getScheduler().runTaskTimerAsynchronously(hub, new Runnable()
-        {
+    private void startNearingTask(Hub hub, Parkour parkour) {
+        this.nearingTask = hub.getServer().getScheduler().runTaskTimerAsynchronously(hub, new Runnable() {
             private final List<UUID> playersCooldown = new ArrayList<>();
 
             @Override
-            public void run()
-            {
+            public void run() {
                 parkour.getStartTooltip().getNearbyEntities(0.5D, 0.5D, 0.5D).stream().filter(entity -> entity.getType() == EntityType.PLAYER).forEach(player ->
                 {
                     if (!parkour.isParkouring(player.getUniqueId()) && !hub.getPlayerManager().isBusy((Player) player))

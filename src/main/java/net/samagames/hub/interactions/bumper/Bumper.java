@@ -7,9 +7,13 @@ import net.samagames.hub.utils.RestrictedVersion;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.ProximityUtils;
 import net.samagames.tools.Titles;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
@@ -36,8 +40,8 @@ import java.util.*;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class Bumper extends AbstractInteraction implements Listener
-{
+class Bumper extends AbstractInteraction implements Listener {
+    private static final double g = 18; //Minecraft constant for gravity (9.8 for earth)
     private final Location bumperLocation;
     private final BukkitTask startTask;
     private final ArmorStand startBeacon;
@@ -46,10 +50,7 @@ class Bumper extends AbstractInteraction implements Listener
     private final List<UUID> flyingPlayers;
     private final double power;
 
-    private static final double g = 18; //Minecraft constant for gravity (9.8 for earth)
-
-    Bumper(Hub hub, String location) throws Exception
-    {
+    Bumper(Hub hub, String location) {
         super(hub);
 
         String[] args = location.split(", ");
@@ -73,30 +74,24 @@ class Bumper extends AbstractInteraction implements Listener
     }
 
     @Override
-    public void play(Player player)
-    {
+    public void play(Player player) {
         if (this.flyingPlayers.contains(player.getUniqueId()))
             return;
 
         if (this.hub.getPlayerManager().isBusy(player) || player.getGameMode() == GameMode.SPECTATOR)
             return;
 
-        if (!RestrictedVersion.isLoggedInPost19(player))
-        {
-            if (!this.disclaimerCooldowns.containsKey(player.getUniqueId()))
-            {
+        if (!RestrictedVersion.isLoggedInPost19(player)) {
+            if (!this.disclaimerCooldowns.containsKey(player.getUniqueId())) {
                 player.sendMessage(ChatColor.RED + "Veuillez vous connecter avec une version supérieure ou égale à Minecraft 1.9 pour utiliser les Bumpers.");
                 this.disclaimerCooldowns.put(player.getUniqueId(), 20);
-            }
-            else
-            {
+            } else {
                 int cooldown = this.disclaimerCooldowns.get(player.getUniqueId());
                 cooldown--;
 
                 this.disclaimerCooldowns.remove(player.getUniqueId());
 
-                if (cooldown > 0)
-                {
+                if (cooldown > 0) {
                     this.disclaimerCooldowns.put(player.getUniqueId(), cooldown);
                 }
             }
@@ -111,33 +106,31 @@ class Bumper extends AbstractInteraction implements Listener
         Vector vec = this.bumperLocation.getDirection().multiply(this.power);
         long flyTime = (long) (((vec.getY()) / g) * 20.0);
 
-        BukkitTask run = new BukkitRunnable()
-        {
-            double x = vec.getX() / 2;
-            double y = vec.getY() / 2;
-            double z = vec.getZ() / 2;
+        BukkitTask run = new BukkitRunnable() {
+            final double x = vec.getX() / 2;
+            final double y = vec.getY() / 2;
+            final double z = vec.getZ() / 2;
 
             @Override
-            public void run()
-            {
-                ((CraftPlayer)player).getHandle().motX = x;
-                ((CraftPlayer)player).getHandle().motY = y;
-                ((CraftPlayer)player).getHandle().motZ = z;
-                ((CraftPlayer)player).getHandle().velocityChanged = true;
+            public void run() {
+                ((CraftPlayer) player).getHandle().motX = x;
+                ((CraftPlayer) player).getHandle().motY = y;
+                ((CraftPlayer) player).getHandle().motZ = z;
+                ((CraftPlayer) player).getHandle().velocityChanged = true;
             }
-        }.runTaskTimer(this.hub, 0L, flyTime/2L);
+        }.runTaskTimer(this.hub, 0L, flyTime / 2L);
 
         this.flyTasks.put(player.getUniqueId(), this.hub.getServer().getScheduler().runTaskLater(this.hub, () ->
         {
             ItemStack stack = new ItemStack(Material.ELYTRA);
 
             ItemMeta meta = stack.getItemMeta();
-            meta.spigot().setUnbreakable(true);
+            meta.setUnbreakable(true);
 
             stack.setItemMeta(meta);
 
             player.getInventory().setChestplate(stack);
-            ((CraftPlayer)player).getHandle().setFlag(7, true);
+            ((CraftPlayer) player).getHandle().setFlag(7, true);
 
             this.hub.getPlayerManager().getStaticInventory().setInventoryToPlayer(player);
             this.hub.getServer().getPluginManager().callEvent(new EntityToggleGlideEvent(player, true));
@@ -150,14 +143,12 @@ class Bumper extends AbstractInteraction implements Listener
     }
 
     @Override
-    public boolean hasPlayer(Player player)
-    {
+    public boolean hasPlayer(Player player) {
         return (this.flyingPlayers.contains(player.getUniqueId()));
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.startBeacon.remove();
         this.startTask.cancel();
 
@@ -165,8 +156,7 @@ class Bumper extends AbstractInteraction implements Listener
     }
 
     @Override
-    public void stop(Player player)
-    {
+    public void stop(Player player) {
         this.flyingPlayers.remove(player.getUniqueId());
         this.flyTasks.remove(player.getUniqueId());
     }

@@ -22,23 +22,19 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractCosmeticRegistry<COSMETIC extends AbstractCosmetic>
-{
+public abstract class AbstractCosmeticRegistry<COSMETIC extends AbstractCosmetic> {
     protected final Hub hub;
     private final Map<Integer, COSMETIC> elements;
 
-    public AbstractCosmeticRegistry(Hub hub)
-    {
+    public AbstractCosmeticRegistry(Hub hub) {
         this.hub = hub;
         this.elements = new HashMap<>();
     }
 
     public abstract void register() throws Exception;
 
-    protected void registerElement(COSMETIC element)
-    {
-        if (this.elements.containsKey(element.getStorageId()))
-        {
+    protected void registerElement(COSMETIC element) {
+        if (this.elements.containsKey(element.getStorageId())) {
             this.hub.getCosmeticManager().log(Level.SEVERE, "Cosmetic already registered with the storage id '" + element.getStorageId() + "'!");
             return;
         }
@@ -46,16 +42,11 @@ public abstract class AbstractCosmeticRegistry<COSMETIC extends AbstractCosmetic
         this.elements.put(element.getStorageId(), element);
     }
 
-    public COSMETIC getElementByStorageId(int storageId)
-    {
-        if (this.elements.containsKey(storageId))
-            return this.elements.get(storageId);
-        else
-            return null;
+    public COSMETIC getElementByStorageId(int storageId) {
+        return this.elements.getOrDefault(storageId, null);
     }
 
-    public Map<Integer, COSMETIC> getElements()
-    {
+    public Map<Integer, COSMETIC> getElements() {
         return this.elements;
     }
 }

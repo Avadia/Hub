@@ -1,10 +1,8 @@
 package net.samagames.hub.gui.cosmetics.clothes;
 
 import net.samagames.hub.Hub;
-import net.samagames.hub.cosmetics.clothes.ClothRegistry;
 import net.samagames.hub.cosmetics.clothes.ClothingSet;
 import net.samagames.hub.gui.AbstractGui;
-import net.samagames.hub.gui.cosmetics.GuiCosmetics;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,20 +25,17 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class GuiClothingSet extends AbstractGui
-{
+class GuiClothingSet extends AbstractGui {
     private final ClothingSet set;
 
-    GuiClothingSet(Hub hub, ClothingSet set)
-    {
+    GuiClothingSet(Hub hub, ClothingSet set) {
         super(hub);
 
         this.set = set;
     }
 
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         this.inventory = this.hub.getServer().createInventory(null, 54, this.set.getName());
 
         this.update(player);
@@ -49,8 +44,7 @@ class GuiClothingSet extends AbstractGui
     }
 
     @Override
-    public void update(Player player)
-    {
+    public void update(Player player) {
         this.setSlotData(this.set.getSet()[0].getIcon(player), 13, "cosmetic_" + this.set.getSet()[0].getStorageId());
         this.setSlotData(this.set.getSet()[1].getIcon(player), 22, "cosmetic_" + this.set.getSet()[1].getStorageId());
         this.setSlotData(this.set.getSet()[2].getIcon(player), 31, "cosmetic_" + this.set.getSet()[2].getStorageId());
@@ -61,19 +55,13 @@ class GuiClothingSet extends AbstractGui
     }
 
     @Override
-    public void onClick(Player player, ItemStack stack, String action, ClickType clickType)
-    {
-        if (action.startsWith("cosmetic_"))
-        {
+    public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
+        if (action.startsWith("cosmetic_")) {
             int cosmetic = Integer.parseInt(action.split("_")[1]);
             this.hub.getCosmeticManager().getClothManager().enableCosmetic(player, this.hub.getCosmeticManager().getClothManager().getRegistry().getElementByStorageId(cosmetic), clickType, false);
-        }
-        else if (action.equals("delete"))
-        {
+        } else if (action.equals("delete")) {
             this.hub.getCosmeticManager().getClothManager().disableCosmetics(player, false, false);
-        }
-        else if (action.equals("back"))
-        {
+        } else if (action.equals("back")) {
             this.hub.getGuiManager().openGui(player, new GuiClothingSets(this.hub));
         }
     }

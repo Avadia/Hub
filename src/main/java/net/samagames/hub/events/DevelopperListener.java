@@ -25,28 +25,22 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DevelopperListener implements Listener
-{
+public class DevelopperListener implements Listener {
     private final Hub hub;
 
-    public DevelopperListener(Hub hub)
-    {
+    public DevelopperListener(Hub hub) {
         this.hub = hub;
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
         {
-            if (SamaGamesAPI.get().getPermissionsManager().hasPermission(event.getPlayer(), "hub.sign.selection"))
-            {
-                if (event.getItem() != null && event.getItem().getType() == Material.WOOD_AXE)
-                {
+            if (SamaGamesAPI.get().getPermissionsManager().hasPermission(event.getPlayer(), "hub.sign.selection")) {
+                if (event.getItem() != null && event.getItem().getType() == Material.WOOD_AXE) {
                     Action act = event.getAction();
 
-                    if (act == Action.LEFT_CLICK_BLOCK)
-                    {
+                    if (act == Action.LEFT_CLICK_BLOCK) {
                         this.hub.getPlayerManager().setSelection(event.getPlayer(), event.getClickedBlock().getLocation());
                         event.getPlayer().sendMessage(ChatColor.GOLD + "Point sélectionné !");
                     }

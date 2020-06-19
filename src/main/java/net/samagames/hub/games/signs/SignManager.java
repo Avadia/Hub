@@ -15,7 +15,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
 /*
@@ -34,31 +34,26 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SignManager extends AbstractManager
-{
+public class SignManager extends AbstractManager {
     private final JsonConfiguration jsonConfig;
 
-    public SignManager(Hub hub)
-    {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public SignManager(Hub hub) {
         super(hub);
 
         File config = new File(this.hub.getDataFolder(), "signs.json");
 
-        if (!config.exists())
-        {
-            try
-            {
+        if (!config.exists()) {
+            try {
                 config.createNewFile();
 
                 FileOutputStream fileOutputStream = new FileOutputStream(config);
-                OutputStreamWriter fw = new OutputStreamWriter(fileOutputStream, Charset.forName("UTF-8"));
+                OutputStreamWriter fw = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
                 BufferedWriter bw = new BufferedWriter(fw);
                 bw.write("{\"zones\":[]}");
                 bw.close();
                 fileOutputStream.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -68,32 +63,29 @@ public class SignManager extends AbstractManager
     }
 
     @Override
-    public void onDisable() { /** Not needed **/ }
+    public void onDisable() { /* Not needed **/}
 
     @Override
-    public void onLogin(Player player) { /** Not needed **/ }
+    public void onLogin(Player player) { /* Not needed **/}
 
     @Override
-    public void onLogout(Player player) { /** Not needed **/ }
+    public void onLogout(Player player) { /* Not needed **/}
 
-    public void reloadList()
-    {
+    public void reloadList() {
         this.log(Level.INFO, "Reloading game sign list...");
 
         this.hub.getGameManager().getGames().values().forEach(net.samagames.hub.games.AbstractGame::clearSigns);
 
         JsonArray signZonesArray = this.jsonConfig.load().getAsJsonArray("zones");
 
-        for (int i = 0; i < signZonesArray.size(); i++)
-        {
+        for (int i = 0; i < signZonesArray.size(); i++) {
             JsonObject signZoneObject = signZonesArray.get(i).getAsJsonObject();
 
             String game = signZoneObject.get("game").getAsString();
 
             JsonArray maps = signZoneObject.get("maps").getAsJsonArray();
 
-            for (int j = 0; j < maps.size(); j++)
-            {
+            for (int j = 0; j < maps.size(); j++) {
                 JsonObject mapObject = maps.get(j).getAsJsonObject();
                 String map = mapObject.get("map").getAsString();
                 String template = mapObject.get("template").getAsString();
@@ -102,14 +94,10 @@ public class SignManager extends AbstractManager
 
                 RestrictedVersion restrictedVersion = null;
 
-                if (mapObject.has("restricted-version"))
-                {
-                    try
-                    {
+                if (mapObject.has("restricted-version")) {
+                    try {
                         restrictedVersion = RestrictedVersion.parse(mapObject.get("restricted-version").getAsString());
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         this.log(Level.SEVERE, "Wanted to register a game sign with an invalid restricted version! (" + e.getMessage() + ")");
                         continue;
                     }
@@ -117,16 +105,14 @@ public class SignManager extends AbstractManager
 
                 AbstractGame gameObject = this.hub.getGameManager().getGameByIdentifier(game);
 
-                if (gameObject == null)
-                {
+                if (gameObject == null) {
                     this.log(Level.SEVERE, "Wanted to register a game sign withing an unknown game!");
                     continue;
                 }
 
                 Block block = this.hub.getWorld().getBlockAt(sign);
 
-                if (!(block.getState() instanceof Sign))
-                {
+                if (!(block.getState() instanceof Sign)) {
                     this.log(Level.SEVERE, "Sign block for game '" + game + "' and map '" + map + "' is not a sign in the world!");
                     continue;
                 }
@@ -140,17 +126,14 @@ public class SignManager extends AbstractManager
         this.log(Level.INFO, "Reloaded game sign list.");
     }
 
-    public void setSignForMap(String game, String map, ChatColor color, String template, Sign sign)
-    {
+    public void setSignForMap(String game, String map, ChatColor color, String template, Sign sign) {
         JsonObject root = this.jsonConfig.load();
         JsonArray signZonesArray = root.getAsJsonArray("zones");
 
-        for (int i = 0; i < signZonesArray.size(); i++)
-        {
+        for (int i = 0; i < signZonesArray.size(); i++) {
             JsonObject signZoneObject = signZonesArray.get(i).getAsJsonObject();
 
-            if (signZoneObject.get("game").getAsString().equals(game))
-            {
+            if (signZoneObject.get("game").getAsString().equals(game)) {
                 JsonArray maps = signZoneObject.get("maps").getAsJsonArray();
 
                 JsonObject mapObject = new JsonObject();

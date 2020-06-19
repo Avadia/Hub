@@ -29,17 +29,14 @@ import javax.lang.model.type.NullType;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class BalloonManager extends AbstractCosmeticManager<BalloonCosmetic> implements Listener
-{
-    public BalloonManager(Hub hub)
-    {
+public class BalloonManager extends AbstractCosmeticManager<BalloonCosmetic> implements Listener {
+    public BalloonManager(Hub hub) {
         super(hub, new BalloonRegistry(hub));
         this.hub.getServer().getPluginManager().registerEvents(this, this.hub);
     }
 
     @Override
-    public void enableCosmetic(Player player, BalloonCosmetic cosmetic, ClickType clickType, boolean login, NullType useless)
-    {
+    public void enableCosmetic(Player player, BalloonCosmetic cosmetic, ClickType clickType, boolean login, NullType useless) {
         cosmetic.spawn(player);
 
         if (!login)
@@ -47,8 +44,7 @@ public class BalloonManager extends AbstractCosmeticManager<BalloonCosmetic> imp
     }
 
     @Override
-    public void disableCosmetic(Player player, BalloonCosmetic cosmetic, boolean logout, boolean replace, NullType useless)
-    {
+    public void disableCosmetic(Player player, BalloonCosmetic cosmetic, boolean logout, boolean replace, NullType useless) {
         cosmetic.remove(player);
 
         if (!logout && !replace)
@@ -56,18 +52,16 @@ public class BalloonManager extends AbstractCosmeticManager<BalloonCosmetic> imp
     }
 
     @Override
-    public void update() { /** Not needed **/ }
+    public void update() { /* Not needed **/}
 
     @EventHandler
-    public void onItemSpawn(ItemSpawnEvent event)
-    {
+    public void onItemSpawn(ItemSpawnEvent event) {
         if (event.getEntity().getItemStack() != null && event.getEntity().getItemStack().getType() == Material.LEASH)
             event.setCancelled(true);
     }
 
     @Override
-    public boolean restrictToOne()
-    {
+    public boolean restrictToOne() {
         return true;
     }
 }

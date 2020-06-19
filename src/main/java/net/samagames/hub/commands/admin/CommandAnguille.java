@@ -23,23 +23,17 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandAnguille extends AbstractCommand
-{
-    public CommandAnguille(Hub hub)
-    {
+public class CommandAnguille extends AbstractCommand {
+    public CommandAnguille(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
-        if (this.hub.getPlayerManager().canBuild())
-        {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
+        if (this.hub.getPlayerManager().canBuild()) {
             this.hub.getPlayerManager().setBuild(false);
             player.sendMessage(PlayerManager.SETTINGS_TAG + ChatColor.RED + "Construction désactivée.");
-        }
-        else
-        {
+        } else {
             this.hub.getPlayerManager().setBuild(true);
             player.sendMessage(PlayerManager.SETTINGS_TAG + ChatColor.GREEN + "Construction activée.");
         }

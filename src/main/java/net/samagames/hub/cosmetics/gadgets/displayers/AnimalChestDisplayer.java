@@ -1,7 +1,8 @@
 package net.samagames.hub.cosmetics.gadgets.displayers;
 
-import com.google.common.collect.Sets;
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.Block;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.PacketPlayOutBlockAction;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.gadgets.GadgetManager;
 import net.samagames.hub.utils.EntityUtils;
@@ -10,15 +11,12 @@ import net.samagames.tools.SimpleBlock;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-
-import java.lang.reflect.Field;
 
 /*
  * This file is part of Hub.
@@ -36,9 +34,8 @@ import java.lang.reflect.Field;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class AnimalChestDisplayer extends AbstractDisplayer
-{
-    private static final EntityType[] TYPES = new EntityType[] {
+public class AnimalChestDisplayer extends AbstractDisplayer {
+    private static final EntityType[] TYPES = new EntityType[]{
             EntityType.CAVE_SPIDER, EntityType.COW, EntityType.CREEPER, EntityType.ENDERMAN, EntityType.ENDERMITE,
             EntityType.GUARDIAN, EntityType.IRON_GOLEM, EntityType.MAGMA_CUBE, EntityType.OCELOT, EntityType.PIG,
             EntityType.PIG_ZOMBIE, EntityType.RABBIT, EntityType.SHEEP, EntityType.SILVERFISH, EntityType.SKELETON,
@@ -50,22 +47,20 @@ public class AnimalChestDisplayer extends AbstractDisplayer
     private final Location centerLoc;
     private final EntityType type;
 
-    public AnimalChestDisplayer(Hub hub, Player player)
-    {
+    public AnimalChestDisplayer(Hub hub, Player player) {
         super(hub, player);
 
         this.baseLocation = player.getLocation().add(1, 0, 1);
-        this.addBlockToUse(this.baseLocation, new SimpleBlock(Material.CHEST, (byte)4));
+        this.addBlockToUse(this.baseLocation, new SimpleBlock(Material.CHEST, (byte) 4));
 
         this.centerLoc = this.baseLocation.clone().add(-0.5D, 0.75D, -0.5D);
         this.type = TYPES[GadgetManager.RANDOM.nextInt(TYPES.length)];
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void display()
-    {
-        for (Location block : this.blocksUsed.keySet())
-        {
+    public void display() {
+        for (Location block : this.blocksUsed.keySet()) {
             block.getBlock().setType(this.blocksUsed.get(block).getType());
             block.getBlock().setData(this.blocksUsed.get(block).getData());
         }
@@ -88,7 +83,7 @@ public class AnimalChestDisplayer extends AbstractDisplayer
             PacketPlayOutBlockAction openingpacket = new PacketPlayOutBlockAction(position, block, 1, 1);
 
             for (Player p : this.hub.getServer().getOnlinePlayers())
-                ((CraftPlayer)p).getHandle().playerConnection.sendPacket(openingpacket);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(openingpacket);
 
             BukkitTask spawningTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, () ->
             {
@@ -118,17 +113,16 @@ public class AnimalChestDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
     @Override
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 }

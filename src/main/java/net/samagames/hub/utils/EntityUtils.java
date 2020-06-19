@@ -25,24 +25,20 @@ import java.lang.reflect.Field;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class EntityUtils
-{
-    private EntityUtils()
-    {
+public class EntityUtils {
+    private EntityUtils() {
     }
 
-    public static void freezeEntity(Entity e)
-    {
-        net.minecraft.server.v1_12_R1.Entity entity = ((CraftEntity)e).getHandle();
+    public static void freezeEntity(Entity e) {
+        net.minecraft.server.v1_12_R1.Entity entity = ((CraftEntity) e).getHandle();
 
         if (!(entity instanceof EntityInsentient))
-            return ;
+            return;
 
         EntityInsentient ce = (EntityInsentient) entity;
         Field bField;
 
-        try
-        {
+        try {
             bField = PathfinderGoalSelector.class.getDeclaredField("b");
             bField.setAccessible(true);
             Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
@@ -54,7 +50,7 @@ public class EntityUtils
             cField.set(ce.targetSelector, Sets.newLinkedHashSet());
 
             ((Navigation) ce.getNavigation()).a(true);
+        } catch (ReflectiveOperationException ignored) {
         }
-        catch (ReflectiveOperationException ignored) {}
     }
 }

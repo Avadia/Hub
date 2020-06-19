@@ -24,19 +24,17 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class CoveredTutorialChapter extends TutorialChapter
-{
+class CoveredTutorialChapter extends TutorialChapter {
     private final int coverId;
 
-    CoveredTutorialChapter(Location location, String title, List<Pair<String, Long>> content, int coverId)
-    {
+    CoveredTutorialChapter(Location location, String title, List<Pair<String, Long>> content, int coverId) {
         super(location, title, content, true);
         this.coverId = coverId;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void teleport(Player player)
-    {
+    public void teleport(Player player) {
         super.teleport(player);
         player.playEffect(player.getLocation(), Effect.RECORD_PLAY, this.coverId);
     }

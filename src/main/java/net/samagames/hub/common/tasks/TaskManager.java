@@ -6,6 +6,7 @@ import net.samagames.hub.common.managers.AbstractManager;
 import net.samagames.tools.ProximityUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -26,8 +27,7 @@ import org.bukkit.scheduler.BukkitTask;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class TaskManager extends AbstractManager
-{
+public class TaskManager extends AbstractManager {
     private final CirclesTask circlesTask;
     private final BirthdayTask birthdayTask;
     private final PlayersAwayFromKeyboardTask playersAwayFromKeyboardTask;
@@ -40,8 +40,7 @@ public class TaskManager extends AbstractManager
     private final BukkitTask serverRoomProximityTask;
     private final BukkitTask webDeveloperArtProximityTask;
 
-    public TaskManager(Hub hub)
-    {
+    public TaskManager(Hub hub) {
         super(hub);
 
         this.circlesTask = new CirclesTask(hub);
@@ -81,8 +80,7 @@ public class TaskManager extends AbstractManager
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.circlesTask.cancel();
         this.birthdayTask.cancel();
         this.playersAwayFromKeyboardTask.cancel();
@@ -97,31 +95,26 @@ public class TaskManager extends AbstractManager
     }
 
     @Override
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         this.advertisingTask.addPlayer(player);
     }
 
     @Override
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         this.advertisingTask.removePlayer(player);
     }
 
-    public CirclesTask getCirclesTask()
-    {
+    public CirclesTask getCirclesTask() {
         return this.circlesTask;
     }
 
-    public PlayersAwayFromKeyboardTask getPlayersAwayFromKeyboardTask()
-    {
+    public PlayersAwayFromKeyboardTask getPlayersAwayFromKeyboardTask() {
         return this.playersAwayFromKeyboardTask;
     }
 
-    private void prepareProximityDetection(ArmorStand armorStand, String customName)
-    {
+    private void prepareProximityDetection(ArmorStand armorStand, String customName) {
         armorStand.setCustomName(customName);
         armorStand.setCustomNameVisible(false);
-        armorStand.getNearbyEntities(2.0, 2.0, 2.0).stream().filter(entity -> entity.getType() == EntityType.ARMOR_STAND).filter(entity -> entity.getCustomName().equals(armorStand.getCustomName())).forEach(entity -> entity.remove());
+        armorStand.getNearbyEntities(2.0, 2.0, 2.0).stream().filter(entity -> entity.getType() == EntityType.ARMOR_STAND).filter(entity -> entity.getCustomName().equals(armorStand.getCustomName())).forEach(Entity::remove);
     }
 }

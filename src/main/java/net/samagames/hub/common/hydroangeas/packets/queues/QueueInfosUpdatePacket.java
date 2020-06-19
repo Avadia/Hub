@@ -19,9 +19,7 @@ import net.samagames.hub.common.hydroangeas.connection.Packet;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class QueueInfosUpdatePacket extends Packet
-{
-
+public class QueueInfosUpdatePacket extends Packet {
     private Type type;
 
     private String game;
@@ -45,77 +43,67 @@ public class QueueInfosUpdatePacket extends Packet
     //target
     private QPlayer player;
 
-    public QueueInfosUpdatePacket()
-    {
+    public QueueInfosUpdatePacket() {
     }
 
-    public QueueInfosUpdatePacket(QPlayer player, Type type, String game, String map)
-    {
+    public QueueInfosUpdatePacket(QPlayer player, Type type, String game, String map) {
         this(player, type);
         this.game = game;
         this.map = map;
     }
 
-    public QueueInfosUpdatePacket(QPlayer player, Type type, String templateId)
-    {
+    public QueueInfosUpdatePacket(QPlayer player, Type type, String templateId) {
         this(player, type);
         this.templateId = templateId;
     }
 
-    public QueueInfosUpdatePacket(QPlayer player, Type type)
-    {
+    public QueueInfosUpdatePacket(QPlayer player, Type type) {
         this.player = player;
         this.type = type;
     }
 
-    public Type getType()
-    {
+    public Type getType() {
         return type;
-    }
-
-    public boolean isSuccess()
-    {
-        return success;
-    }
-
-    public String getErrorMessage()
-    {
-        return errorMessage;
-    }
-
-    public String getGame()
-    {
-        return game;
-    }
-
-    public String getMap()
-    {
-        return map;
-    }
-
-    public QPlayer getPlayer()
-    {
-        return player;
     }
 
     public void setType(Type type) {
         this.type = type;
     }
 
-    public void setGame(String game) {
-        this.game = game;
-    }
-
-    public void setMap(String map) {
-        this.map = map;
+    public boolean isSuccess() {
+        return success;
     }
 
     public void setSuccess(boolean success) {
         this.success = success;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public String getGame() {
+        return game;
+    }
+
+    public void setGame(String game) {
+        this.game = game;
+    }
+
+    public String getMap() {
+        return map;
+    }
+
+    public void setMap(String map) {
+        this.map = map;
+    }
+
+    public QPlayer getPlayer() {
+        return player;
     }
 
     public void setPlayer(QPlayer player) {
@@ -170,8 +158,7 @@ public class QueueInfosUpdatePacket extends Packet
         this.groupSize = groupSize;
     }
 
-    public enum Type
-    {
+    public enum Type {
         ADD, REMOVE, INFO
     }
 }

@@ -3,9 +3,6 @@ package net.samagames.hub.cosmetics.disguises;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.common.AbstractCosmetic;
-import net.samagames.hub.cosmetics.common.CosmeticAccessibility;
-import net.samagames.hub.cosmetics.common.CosmeticRarity;
-import org.bukkit.inventory.ItemStack;
 
 /*
  * This file is part of Hub.
@@ -23,19 +20,16 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class DisguiseCosmetic extends AbstractCosmetic
-{
+class DisguiseCosmetic extends AbstractCosmetic {
     private final DisguiseType disguiseType;
 
-    DisguiseCosmetic(Hub hub, int storageId, DisguiseType disguiseType) throws Exception
-    {
+    DisguiseCosmetic(Hub hub, int storageId, DisguiseType disguiseType) throws Exception {
         super(hub, "Déguisement", storageId);
 
         this.disguiseType = disguiseType;
     }
 
-    public DisguiseType getDisguiseType()
-    {
+    public DisguiseType getDisguiseType() {
         return this.disguiseType;
     }
 }

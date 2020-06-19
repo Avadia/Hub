@@ -22,10 +22,8 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class RankUtils
-{
-    public static String getFormattedRank(UUID uuid, boolean overrideNickname)
-    {
+public class RankUtils {
+    public static String getFormattedRank(UUID uuid, boolean overrideNickname) {
         IPermissionsEntity permissionsEntity = SamaGamesAPI.get().getPermissionsManager().getPlayer(uuid);
 
         String prefix = overrideNickname ? permissionsEntity.getPrefix() : permissionsEntity.getDisplayPrefix();

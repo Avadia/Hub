@@ -21,10 +21,8 @@ import net.minecraft.server.v1_12_R1.World;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class EntityGraouLaserTarget extends EntitySquid
-{
-    public EntityGraouLaserTarget(World world)
-    {
+public class EntityGraouLaserTarget extends EntitySquid {
+    public EntityGraouLaserTarget(World world) {
         super(world);
 
         this.setInvisible(true);
@@ -33,29 +31,29 @@ public class EntityGraouLaserTarget extends EntitySquid
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {}
+    public void b(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    public boolean c(NBTTagCompound nbttagcompound)
-    {
+    public boolean c(NBTTagCompound nbttagcompound) {
         return false;
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {}
+    public void a(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    public boolean d(NBTTagCompound nbttagcompound)
-    {
+    public boolean d(NBTTagCompound nbttagcompound) {
         return false;
     }
 
     @Override
-    public void f(NBTTagCompound nbttagcompound) {}
+    public void f(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    protected SoundEffect F()
-    {
+    protected SoundEffect F() {
         return null;
     }
 }

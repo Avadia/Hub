@@ -26,36 +26,28 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandClickme extends AbstractCommand
-{
-    public CommandClickme(Hub hub)
-    {
+public class CommandClickme extends AbstractCommand {
+    public CommandClickme(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
-        if (args == null || args.length < 1)
-        {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
+        if (args == null || args.length < 1) {
             player.sendMessage(ChatColor.RED + "Usage: /" + command.getLabel() + " <Joueur>");
             return true;
         }
 
         UUID uuid = SamaGamesAPI.get().getUUIDTranslator().getUUID(args[0], false);
 
-        if (uuid == null)
-        {
+        if (uuid == null) {
             player.sendMessage(ChatColor.RED + "Ce joueur n'existe pas !");
             return true;
         }
 
-        if (SamaGamesAPI.get().getSettingsManager().getSettings(uuid).isClickOnMeActivation())
-        {
+        if (SamaGamesAPI.get().getSettingsManager().getSettings(uuid).isClickOnMeActivation()) {
             this.hub.getGuiManager().openGui(player, new GuiClickMe(this.hub, args[0], uuid));
-        }
-        else
-        {
+        } else {
             player.sendMessage(ChatColor.RED + "Ce joueur a désactivé le ClickMe !");
         }
 

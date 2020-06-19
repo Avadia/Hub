@@ -27,9 +27,18 @@ import org.bukkit.scheduler.BukkitTask;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiConfirm extends AbstractGui
-{
+public class GuiConfirm extends AbstractGui {
     private static final ItemStack WAITING_STACK;
+
+    static {
+        //noinspection deprecation
+        WAITING_STACK = new ItemStack(Material.STAINED_GLASS, 1, DyeColor.YELLOW.getWoolData());
+
+        ItemMeta meta = WAITING_STACK.getItemMeta();
+        meta.setDisplayName(ChatColor.GOLD + "Veuillez patienter...");
+
+        WAITING_STACK.setItemMeta(meta);
+    }
 
     private final AbstractGui parent;
     private final ConfirmCallback callback;
@@ -37,8 +46,7 @@ public class GuiConfirm extends AbstractGui
     private int waitingSlot;
     private boolean isInProgress;
 
-    public GuiConfirm(Hub hub, AbstractGui parent, ConfirmCallback callback)
-    {
+    public GuiConfirm(Hub hub, AbstractGui parent, ConfirmCallback callback) {
         super(hub);
 
         this.parent = parent;
@@ -50,8 +58,7 @@ public class GuiConfirm extends AbstractGui
 
     @SuppressWarnings("deprecation")
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         this.inventory = this.hub.getServer().createInventory(null, 27, "Confirmer l'achat ?");
 
         this.setSlotData(ChatColor.GREEN + "Oui", new ItemStack(Material.STAINED_GLASS, 1, DyeColor.GREEN.getWoolData()), 11, null, "confirm");
@@ -61,17 +68,14 @@ public class GuiConfirm extends AbstractGui
     }
 
     @Override
-    public void onClose(Player player)
-    {
+    public void onClose(Player player) {
         if (this.waitingTask != null)
             this.waitingTask.cancel();
     }
 
     @Override
-    public void onClick(Player player, ItemStack stack, String action)
-    {
-        if (action.equals("confirm") && !this.isInProgress)
-        {
+    public void onClick(Player player, ItemStack stack, String action) {
+        if (action.equals("confirm") && !this.isInProgress) {
             this.waitingTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, () ->
             {
                 this.inventory.clear();
@@ -88,30 +92,15 @@ public class GuiConfirm extends AbstractGui
                 this.isInProgress = true;
                 this.callback.run(this.parent);
             });
-        }
-        else if (action.equals("cancel") && !this.isInProgress)
-        {
+        } else if (action.equals("cancel") && !this.isInProgress) {
             this.hub.getGuiManager().openGui(player, this.parent);
-        }
-        else
-        {
+        } else {
             player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Merci de patienter pendant le traitement de votre commande...");
         }
     }
 
     @FunctionalInterface
-    public interface ConfirmCallback
-    {
+    public interface ConfirmCallback {
         void run(AbstractGui parent);
-    }
-
-    static
-    {
-        WAITING_STACK = new ItemStack(Material.STAINED_GLASS, 1, DyeColor.YELLOW.getWoolData());
-
-        ItemMeta meta = WAITING_STACK.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + "Veuillez patienter...");
-
-        WAITING_STACK.setItemMeta(meta);
     }
 }

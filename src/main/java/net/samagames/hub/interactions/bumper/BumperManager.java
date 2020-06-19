@@ -23,30 +23,24 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class BumperManager extends AbstractInteractionManager<Bumper>
-{
-    public BumperManager(Hub hub)
-    {
+public class BumperManager extends AbstractInteractionManager<Bumper> {
+    public BumperManager(Hub hub) {
         super(hub, "bumpers");
     }
 
     @Override
-    public void loadConfiguration(JsonArray rootJson)
-    {
-        for (int i = 0; i < rootJson.size(); i++)
-        {
+    public void loadConfiguration(JsonArray rootJson) {
+        for (int i = 0; i < rootJson.size(); i++) {
             JsonElement jsonBumber = rootJson.get(i);
 
             Bumper bumper = null;
 
-            try
-            {
+            try {
                 bumper = new Bumper(this.hub, jsonBumber.getAsString());
+            } catch (Exception ignored) {
             }
-            catch (Exception ignored) {}
 
-            if (bumper != null)
-            {
+            if (bumper != null) {
                 this.interactions.add(bumper);
                 this.log(Level.INFO, "Registered bumper at '" + jsonBumber.getAsString());
             }

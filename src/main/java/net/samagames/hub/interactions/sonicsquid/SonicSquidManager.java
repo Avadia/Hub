@@ -21,18 +21,15 @@ import net.samagames.hub.interactions.AbstractInteractionManager;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SonicSquidManager extends AbstractInteractionManager<SonicSquid>
-{
-    public SonicSquidManager(Hub hub)
-    {
+public class SonicSquidManager extends AbstractInteractionManager<SonicSquid> {
+    public SonicSquidManager(Hub hub) {
         super(hub, "squid");
 
         this.hub.getEntityManager().registerEntity("SonicSquid", 94, EntitySquid.class, EntitySonicSquid.class);
     }
 
     @Override
-    public void loadConfiguration(JsonArray rootJson)
-    {
+    public void loadConfiguration(JsonArray rootJson) {
         this.interactions.add(new SonicSquid(this.hub));
     }
 }

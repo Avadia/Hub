@@ -31,13 +31,11 @@ import java.util.stream.Collectors;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class MagicCakeDisplayer extends AbstractDisplayer
-{
+public class MagicCakeDisplayer extends AbstractDisplayer {
+    private final Location centerLoc;
     private BukkitTask loopTask;
-    private Location centerLoc;
 
-    public MagicCakeDisplayer(Hub hub, Player player)
-    {
+    public MagicCakeDisplayer(Hub hub, Player player) {
         super(hub, player);
 
         this.baseLocation = player.getLocation().getBlock().getLocation().clone().add(0.0D, 1.0D, 0.0D);
@@ -47,11 +45,10 @@ public class MagicCakeDisplayer extends AbstractDisplayer
         this.centerLoc = this.baseLocation.clone().add(0.5D, 0.5D, 0.5D);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void display()
-    {
-        for (Location block : this.blocksUsed.keySet())
-        {
+    public void display() {
+        for (Location block : this.blocksUsed.keySet()) {
             block.getBlock().setType(this.blocksUsed.get(block).getType());
             block.getBlock().setData(this.blocksUsed.get(block).getData());
         }
@@ -63,20 +60,17 @@ public class MagicCakeDisplayer extends AbstractDisplayer
 
         this.getNearbyPlayers(this.centerLoc, 5).stream().filter(entity -> entity instanceof Player).forEach(entity -> entity.setVelocity(new Vector(0, 2, 0)));
 
-        this.loopTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable()
-        {
+        this.loopTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable() {
             int times = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 for (int i = 0; i <= 5; i++)
+                    //noinspection deprecation
                     centerLoc.getWorld().playEffect(centerLoc.clone().add((GadgetManager.RANDOM.nextDouble() * 5) - 2.5, (GadgetManager.RANDOM.nextDouble() * 4) - 1, (GadgetManager.RANDOM.nextDouble() * 5) - 2.5), Effect.FLYING_GLYPH, 5);
 
-                for (Entity entity : getNearbyPlayers(centerLoc, 5))
-                {
-                    if (entity instanceof Player)
-                    {
+                for (Entity entity : getNearbyPlayers(centerLoc, 5)) {
+                    if (entity instanceof Player) {
                         Player player = (Player) entity;
 
                         double pw = 8;
@@ -92,13 +86,10 @@ public class MagicCakeDisplayer extends AbstractDisplayer
                         double yc;
                         double xc;
 
-                        if (Math.abs(xa - xc1) > Math.abs(xa - xc2))
-                        {
+                        if (Math.abs(xa - xc1) > Math.abs(xa - xc2)) {
                             yc = m * xc1 + p;
                             xc = xc1;
-                        }
-                        else
-                        {
+                        } else {
                             yc = m * xc2 + p;
                             xc = xc2;
                         }
@@ -111,16 +102,14 @@ public class MagicCakeDisplayer extends AbstractDisplayer
                         else if (b < -10)
                             b = -10;
 
-                        if (a != 0.0D && b != 0.0D)
-                        {
+                        if (a != 0.0D && b != 0.0D) {
                             Vector v = new Vector(a / 10, (player.getLocation().getY() - centerLoc.getY()) / 10 + 1, b / 10);
                             player.setVelocity(v);
                             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1F, 2F);
 
                             int effect = GadgetManager.RANDOM.nextInt(3);
 
-                            switch (effect)
-                            {
+                            switch (effect) {
                                 case 0:
                                     break;
                                 case 1:
@@ -137,18 +126,13 @@ public class MagicCakeDisplayer extends AbstractDisplayer
                     }
                 }
 
-                if (this.times == 10 || this.times == 20 || this.times == 30 || this.times == 40 || this.times == 50 || this.times == 60)
-                {
+                if (this.times == 10 || this.times == 20 || this.times == 30 || this.times == 40 || this.times == 50 || this.times == 60) {
                     baseLocation.getWorld().getBlockAt(baseLocation).setData((byte) (baseLocation.getWorld().getBlockAt(baseLocation).getData() + 1));
                     centerLoc.getWorld().playSound(centerLoc, Sound.ENTITY_PLAYER_BURP, 2, 1);
-                }
-                else if (this.times == 70)
-                {
+                } else if (this.times == 70) {
                     baseLocation.getWorld().getBlockAt(baseLocation).setType(Material.AIR);
                     baseLocation.getWorld().playSound(baseLocation, Sound.ENTITY_PLAYER_BURP, 2, 1);
-                }
-                else if (this.times >= 80)
-                {
+                } else if (this.times >= 80) {
                     FireworkEffect.Builder builder = FireworkEffect.builder();
                     FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.BLUE).withFade(Color.PURPLE).withFlicker().build();
                     FireworkUtils.launchfw(hub, baseLocation, effect);
@@ -164,32 +148,29 @@ public class MagicCakeDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
-    private List<Entity> getNearbyPlayers(Location where, int range)
-    {
+    @SuppressWarnings("SameParameterValue")
+    private List<Entity> getNearbyPlayers(Location where, int range) {
         return where.getWorld().getEntities().stream().filter(entity -> this.distance(where, entity.getLocation()) <= range && entity instanceof Player).filter(p -> p.getUniqueId().equals(this.player.getUniqueId()) || this.canInteractWith((Player) p)).collect(Collectors.toList());
     }
 
-    private double distance(Location loc1, Location loc2)
-    {
+    private double distance(Location loc1, Location loc2) {
         return Math.sqrt((loc1.getX() - loc2.getX()) * (loc1.getX() - loc2.getX()) + (loc1.getY() - loc2.getY()) * (loc1.getY() - loc2.getY()) + (loc1.getZ() - loc2.getZ()) * (loc1.getZ() - loc2.getZ()));
     }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
     @Override
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 
-    private void callback()
-    {
+    private void callback() {
         this.loopTask.cancel();
     }
 }

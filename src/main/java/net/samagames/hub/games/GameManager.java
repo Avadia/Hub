@@ -1,7 +1,6 @@
 package net.samagames.hub.games;
 
 import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.pubsub.IPacketsReceiver;
 import net.samagames.hub.Hub;
 import net.samagames.hub.common.hydroangeas.packets.PacketCallBack;
 import net.samagames.hub.common.hydroangeas.packets.hubinfos.GameInfoToHubPacket;
@@ -18,7 +17,6 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.logging.Level;
 
 /*
@@ -37,13 +35,11 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GameManager extends AbstractManager
-{
+public class GameManager extends AbstractManager {
     private final Map<String, AbstractGame> games;
     private final CopyOnWriteArrayList<UUID> playerHided;
 
-    public GameManager(Hub hub)
-    {
+    public GameManager(Hub hub) {
         super(hub);
 
         this.games = new HashMap<>();
@@ -89,15 +85,11 @@ public class GameManager extends AbstractManager
 
         this.registerGame(new BackEndGame(hub, "event", "Événement", this.hub.getPlayerManager().getSpawn(), null, false));
 
-        hub.getHydroangeasManager().getPacketReceiver().registerCallBack(new PacketCallBack<GameInfoToHubPacket>(GameInfoToHubPacket.class)
-        {
+        hub.getHydroangeasManager().getPacketReceiver().registerCallBack(new PacketCallBack<GameInfoToHubPacket>(GameInfoToHubPacket.class) {
             @Override
-            public void call(GameInfoToHubPacket packet)
-            {
-                for (AbstractGame game : games.values())
-                {
-                    for (List<GameSign> list : game.getSigns().values())
-                    {
+            public void call(GameInfoToHubPacket packet) {
+                for (AbstractGame game : games.values()) {
+                    for (List<GameSign> list : game.getSigns().values()) {
                         list.stream().filter(sign -> sign.getTemplate().equalsIgnoreCase(packet.getTemplateID())).forEach(sign ->
                         {
                             sign.setPlayerPerGame(packet.getPlayerMaxForMap());
@@ -110,47 +102,36 @@ public class GameManager extends AbstractManager
             }
         });
 
-        hub.getHydroangeasManager().getPacketReceiver().registerCallBack(new PacketCallBack<QueueInfosUpdatePacket>(QueueInfosUpdatePacket.class)
-        {
+        hub.getHydroangeasManager().getPacketReceiver().registerCallBack(new PacketCallBack<QueueInfosUpdatePacket>(QueueInfosUpdatePacket.class) {
             @Override
-            public void call(QueueInfosUpdatePacket packet)
-            {
-                try
-                {
+            public void call(QueueInfosUpdatePacket packet) {
+                try {
                     Player player = hub.getServer().getPlayer(packet.getPlayer().getUUID());
 
-                    if (!packet.isSuccess() && (packet.getErrorMessage() != null && !packet.getErrorMessage().isEmpty()))
-                    {
+                    if (!packet.isSuccess() && (packet.getErrorMessage() != null && !packet.getErrorMessage().isEmpty())) {
                         player.sendRawMessage(packet.getErrorMessage());
                         return;
                     }
 
-                    if (player != null)
-                    {
-                        if (packet.getType().equals(QueueInfosUpdatePacket.Type.ADD))
-                        {
+                    if (player != null) {
+                        if (packet.getType().equals(QueueInfosUpdatePacket.Type.ADD)) {
                             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1.0F, 1.5F);
 
                             ActionBarAPI.removeMessage(player);
-                            ActionBarAPI.sendMessage(player, ChatColor.GREEN + "Ajouté à la file d'attente de " + ChatColor.GOLD + packet.getGame() +  ChatColor.GREEN + " sur la map " + ChatColor.GOLD + packet.getMap() + ChatColor.GREEN + " !");
+                            ActionBarAPI.sendMessage(player, ChatColor.GREEN + "Ajouté à la file d'attente de " + ChatColor.GOLD + packet.getGame() + ChatColor.GREEN + " sur la map " + ChatColor.GOLD + packet.getMap() + ChatColor.GREEN + " !");
 
-                            if (getGameByIdentifier(packet.getGame()).hasResourcesPack())
-                            {
+                            if (getGameByIdentifier(packet.getGame()).hasResourcesPack()) {
                                 player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
                                 player.sendMessage(ChatColor.AQUA + "Ce jeu fait l'usage d'un pack de ressources. Vérifiez vos paramètres afin qu'ils soient correctement activés.");
                                 player.sendMessage(ChatColor.AQUA + "Si vous n'utilisez pas le pack de ressources avant le début de la partie, vous serez renvoyé au Hub.");
                                 player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
                             }
-                        }
-                        else if (packet.getType().equals(QueueInfosUpdatePacket.Type.REMOVE))
-                        {
+                        } else if (packet.getType().equals(QueueInfosUpdatePacket.Type.REMOVE)) {
                             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1.0F, 0.8F);
 
                             ActionBarAPI.removeMessage(player);
                             ActionBarAPI.sendMessage(player, ChatColor.RED + "Retiré de la file d'attente de " + ChatColor.GOLD + packet.getGame() + ChatColor.RED + " sur la map " + ChatColor.GOLD + packet.getMap() + ChatColor.RED + " !");
-                        }
-                        else if (packet.getType().equals(QueueInfosUpdatePacket.Type.INFO))
-                        {
+                        } else if (packet.getType().equals(QueueInfosUpdatePacket.Type.INFO)) {
                             if (!SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isWaitingLineNotification())
                                 return;
 
@@ -162,8 +143,8 @@ public class GameManager extends AbstractManager
                                 ActionBarAPI.sendPermanentMessage(player, ChatColor.YELLOW + "Il manque " + ChatColor.RED + packet.getRemainingPlayer() + ChatColor.YELLOW + " joueur" + (packet.getRemainingPlayer() > 1 ? "s" : "") + " pour démarrer votre serveur.");
                         }
                     }
+                } catch (Exception ignored) {
                 }
-                catch (Exception ignored) {}
             }
         });
 
@@ -176,71 +157,59 @@ public class GameManager extends AbstractManager
                     for (GameSign sign : list)
                         this.hub.getWorld().getNearbyEntities(sign.getSign().getLocation(), 1.0D, 1.0D, 1.0D).stream().filter(entity -> entity instanceof Player && !toHide.contains(entity.getUniqueId())).forEach(entity -> toHide.add(entity.getUniqueId()));
 
-            for (UUID playerUUID : toHide)
-            {
+            for (UUID playerUUID : toHide) {
                 Player player = this.hub.getServer().getPlayer(playerUUID);
 
                 if (player == null)
                     continue;
 
                 for (Player pPlayer : this.hub.getServer().getOnlinePlayers())
-                    this.hub.getServer().getScheduler().runTask(hub, () -> pPlayer.hidePlayer(player));
+                    this.hub.getServer().getScheduler().runTask(hub, () -> pPlayer.hidePlayer(this.hub, player));
             }
 
             this.playerHided.addAll(toHide);
 
-            for (UUID playerUUID : this.playerHided)
-            {
+            for (UUID playerUUID : this.playerHided) {
                 Player player = this.hub.getServer().getPlayer(playerUUID);
 
-                if (player == null)
-                {
+                if (player == null) {
                     this.playerHided.remove(playerUUID);
                     continue;
                 }
 
-                if (!toHide.contains(playerUUID))
-                {
+                if (!toHide.contains(playerUUID)) {
                     this.playerHided.remove(playerUUID);
 
                     for (Player other : this.hub.getServer().getOnlinePlayers())
-                        this.hub.getServer().getScheduler().runTask(hub, () -> other.showPlayer(player));
+                        this.hub.getServer().getScheduler().runTask(hub, () -> other.showPlayer(this.hub, player));
                 }
             }
         }, 20L * 2, 20L * 2);
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.games.values().forEach(AbstractGame::clearSigns);
     }
 
     @Override
-    public void onLogin(Player player) { /** Not needed **/ }
+    public void onLogin(Player player) { /* Not needed **/}
 
     @Override
-    public void onLogout(Player player) {/** Not needed **/ }
+    public void onLogout(Player player) {/* Not needed **/}
 
-    private void registerGame(AbstractGame game)
-    {
-        if (!this.games.containsKey(game.getCodeName()))
-        {
+    private void registerGame(AbstractGame game) {
+        if (!this.games.containsKey(game.getCodeName())) {
             this.games.put(game.getCodeName(), game);
             this.log(Level.INFO, "Registered game '" + game.getCodeName() + "'");
         }
     }
 
-    public AbstractGame getGameByIdentifier(String identifier)
-    {
-        if (this.games.containsKey(identifier.toLowerCase()))
-            return this.games.get(identifier.toLowerCase());
-        else
-            return null;
+    public AbstractGame getGameByIdentifier(String identifier) {
+        return this.games.getOrDefault(identifier.toLowerCase(), null);
     }
 
-    public Map<String, AbstractGame> getGames()
-    {
+    public Map<String, AbstractGame> getGames() {
         return this.games;
     }
 }

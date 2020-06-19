@@ -27,22 +27,18 @@ import java.util.concurrent.ConcurrentMap;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class EventListener implements IPacketsReceiver
-{
+public class EventListener implements IPacketsReceiver {
     private final Hub hub;
     private final ConcurrentMap<UUID, String> waiting;
 
-    public EventListener(Hub hub)
-    {
+    public EventListener(Hub hub) {
         this.hub = hub;
         this.waiting = new ConcurrentHashMap<>();
     }
 
     @Override
-    public void receive(String channel, String packet)
-    {
-        if (channel.equals("eventChannel"))
-        {
+    public void receive(String channel, String packet) {
+        if (channel.equals("eventChannel")) {
             String[] data = packet.split(":");
 
             String gameCodeName = data[0];
@@ -75,23 +71,18 @@ public class EventListener implements IPacketsReceiver
                 message.send(player);
                 player.sendMessage("");
             });
-        }
-        else if (channel.equals("servers") && packet.startsWith("heartbeat"))
-        {
+        } else if (channel.equals("servers") && packet.startsWith("heartbeat")) {
             String[] data = packet.split(" ");
 
-            for (UUID animator : this.waiting.keySet())
-            {
-                if (this.hub.getServer().getPlayer(animator) == null)
-                {
+            for (UUID animator : this.waiting.keySet()) {
+                if (this.hub.getServer().getPlayer(animator) == null) {
                     this.waiting.remove(animator);
                     continue;
                 }
 
                 String gameName = this.waiting.get(animator);
 
-                if (data[1].startsWith(gameName))
-                {
+                if (data[1].startsWith(gameName)) {
                     SamaGamesAPI.get().getPubSub().send(data[1], "moderator " + animator);
                     SamaGamesAPI.get().getPubSub().send(data[1], "teleport " + animator);
 
@@ -101,8 +92,7 @@ public class EventListener implements IPacketsReceiver
         }
     }
 
-    public void setWaiting(UUID animator, String gameName)
-    {
+    public void setWaiting(UUID animator, String gameName) {
         this.waiting.put(animator, gameName);
     }
 }

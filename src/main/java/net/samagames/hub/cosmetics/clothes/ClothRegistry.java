@@ -22,22 +22,19 @@ import java.util.Map;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
-{
+public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic> {
     private final Map<Integer, ClothingSet> sets;
 
-    ClothRegistry(Hub hub)
-    {
+    ClothRegistry(Hub hub) {
         super(hub);
 
         this.sets = new HashMap<>();
     }
 
     @Override
-    public void register() throws Exception
-    {
+    public void register() throws Exception {
         // Cochonou
-        this.registerSet(273, new ClothCosmetic[] {
+        this.registerSet(273, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 274, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 275, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 276, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -45,7 +42,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Vampire
-        this.registerSet(278, new ClothCosmetic[] {
+        this.registerSet(278, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 279, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 280, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 281, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -53,7 +50,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Link
-        this.registerSet(283, new ClothCosmetic[] {
+        this.registerSet(283, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 284, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 285, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 286, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -61,7 +58,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // TNT
-        this.registerSet(288, new ClothCosmetic[] {
+        this.registerSet(288, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 289, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 290, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 291, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -69,7 +66,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Zombie
-        this.registerSet(293, new ClothCosmetic[] {
+        this.registerSet(293, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 294, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 295, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 296, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -77,7 +74,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Cow
-        this.registerSet(298, new ClothCosmetic[] {
+        this.registerSet(298, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 299, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 300, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 301, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -85,7 +82,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Mushroom Cow
-        this.registerSet(303, new ClothCosmetic[] {
+        this.registerSet(303, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 304, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 305, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 306, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -93,7 +90,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Wolf
-        this.registerSet(308, new ClothCosmetic[] {
+        this.registerSet(308, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 309, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 310, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 311, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -101,7 +98,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Sheep
-        this.registerSet(313, new ClothCosmetic[] {
+        this.registerSet(313, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 314, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 315, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 316, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -109,7 +106,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Meow
-        this.registerSet(318, new ClothCosmetic[] {
+        this.registerSet(318, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 319, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 320, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 321, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -117,7 +114,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Carrot
-        this.registerSet(323, new ClothCosmetic[] {
+        this.registerSet(323, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 324, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 325, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 326, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -125,7 +122,7 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
 
         // Chicken
-        this.registerSet(328, new ClothCosmetic[] {
+        this.registerSet(328, new ClothCosmetic[]{
                 new ClothCosmetic(this.hub, 329, ClothCosmetic.ArmorSlot.HELMET),
                 new ClothCosmetic(this.hub, 330, ClothCosmetic.ArmorSlot.CHESTPLATE),
                 new ClothCosmetic(this.hub, 331, ClothCosmetic.ArmorSlot.LEGGINGS),
@@ -133,24 +130,18 @@ public class ClothRegistry extends AbstractCosmeticRegistry<ClothCosmetic>
         });
     }
 
-    private void registerSet(int storageId, ClothCosmetic[] set) throws Exception
-    {
+    private void registerSet(int storageId, ClothCosmetic[] set) throws Exception {
         for (ClothCosmetic cosmetic : set)
             this.registerElement(cosmetic);
 
         this.sets.put(storageId, new ClothingSet(this.hub, storageId, set));
     }
 
-    public ClothingSet getClothingSetByStorageId(int storageId)
-    {
-        if (this.sets.containsKey(storageId))
-            return this.sets.get(storageId);
-        else
-            return null;
+    public ClothingSet getClothingSetByStorageId(int storageId) {
+        return this.sets.getOrDefault(storageId, null);
     }
 
-    public Map<Integer, ClothingSet> getClothingSets()
-    {
+    public Map<Integer, ClothingSet> getClothingSets() {
         return this.sets;
     }
 }

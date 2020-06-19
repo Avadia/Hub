@@ -31,8 +31,7 @@ import java.util.Map;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class TrampoSlimeDisplayer extends AbstractDisplayer
-{
+public class TrampoSlimeDisplayer extends AbstractDisplayer {
     private final Map<Location, SimpleBlock> corners;
 
     private ArmorStand beacon;
@@ -40,8 +39,7 @@ public class TrampoSlimeDisplayer extends AbstractDisplayer
     private BukkitTask loopTask;
 
     @SuppressWarnings("deprecation")
-    public TrampoSlimeDisplayer(Hub hub, Player player)
-    {
+    public TrampoSlimeDisplayer(Hub hub, Player player) {
         super(hub, player);
 
         this.corners = new HashMap<>();
@@ -81,10 +79,8 @@ public class TrampoSlimeDisplayer extends AbstractDisplayer
 
     @SuppressWarnings("deprecation")
     @Override
-    public void display()
-    {
-        for (Location block : this.blocksUsed.keySet())
-        {
+    public void display() {
+        for (Location block : this.blocksUsed.keySet()) {
             block.getBlock().setType(this.blocksUsed.get(block).getType());
             block.getBlock().setData(this.blocksUsed.get(block).getData());
         }
@@ -100,46 +96,36 @@ public class TrampoSlimeDisplayer extends AbstractDisplayer
 
         this.player.teleport(this.baseLocation.clone().add(0.0D, 2.0D, 0.0D));
 
-        this.loopTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable()
-        {
+        this.loopTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable() {
             int timer = 0;
             int ticks = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 this.ticks++;
 
-                if (this.ticks == 20)
-                {
+                if (this.ticks == 20) {
                     this.ticks = 0;
                     this.timer++;
                 }
 
                 ParticleEffect.SLIME.display(1.0F, 1.0F, 1.0F, 0.25F, 2, baseLocation.clone().add(0.0D, 0.5D, 0.0D), 160.0);
 
-                if (this.timer == 10 && this.ticks == 0)
-                {
+                if (this.timer == 10 && this.ticks == 0) {
                     FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.ORANGE).withFade(Color.YELLOW).withFlicker().build();
 
-                    for (Location block : corners.keySet())
-                    {
+                    for (Location block : corners.keySet()) {
                         block.getBlock().setData(DyeColor.YELLOW.getWoolData());
                         FireworkUtils.launchfw(hub, block.clone().add(0.0D, 1.0D, 0.0D), effect);
                     }
-                }
-                else if (this.timer == 20 && this.ticks == 0)
-                {
+                } else if (this.timer == 20 && this.ticks == 0) {
                     FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.FUCHSIA).withFlicker().build();
 
-                    for (Location block : corners.keySet())
-                    {
+                    for (Location block : corners.keySet()) {
                         block.getBlock().setData(DyeColor.RED.getWoolData());
                         FireworkUtils.launchfw(hub, block.clone().add(0.0D, 1.0D, 0.0D), effect);
                     }
-                }
-                else if (this.timer == 30 && this.ticks == 0)
-                {
+                } else if (this.timer == 30 && this.ticks == 0) {
                     baseLocation.getWorld().createExplosion(baseLocation.getX(), baseLocation.getY(), baseLocation.getZ(), 5, false, false);
 
                     TrampoSlimeDisplayer.this.beacon.remove();
@@ -153,21 +139,19 @@ public class TrampoSlimeDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 
-    private void callback()
-    {
+    private void callback() {
         this.loopTask.cancel();
     }
 }

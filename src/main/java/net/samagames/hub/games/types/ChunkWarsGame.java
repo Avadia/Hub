@@ -29,47 +29,39 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ChunkWarsGame extends AbstractGame
-{
-    public ChunkWarsGame(Hub hub)
-    {
+public class ChunkWarsGame extends AbstractGame {
+    public ChunkWarsGame(Hub hub) {
         super(hub);
     }
 
     @Override
-    public String getCodeName()
-    {
+    public String getCodeName() {
         return "chunkwars";
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "ChunkWars";
     }
 
     @Override
-    public String getCategory()
-    {
+    public String getCategory() {
         return "PvP";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.ENDER_PORTAL_FRAME, 1);
     }
 
     @Override
-    public String[] getDescription()
-    {
+    public String[] getDescription() {
         return new String[0];
     }
 
     @Override
-    public String[] getDevelopers()
-    {
-        return new String[] {
+    public String[] getDevelopers() {
+        return new String[]{
                 "IamBlueSlime",
                 "LordFinn",
                 "6infinity8"
@@ -77,22 +69,18 @@ public class ChunkWarsGame extends AbstractGame
     }
 
     @Override
-    public String getWebsiteDescriptionURL()
-    {
+    public String getWebsiteDescriptionURL() {
         return null;
     }
 
     @Override
-    public int getSlotInMainMenu()
-    {
+    public int getSlotInMainMenu() {
         return 13;
     }
 
     @Override
-    public ShopCategory getShopConfiguration()
-    {
-        try
-        {
+    public ShopCategory getShopConfiguration() {
+        try {
             ShopCategory shopCategory = new ShopCategory(this.hub, this, 202, 0);
 
             // -----------------------------------------
@@ -105,7 +93,7 @@ public class ChunkWarsGame extends AbstractGame
 
             // ---------------
 
-            int[] nacelleIds = new int[] { 208, 209, 210, 211, 212, 213, 214, 215, 216 };
+            int[] nacelleIds = new int[]{208, 209, 210, 211, 212, 213, 214, 215, 216};
 
             ShopCategory nacelleCosmeticCategory = new ShopCategory(this.hub, this, 204, 19);
             ShopItem littleNacelleCosmetic = new ShopItem(this.hub, "Nacelle", nacelleIds[0], 19, nacelleIds).defaultItem();
@@ -130,8 +118,8 @@ public class ChunkWarsGame extends AbstractGame
 
             // ---------------
 
-            int[] woolColorIds = new int[] { 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234 };
-            int[] glassColorIds = new int[] { 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252 };
+            int[] woolColorIds = new int[]{218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234};
+            int[] glassColorIds = new int[]{236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252};
 
             ShopCategory colorCosmeticCategory = new ShopCategory(this.hub, this, 205, 21);
 
@@ -178,7 +166,7 @@ public class ChunkWarsGame extends AbstractGame
 
             // ---------------
 
-            int[] patternIds = new int[] { 253, 254, 255, 256, 257, 258, 259, 260 };
+            int[] patternIds = new int[]{253, 254, 255, 256, 257, 258, 259, 260};
 
             ShopCategory patternCosmeticCategory = new ShopCategory(this.hub, this, 206, 23);
             patternCosmeticCategory.addContent(new ShopItem(this.hub, "Motif", patternIds[0], 12, patternIds).defaultItem());
@@ -192,7 +180,7 @@ public class ChunkWarsGame extends AbstractGame
 
             // ---------------
 
-            int[] decorationIds = new int[] { 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 333, 334, 335 };
+            int[] decorationIds = new int[]{261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 333, 334, 335};
 
             ShopCategory decorationCosmeticCategory = new ShopCategory(this.hub, this, 207, 25);
             decorationCosmeticCategory.addContent(new ShopItem(this.hub, "Décoration", decorationIds[0], 10, decorationIds));
@@ -223,9 +211,7 @@ public class ChunkWarsGame extends AbstractGame
             shopCategory.addContent(cosmeticCategory);
 
             return shopCategory;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -233,44 +219,37 @@ public class ChunkWarsGame extends AbstractGame
     }
 
     @Override
-    public Location getLobbySpawn()
-    {
+    public Location getLobbySpawn() {
         return new Location(this.hub.getWorld(), -55.5D, 96.0D, 43.5D, 50.0F, 0.0F);
     }
 
     @Override
-    public Location getWebsiteDescriptionSkull()
-    {
+    public Location getWebsiteDescriptionSkull() {
         return new Location(this.hub.getWorld(), -63.0, 97.0D, 52.0D, 0.0F, 0.0F);
     }
 
     @Override
-    public List<HubLeaderboard> getLeaderBoards()
-    {
+    public List<HubLeaderboard> getLeaderBoards() {
         return null;
     }
 
     @Override
-    public State getState()
-    {
+    public State getState() {
         return State.NEW;
     }
 
     @Override
-    public boolean hasResourcesPack()
-    {
+    public boolean hasResourcesPack() {
         return false;
     }
 
     @Override
-    public boolean isPlayerFirstGame(IPlayerStats playerStats)
-    {
+    public boolean isPlayerFirstGame(IPlayerStats playerStats) {
         return playerStats.getChunkWarsStatistics().getPlayedGames() == 0;
     }
 
     @Override
-    public boolean isGroup()
-    {
+    public boolean isGroup() {
         return false;
     }
 }

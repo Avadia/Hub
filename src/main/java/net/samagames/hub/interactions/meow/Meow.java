@@ -41,8 +41,7 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class Meow extends AbstractInteraction
-{
+class Meow extends AbstractInteraction {
     protected static final String TAG = ChatColor.GOLD + "[" + ChatColor.YELLOW + "Meow" + ChatColor.GOLD + "] " + ChatColor.RESET;
     private static final String MEOW_NAME = ChatColor.GOLD + "" + ChatColor.BOLD + "Meow";
 
@@ -52,8 +51,7 @@ class Meow extends AbstractInteraction
     private BukkitTask thankYouTask;
     private boolean lock;
 
-    Meow(Hub hub, Location location)
-    {
+    Meow(Hub hub, Location location) {
         super(hub);
 
         this.holograms = new HashMap<>();
@@ -73,16 +71,14 @@ class Meow extends AbstractInteraction
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         if (this.thankYouTask != null)
             this.thankYouTask.cancel();
 
         this.meowEntity.die();
     }
 
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         if (this.holograms.containsKey(player.getUniqueId()))
             this.onLogout(player);
 
@@ -105,10 +101,8 @@ class Meow extends AbstractInteraction
         this.holograms.put(player.getUniqueId(), hologram);
     }
 
-    public void onLogout(Player player)
-    {
-        if (this.holograms.containsKey(player.getUniqueId()))
-        {
+    public void onLogout(Player player) {
+        if (this.holograms.containsKey(player.getUniqueId())) {
             Hologram hologram = this.holograms.get(player.getUniqueId());
             hologram.removeLinesForPlayers();
             hologram.removeReceiver(player);
@@ -118,8 +112,7 @@ class Meow extends AbstractInteraction
     }
 
     @Override
-    public void play(Player player)
-    {
+    public void play(Player player) {
         this.hub.getGuiManager().openGui(player, new GuiMeow(this.hub, this));
         player.playSound(player.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
 
@@ -128,10 +121,9 @@ class Meow extends AbstractInteraction
     }
 
     @Override
-    public void stop(Player player) { /** Not needed **/ }
+    public void stop(Player player) { /* Not needed **/}
 
-    public void update(Player player)
-    {
+    public void update(Player player) {
         int fishes = 0;
 
         for (Bonus bonus : this.hub.getInteractionManager().getMeowManager().getBonus())
@@ -148,29 +140,23 @@ class Meow extends AbstractInteraction
         hologram.sendLines(player);
     }
 
-    public void playThankYou()
-    {
+    public void playThankYou() {
         if (this.lock)
             return;
 
         this.meowEntity.getBukkitEntity().getWorld().playSound(this.meowEntity.getBukkitEntity().getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.5F);
 
-        this.thankYouTask = new BukkitRunnable()
-        {
+        this.thankYouTask = new BukkitRunnable() {
             int times = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 Item fish = meowEntity.getBukkitEntity().getWorld().dropItem(meowEntity.getBukkitEntity().getLocation(), new ItemStack(Material.RAW_FISH, 1));
                 fish.setVelocity(new Vector(random.nextFloat() * 2 - 1, 1.25F, random.nextFloat() * 2 - 1));
 
-                try
-                {
+                try {
                     GadgetManager.AGE_FIELD.set(((CraftItem) fish).getHandle(), 5860);
-                }
-                catch (IllegalAccessException e)
-                {
+                } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
 
@@ -178,8 +164,7 @@ class Meow extends AbstractInteraction
 
                 this.times++;
 
-                if (this.times == 40)
-                {
+                if (this.times == 40) {
                     lock = false;
                     this.cancel();
                 }
@@ -187,14 +172,12 @@ class Meow extends AbstractInteraction
         }.runTaskTimer(this.hub, 2L, 2L);
     }
 
-    public EntityMeow getMeowEntity()
-    {
+    public EntityMeow getMeowEntity() {
         return this.meowEntity;
     }
 
     @Override
-    public boolean hasPlayer(Player player)
-    {
+    public boolean hasPlayer(Player player) {
         return this.hub.getGuiManager().getPlayerGui(player) instanceof GuiMeow;
     }
 }

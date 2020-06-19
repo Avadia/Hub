@@ -31,13 +31,11 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ParticleManager extends AbstractCosmeticManager<ParticleCosmetic>
-{
+public class ParticleManager extends AbstractCosmeticManager<ParticleCosmetic> {
     private final Map<UUID, Effect> playersParticleEffect;
     private final EffectManager effectManager;
 
-    public ParticleManager(Hub hub)
-    {
+    public ParticleManager(Hub hub) {
         super(hub, new ParticleRegistry(hub));
 
         this.playersParticleEffect = new HashMap<>();
@@ -45,10 +43,8 @@ public class ParticleManager extends AbstractCosmeticManager<ParticleCosmetic>
     }
 
     @Override
-    public void enableCosmetic(Player player, ParticleCosmetic cosmetic, ClickType clickType, boolean login, NullType useless)
-    {
-        try
-        {
+    public void enableCosmetic(Player player, ParticleCosmetic cosmetic, ClickType clickType, boolean login, NullType useless) {
+        try {
             Effect particleEffectObject = cosmetic.getParticleEffect().getConstructor(EffectManager.class).newInstance(this.effectManager);
             particleEffectObject.setEntity(player);
             particleEffectObject.infinite();
@@ -58,18 +54,14 @@ public class ParticleManager extends AbstractCosmeticManager<ParticleCosmetic>
 
             if (!login)
                 player.sendMessage(PlayerManager.COSMETICS_TAG + ChatColor.GREEN + "Vous voilà noyé sous les particules...");
-        }
-        catch (ReflectiveOperationException e)
-        {
+        } catch (ReflectiveOperationException e) {
             this.hub.getCosmeticManager().log(Level.SEVERE, "Can't create EntityEffect object to " + player.getName() + "'s particle effect!");
         }
     }
 
     @Override
-    public void disableCosmetic(Player player, ParticleCosmetic cosmetic, boolean logout, boolean replace, NullType useless)
-    {
-        if (this.playersParticleEffect.containsKey(player.getUniqueId()))
-        {
+    public void disableCosmetic(Player player, ParticleCosmetic cosmetic, boolean logout, boolean replace, NullType useless) {
+        if (this.playersParticleEffect.containsKey(player.getUniqueId())) {
             this.playersParticleEffect.get(player.getUniqueId()).cancel();
             this.playersParticleEffect.remove(player.getUniqueId());
         }
@@ -79,16 +71,14 @@ public class ParticleManager extends AbstractCosmeticManager<ParticleCosmetic>
     }
 
     @Override
-    public void update() { /** Not needed **/ }
+    public void update() { /* Not needed **/}
 
     @Override
-    public boolean restrictToOne()
-    {
+    public boolean restrictToOne() {
         return true;
     }
 
-    public EffectManager getEffectManager()
-    {
+    public EffectManager getEffectManager() {
         return this.effectManager;
     }
 }

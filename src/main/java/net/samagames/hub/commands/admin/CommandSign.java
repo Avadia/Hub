@@ -30,24 +30,19 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandSign extends AbstractCommand
-{
-    public CommandSign(Hub hub)
-    {
+public class CommandSign extends AbstractCommand {
+    public CommandSign(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
-        if (args.length < 1)
-        {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
+        if (args.length < 1) {
             player.sendMessage(ChatColor.RED + "Usage: /sign <add|maintenance|reload|list> <...>");
             return true;
         }
 
-        switch (args[0])
-        {
+        switch (args[0]) {
             case "add":
                 this.addSign(player, args);
                 break;
@@ -76,16 +71,13 @@ public class CommandSign extends AbstractCommand
         return true;
     }
 
-    private void addSign(Player player, String[] args)
-    {
-        if (args.length < 5)
-        {
+    private void addSign(Player player, String[] args) {
+        if (args.length < 5) {
             player.sendMessage(ChatColor.RED + "Usage: /sign add <game code name> <map> <color [default GREEN]> <template>");
             return;
         }
 
-        if (this.hub.getPlayerManager().getSelection(player) == null)
-        {
+        if (this.hub.getPlayerManager().getSelection(player) == null) {
             player.sendMessage(ChatColor.RED + "Vous devez sélectionner une zone pour l'ajouter.");
             return;
         }
@@ -97,8 +89,7 @@ public class CommandSign extends AbstractCommand
         ChatColor color = ChatColor.valueOf(args[3].toUpperCase());
         String template = args[4];
 
-        if (!(selection.getBlock().getState() instanceof Sign))
-        {
+        if (!(selection.getBlock().getState() instanceof Sign)) {
             player.sendMessage(ChatColor.RED + "Le bloc sélectionné n'est pas un panneau !");
             return;
         }
@@ -107,10 +98,8 @@ public class CommandSign extends AbstractCommand
         this.hub.getSignManager().setSignForMap(game, map, color, template, sign);
     }
 
-    private void maintenanceSigns(Player player, String[] args)
-    {
-        if (args.length < 4)
-        {
+    private void maintenanceSigns(Player player, String[] args) {
+        if (args.length < 4) {
             player.sendMessage(ChatColor.RED + "Usage: /sign maintenance <game> <template> <true/false>");
             return;
         }
@@ -120,60 +109,50 @@ public class CommandSign extends AbstractCommand
 
         AbstractGame gameObject = this.hub.getGameManager().getGameByIdentifier(game);
 
-        if (gameObject == null)
-        {
+        if (gameObject == null) {
             player.sendMessage(ChatColor.RED + "Jeu non trouvé :(");
             return;
         }
 
-        if (!template.equals("*"))
-        {
+        if (!template.equals("*")) {
             List<GameSign> gameSign = gameObject.getGameSignsByTemplate(template);
 
-            if (gameSign == null)
-            {
+            if (gameSign == null) {
                 player.sendMessage(ChatColor.RED + "Template non trouvé :(");
                 return;
             }
 
-            boolean flag = Boolean.valueOf(args[3]);
+            boolean flag = Boolean.parseBoolean(args[3]);
 
             Jedis jedis = SamaGamesAPI.get().getBungeeResource();
             jedis.set("hub:maintenance:" + game + ":" + template, String.valueOf(flag));
-            jedis.publish("maintenanceSignChannel", game + ":" + template + ":" + String.valueOf(flag));
+            jedis.publish("maintenanceSignChannel", game + ":" + template + ":" + flag);
             jedis.close();
-        }
-        else
-        {
-            boolean flag = Boolean.valueOf(args[3]);
+        } else {
+            boolean flag = Boolean.parseBoolean(args[3]);
 
             Jedis jedis = SamaGamesAPI.get().getBungeeResource();
 
-            for (List<GameSign> l : gameObject.getSigns().values())
-            {
+            for (List<GameSign> l : gameObject.getSigns().values()) {
                 GameSign gameSign = l.get(0);
                 jedis.set("hub:maintenance:" + game + ":" + gameSign.getTemplate(), String.valueOf(flag));
-                jedis.publish("maintenanceSignChannel", game + ":" + gameSign.getTemplate() + ":" + String.valueOf(flag));
+                jedis.publish("maintenanceSignChannel", game + ":" + gameSign.getTemplate() + ":" + flag);
             }
 
             jedis.close();
         }
     }
 
-    private void listSigns(Player player)
-    {
+    private void listSigns(Player player) {
         player.sendMessage(ChatColor.GREEN + "Liste des zones :");
 
-        for (AbstractGame game : this.hub.getGameManager().getGames().values())
-        {
+        for (AbstractGame game : this.hub.getGameManager().getGames().values()) {
             player.sendMessage(ChatColor.GREEN + "-> " + ChatColor.AQUA + game.getCodeName() + ChatColor.GREEN + " (" + ChatColor.AQUA + game.getSigns().values().size() + " panneaux" + ChatColor.GREEN + ")");
         }
     }
 
-    private void soonSigns(Player player, String[] args)
-    {
-        if (args.length < 4)
-        {
+    private void soonSigns(Player player, String[] args) {
+        if (args.length < 4) {
             player.sendMessage(ChatColor.RED + "Usage: /sign soon <game> <template> <true/false>");
             return;
         }
@@ -183,40 +162,34 @@ public class CommandSign extends AbstractCommand
 
         AbstractGame gameObject = this.hub.getGameManager().getGameByIdentifier(game);
 
-        if (gameObject == null)
-        {
+        if (gameObject == null) {
             player.sendMessage(ChatColor.RED + "Jeu non trouvé :(");
             return;
         }
 
-        if (!template.equals("*"))
-        {
+        if (!template.equals("*")) {
             List<GameSign> gameSign = gameObject.getGameSignsByTemplate(template);
 
-            if (gameSign == null)
-            {
+            if (gameSign == null) {
                 player.sendMessage(ChatColor.RED + "Template non trouvé :(");
                 return;
             }
 
-            boolean flag = Boolean.valueOf(args[3]);
+            boolean flag = Boolean.parseBoolean(args[3]);
 
             Jedis jedis = SamaGamesAPI.get().getBungeeResource();
             jedis.set("hub:soon:" + game + ":" + template, String.valueOf(flag));
-            jedis.publish("soonSignChannel", game + ":" + template + ":" + String.valueOf(flag));
+            jedis.publish("soonSignChannel", game + ":" + template + ":" + flag);
             jedis.close();
-        }
-        else
-        {
-            boolean flag = Boolean.valueOf(args[3]);
+        } else {
+            boolean flag = Boolean.parseBoolean(args[3]);
 
             Jedis jedis = SamaGamesAPI.get().getBungeeResource();
 
-            for (List<GameSign> l : gameObject.getSigns().values())
-            {
+            for (List<GameSign> l : gameObject.getSigns().values()) {
                 GameSign gameSign = l.get(0);
                 jedis.set("hub:soon:" + game + ":" + gameSign.getTemplate(), String.valueOf(flag));
-                jedis.publish("soonSignChannel", game + ":" + gameSign.getTemplate() + ":" + String.valueOf(flag));
+                jedis.publish("soonSignChannel", game + ":" + gameSign.getTemplate() + ":" + flag);
             }
 
             jedis.close();

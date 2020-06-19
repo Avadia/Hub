@@ -27,8 +27,7 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class PersonalScoreboard
-{
+class PersonalScoreboard {
     private final Hub hub;
     private final UUID player;
     private final ObjectiveSign objectiveSign;
@@ -38,24 +37,21 @@ class PersonalScoreboard
     private long powders;
     private int pearls;
 
-    PersonalScoreboard(Hub hub, Player player)
-    {
+    PersonalScoreboard(Hub hub, Player player) {
         this.hub = hub;
         this.player = player.getUniqueId();
 
-        this.objectiveSign = new ObjectiveSign(SamaGamesAPI.get().getServerName().toLowerCase(), "SamaGames");
+        this.objectiveSign = new ObjectiveSign(SamaGamesAPI.get().getServerName().toLowerCase(), "Avadia");
 
         this.reloadData();
         this.objectiveSign.addReceiver(player);
     }
 
-    public void onLogout()
-    {
+    public void onLogout() {
         this.objectiveSign.removeReceiver(this.hub.getServer().getOfflinePlayer(this.player));
     }
 
-    public void reloadData()
-    {
+    public void reloadData() {
         AbstractPlayerData playerData = SamaGamesAPI.get().getPlayerManager().getPlayerData(this.player);
 
         this.formattedRank = RankUtils.getFormattedRank(this.player, true);
@@ -64,9 +60,8 @@ class PersonalScoreboard
         this.pearls = this.hub.getInteractionManager().getGraouManager().getPlayerPearls(this.player).size();
     }
 
-    public void setLines(String ip)
-    {
-        this.objectiveSign.setDisplayName(ChatColor.GOLD + "\u2726" + ChatColor.RED + ChatColor.BOLD + " SamaGames " + ChatColor.RESET + ChatColor.GOLD + "\u2726");
+    public void setLines(String ip) {
+        this.objectiveSign.setDisplayName(ChatColor.GOLD + "\u2726" + ChatColor.RED + ChatColor.BOLD + " Avadia " + ChatColor.RESET + ChatColor.GOLD + "\u2726");
 
         this.objectiveSign.setLine(0, ChatColor.BLUE + "");
 

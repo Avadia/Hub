@@ -1,11 +1,11 @@
 package net.samagames.hub.cosmetics.particles.effects;
 
-import java.util.Random;
-
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
+
+import java.util.Random;
 
 /*
  * This file is part of Hub.
@@ -23,12 +23,10 @@ import de.slikey.effectlib.util.ParticleEffect;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SnowyEffect extends Effect
-{
+public class SnowyEffect extends Effect {
     private final Random random = new Random();
 
-    public SnowyEffect(EffectManager effectManager)
-    {
+    public SnowyEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
         period = 2;
@@ -37,14 +35,13 @@ public class SnowyEffect extends Effect
     }
 
     @Override
-    public void onRun()
-    {
+    public void onRun() {
         // Cloud
         for (int i = 0; i < 20; i++)
-            display(ParticleEffect.CLOUD, getEntity().getLocation().add(random.nextDouble() - 0.5, 2.75 + random.nextDouble() / 4, random.nextDouble() - 0.5));
+            display(Particle.CLOUD, getEntity().getLocation().add(random.nextDouble() - 0.5, 2.75 + random.nextDouble() / 4, random.nextDouble() - 0.5));
 
         // Snow drops
         if (random.nextBoolean())
-            display(ParticleEffect.SNOW_SHOVEL, getEntity().getLocation().add(random.nextDouble() * 0.8 - 0.4, 2.75 + random.nextDouble() / 4, random.nextDouble() * 0.8 - 0.4), 7, 0);
+            display(Particle.SNOW_SHOVEL, getEntity().getLocation().add(random.nextDouble() * 0.8 - 0.4, 2.75 + random.nextDouble() / 4, random.nextDouble() * 0.8 - 0.4), 7, 0);
     }
 }

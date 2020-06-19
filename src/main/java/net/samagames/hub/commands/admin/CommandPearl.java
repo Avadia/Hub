@@ -26,33 +26,26 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandPearl extends AbstractCommand
-{
-    public CommandPearl(Hub hub)
-    {
+public class CommandPearl extends AbstractCommand {
+    public CommandPearl(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
-        if (args.length == 2)
-        {
-            try
-            {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
+        if (args.length == 2) {
+            try {
                 String playerName = args[0];
                 int pearlLevel = Integer.parseInt(args[1]);
 
-                if (pearlLevel < 1 || pearlLevel > 5)
-                {
+                if (pearlLevel < 1 || pearlLevel > 5) {
                     player.sendMessage(ChatColor.RED + "Veuillez indiquer un niveau de perle valide (1 à 5).");
                     return true;
                 }
 
                 Player p = this.hub.getServer().getPlayer(playerName);
 
-                if (p == null)
-                {
+                if (p == null) {
                     player.sendMessage(ChatColor.RED + "Le joueur indiqué est introuvable.");
                     return true;
                 }
@@ -65,14 +58,10 @@ public class CommandPearl extends AbstractCommand
 
                 this.hub.getScoreboardManager().update(p);
                 this.hub.getInteractionManager().getGraouManager().update(p);
-            }
-            catch (NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 player.sendMessage(ChatColor.RED + "Veuillez indiquer un niveau de perle valide (1 à 5).");
             }
-        }
-        else
-        {
+        } else {
             player.sendMessage(ChatColor.RED + "Usage: /pearl <player> <level>");
         }
 

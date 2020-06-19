@@ -27,38 +27,32 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ShopCategory extends ShopIcon
-{
+public class ShopCategory extends ShopIcon {
     protected final AbstractGame game;
     protected final List<ShopIcon> contents;
 
-    public ShopCategory(Hub hub, AbstractGame game, int storageId, int slot) throws Exception
-    {
+    public ShopCategory(Hub hub, AbstractGame game, int storageId, int slot) throws Exception {
         super(hub, null, storageId, slot, new int[0]);
 
         this.game = game;
         this.contents = new ArrayList<>();
     }
 
-    public void addContent(ShopIcon icon)
-    {
+    public void addContent(ShopIcon icon) {
         this.contents.add(icon);
     }
 
     @Override
-    public void execute(Player player, ClickType clickType)
-    {
+    public void execute(Player player, ClickType clickType) {
         this.hub.getGuiManager().openGui(player, new GuiShopCategory(this.hub, this.game, this, (AbstractGui) this.hub.getGuiManager().getPlayerGui(player)));
     }
 
     @Override
-    public ItemStack getFormattedIcon(Player player)
-    {
+    public ItemStack getFormattedIcon(Player player) {
         return this.getIcon().clone();
     }
 
-    public ShopIcon getIconByAction(String action)
-    {
+    public ShopIcon getIconByAction(String action) {
         for (ShopIcon icon : this.contents)
             if (icon.getStorageId() == Long.parseLong(action))
                 return icon;
@@ -66,8 +60,7 @@ public class ShopCategory extends ShopIcon
         return null;
     }
 
-    public List<ShopIcon> getContents()
-    {
+    public List<ShopIcon> getContents() {
         return this.contents;
     }
 }

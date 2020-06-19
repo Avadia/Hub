@@ -45,45 +45,38 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlayerListener implements Listener
-{
+public class PlayerListener implements Listener {
     private final Hub hub;
 
-    public PlayerListener(Hub hub)
-    {
+    public PlayerListener(Hub hub) {
         this.hub = hub;
     }
 
     @EventHandler
-    public void onPlayerLogin(PlayerJoinEvent event)
-    {
+    public void onPlayerLogin(PlayerJoinEvent event) {
         this.hub.getEventBus().onLogin(event.getPlayer());
         new ServerStatus(SamaGamesAPI.get().getServerName(), "Hub", "Map", Status.IN_GAME, this.hub.getServer().getOnlinePlayers().size(), this.hub.getServer().getMaxPlayers()).sendToHydro();
     }
 
     @EventHandler
-    public void onPlayerLogout(PlayerQuitEvent event)
-    {
+    public void onPlayerLogout(PlayerQuitEvent event) {
         this.hub.getEventBus().onLogout(event.getPlayer());
         new ServerStatus(SamaGamesAPI.get().getServerName(), "Hub", "Map", Status.IN_GAME, this.hub.getServer().getOnlinePlayers().size(), this.hub.getServer().getMaxPlayers()).sendToHydro();
     }
 
     @EventHandler
-    public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
-    {
+    public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
         this.hub.getChatManager().onAsyncPlayerChat(event);
     }
 
     @EventHandler
-    public void onEntityDamage(EntityDamageEvent event)
-    {
+    public void onEntityDamage(EntityDamageEvent event) {
         event.setCancelled(true);
 
         if (event.getEntity().getType() != EntityType.PLAYER)
             return;
 
-        if (event.getCause() == EntityDamageEvent.DamageCause.VOID)
-        {
+        if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
             if (this.hub.getParkourManager().getPlayerParkour(event.getEntity().getUniqueId()) != null)
                 this.hub.getParkourManager().getPlayerParkour(event.getEntity().getUniqueId()).failPlayer((Player) event.getEntity());
             else
@@ -92,15 +85,13 @@ public class PlayerListener implements Listener
     }
 
     @EventHandler
-    public void onInventoryInteract(InventoryInteractEvent event)
-    {
+    public void onInventoryInteract(InventoryInteractEvent event) {
         if (!event.getWhoClicked().isOp())
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
@@ -111,32 +102,25 @@ public class PlayerListener implements Listener
     }
 
     @EventHandler
-    public void onPlayerInteractEvent(PlayerInteractEvent event)
-    {
-        if (event.getClickedBlock() != null)
-        {
+    public void onPlayerInteractEvent(PlayerInteractEvent event) {
+        if (event.getClickedBlock() != null) {
             Material material = event.getClickedBlock().getType();
 
-            if (material == Material.SIGN || material == Material.SIGN_POST || material == Material.WALL_SIGN)
-            {
+            if (material == Material.SIGN || material == Material.SIGN_POST || material == Material.WALL_SIGN) {
                 Sign sign = (Sign) event.getClickedBlock().getState();
 
-                if (sign.hasMetadata("game") && sign.hasMetadata("map"))
-                {
+                if (sign.hasMetadata("game") && sign.hasMetadata("map")) {
                     AbstractGame game = this.hub.getGameManager().getGameByIdentifier(sign.getMetadata("game").get(0).asString());
                     GameSign gameSign = game.getGameSignsByMap(sign.getMetadata("map").get(0).asString()).get(0);
 
-                    if (SamaGamesAPI.get().getPermissionsManager().hasPermission(event.getPlayer(), "hub.debug.sign") && event.getPlayer().isSneaking())
-                    {
+                    if (SamaGamesAPI.get().getPermissionsManager().hasPermission(event.getPlayer(), "hub.debug.sign") && event.getPlayer().isSneaking()) {
                         gameSign.developperClick(event.getPlayer());
                         return;
                     }
 
                     gameSign.click(event.getPlayer());
                 }
-            }
-            else if (material == Material.SKULL)
-            {
+            } else if (material == Material.SKULL) {
                 Optional<AbstractGame> optional = this.hub.getGameManager().getGames().values().stream().filter(game -> game.getWebsiteDescriptionSkull().getBlock().getLocation().equals(event.getClickedBlock().getLocation())).findAny();
 
                 if (optional.isPresent() && optional.get().getWebsiteDescriptionURL() != null)
@@ -146,19 +130,16 @@ public class PlayerListener implements Listener
     }
 
     @EventHandler
-    public void onPlayerGameModeChangeEvent(PlayerGameModeChangeEvent event)
-    {
+    public void onPlayerGameModeChangeEvent(PlayerGameModeChangeEvent event) {
         if (SamaGamesAPI.get().getPermissionsManager().hasPermission(event.getPlayer(), "hub.fly"))
             this.hub.getServer().getScheduler().runTask(this.hub, () -> event.getPlayer().setAllowFlight(true));
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event)
-    {
+    public void onPlayerMove(PlayerMoveEvent event) {
         if (!event.getPlayer().getLocation().subtract(0, 0.1, 0).getBlock().getType().equals(Material.AIR)
-            && event.getPlayer().getInventory().getChestplate() != null
-            && event.getPlayer().getInventory().getChestplate().getType() == Material.ELYTRA)
-        {
+                && event.getPlayer().getInventory().getChestplate() != null
+                && event.getPlayer().getInventory().getChestplate().getType() == Material.ELYTRA) {
             this.checkElytra(event.getPlayer());
         }
 
@@ -169,8 +150,7 @@ public class PlayerListener implements Listener
     }
 
     @EventHandler
-    public void onPlayerGlide(EntityToggleGlideEvent event)
-    {
+    public void onPlayerGlide(EntityToggleGlideEvent event) {
         if (!(event.getEntity() instanceof Player))
             return;
 
@@ -178,42 +158,34 @@ public class PlayerListener implements Listener
             if (((Player) event.getEntity()).isFlying() && ((Player) event.getEntity()).getInventory().getChestplate().getType() == Material.ELYTRA)
                 ((Player) event.getEntity()).getInventory().setChestplate(null);
 
-        if (event.isGliding() && RestrictedVersion.isLoggedInPost19((Player) event.getEntity()))
-        {
+        if (event.isGliding() && RestrictedVersion.isLoggedInPost19((Player) event.getEntity())) {
             ItemStack stack = new ItemStack(Material.FEATHER);
             ItemMeta meta = stack.getItemMeta();
             meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Ventilateur" + ChatColor.RESET + "" + ChatColor.GRAY + " (Clic-droit)");
             stack.setItemMeta(meta);
             stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
             ((Player) event.getEntity()).getInventory().setItem(3, stack);
-        }
-        else
-        {
+        } else {
             ((Player) event.getEntity()).getInventory().setItem(3, new ItemStack(Material.AIR));
         }
     }
 
     @EventHandler
-    public void onPlayerToggleFlight(PlayerToggleFlightEvent event)
-    {
+    public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         this.onPlayerGlide(new EntityToggleGlideEvent(event.getPlayer(), false));
     }
 
     @EventHandler
-    public void onPlayerDamaged(final EntityDamageByEntityEvent event)
-    {
+    public void onPlayerDamaged(final EntityDamageByEntityEvent event) {
         event.setCancelled(true);
 
-        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player)
-        {
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             final Player player = (Player) event.getDamager();
 
-            if (this.hub.getCosmeticManager().getGadgetManager().hasGadget((Player) event.getDamager()))
-            {
+            if (this.hub.getCosmeticManager().getGadgetManager().hasGadget((Player) event.getDamager())) {
                 AbstractDisplayer displayer = this.hub.getCosmeticManager().getGadgetManager().getPlayerGadget((Player) event.getDamager());
 
-                if (displayer.isInteractionsEnabled() && !SamaGamesAPI.get().getSettingsManager().getSettings(event.getEntity().getUniqueId()).isOtherPlayerInteraction())
-                {
+                if (displayer.isInteractionsEnabled() && !SamaGamesAPI.get().getSettingsManager().getSettings(event.getEntity().getUniqueId()).isOtherPlayerInteraction()) {
                     if (this.hub.getPlayerManager().isBusy((Player) event.getEntity()))
                         event.getDamager().sendMessage(ChatColor.RED + "Ce joueur est actuellement occupé.");
                     else
@@ -224,21 +196,17 @@ public class PlayerListener implements Listener
 
                 this.hub.getCosmeticManager().getGadgetManager().getPlayerGadget((Player) event.getDamager()).handleInteraction(event.getDamager(), event.getEntity());
                 return;
-            }
-            else if (this.hub.getCosmeticManager().getGadgetManager().hasGadget((Player) event.getEntity()))
-            {
+            } else if (this.hub.getCosmeticManager().getGadgetManager().hasGadget((Player) event.getEntity())) {
                 this.hub.getCosmeticManager().getGadgetManager().getPlayerGadget((Player) event.getEntity()).handleInteraction(event.getDamager(), event.getEntity());
                 return;
             }
 
-            if (player.isSneaking())
-            {
+            if (player.isSneaking()) {
                 this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
                 {
                     Player target = (Player) event.getEntity();
 
-                    if (SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isAllowClickOnOther())
-                    {
+                    if (SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isAllowClickOnOther()) {
                         if (!SamaGamesAPI.get().getSettingsManager().getSettings(target.getUniqueId()).isClickOnMeActivation())
                             return;
 
@@ -246,11 +214,8 @@ public class PlayerListener implements Listener
                     }
                 });
             }
-        }
-        else if (event.getDamager() instanceof Player && !(event.getEntity() instanceof Player))
-        {
-            if (event.getEntity().hasMetadata("owner-id"))
-            {
+        } else if (event.getDamager() instanceof Player && !(event.getEntity() instanceof Player)) {
+            if (event.getEntity().hasMetadata("owner-id")) {
                 UUID uuid = UUID.fromString(event.getEntity().getMetadata("owner-id").get(0).asString());
 
                 if (this.hub.getCosmeticManager().getGadgetManager().hasGadget(uuid))
@@ -259,12 +224,11 @@ public class PlayerListener implements Listener
         }
     }
 
-    private boolean checkElytra(Player player)
-    {
+    @SuppressWarnings("UnusedReturnValue")
+    private boolean checkElytra(Player player) {
         IPermissionsEntity permissionsEntity = SamaGamesAPI.get().getPermissionsManager().getPlayer(player.getUniqueId());
 
-        if (!permissionsEntity.hasPermission("network.vipplus") || !SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isElytraActivated())
-        {
+        if (!permissionsEntity.hasPermission("network.vipplus") || !SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isElytraActivated()) {
             player.getInventory().setChestplate(null);
             this.hub.getPlayerManager().getStaticInventory().setInventoryToPlayer(player);
             return false;

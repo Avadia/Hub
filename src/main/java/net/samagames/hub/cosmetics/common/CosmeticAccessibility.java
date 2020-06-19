@@ -20,8 +20,7 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public enum CosmeticAccessibility
-{
+public enum CosmeticAccessibility {
     ALL(null, null),
     VIP(ChatColor.GREEN + "VIP", "network.vip"),
     VIPPLUS(ChatColor.AQUA + "VIP" + ChatColor.LIGHT_PURPLE + "+", "network.vipplus"),
@@ -32,19 +31,16 @@ public enum CosmeticAccessibility
     private final String display;
     private final String permission;
 
-    CosmeticAccessibility(String display, String permission)
-    {
+    CosmeticAccessibility(String display, String permission) {
         this.display = display;
         this.permission = permission;
     }
 
-    public String getDisplay()
-    {
+    public String getDisplay() {
         return this.display;
     }
 
-    public boolean canAccess(Player player)
-    {
+    public boolean canAccess(Player player) {
         return this.permission == null || SamaGamesAPI.get().getPermissionsManager().hasPermission(player, this.permission);
     }
 }

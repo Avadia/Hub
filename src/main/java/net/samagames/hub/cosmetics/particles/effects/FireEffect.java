@@ -25,15 +25,14 @@ import org.bukkit.util.Vector;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class FireEffect extends Effect
-{
+public class FireEffect extends Effect {
     /**
      * ParticleType of spawned particle
      */
-    private ParticleEffect particle = ParticleEffect.FLAME;
+    @SuppressWarnings("deprecation")
+    private final ParticleEffect particle = ParticleEffect.FLAME;
 
-    public FireEffect(EffectManager effectManager)
-    {
+    public FireEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
         period = 4;
@@ -41,9 +40,8 @@ public class FireEffect extends Effect
     }
 
     @Override
-    public void onRun()
-    {
-        Location location = this.getEntity().getLocation().add(0,1.5,0);
+    public void onRun() {
+        Location location = this.getEntity().getLocation().add(0, 1.5, 0);
 
         //Reactor Left
         Vector relativePosL = new Vector(0.15, -0.15, -0.1);

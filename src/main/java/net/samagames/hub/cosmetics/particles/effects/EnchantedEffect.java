@@ -2,7 +2,7 @@ package net.samagames.hub.cosmetics.particles.effects;
 
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 
 import java.util.Random;
 
@@ -23,11 +23,9 @@ import java.util.Random;
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
 public class EnchantedEffect extends Effect {
+    private final Random random;
 
-    private Random random;
-
-    public EnchantedEffect(EffectManager effectManager)
-    {
+    public EnchantedEffect(EffectManager effectManager) {
         super(effectManager);
         this.period = 2;
         this.iterations = 5;
@@ -35,11 +33,10 @@ public class EnchantedEffect extends Effect {
     }
 
     @Override
-    public void onRun()
-    {
+    public void onRun() {
         double dx = this.random.nextDouble() % 3D - 1.5D;
         double dy = this.random.nextDouble() % 2D;
         double dz = this.random.nextDouble() % 3D - 1.5D;
-        display(ParticleEffect.ENCHANTMENT_TABLE, this.getEntity().getLocation().add(dx, dy, dz));
+        display(Particle.ENCHANTMENT_TABLE, this.getEntity().getLocation().add(dx, dy, dz));
     }
 }

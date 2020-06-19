@@ -9,7 +9,10 @@ import net.samagames.hub.interactions.graou.entity.EntityGraouLaserTarget;
 import net.samagames.tools.ItemUtils;
 import net.samagames.tools.ParticleEffect;
 import net.samagames.tools.ProximityUtils;
-import org.bukkit.*;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Note;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -37,9 +40,8 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class OpeningAnimationRunnable implements Runnable
-{
-    private static final String[] PRESENT_TEXTURES = new String[] {
+class OpeningAnimationRunnable implements Runnable {
+    private static final String[] PRESENT_TEXTURES = new String[]{
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWUzYThmZDA4NTI5Nzc0NDRkOWZkNzc5N2NhYzA3YjhkMzk0OGFkZGM0M2YwYmI1Y2UyNWFlNzJkOTVkYyJ9fX0=",     // Orange
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjczYTIxMTQxMzZiOGVlNDkyNmNhYTUxNzg1NDE0MDM2YTJiNzZlNGYxNjY4Y2I4OWQ5OTcxNmM0MjEifX19",         // Red
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzg1MzZhNDYxNjg0ZmM3YTYzYjU0M2M1ZGYyMzQ4Y2Q5NjhiZjU1ODM1OTFiMWJiY2M1ZjBkYjgzMTY2ZGM3In19fQ==", // Grey blue
@@ -48,10 +50,10 @@ class OpeningAnimationRunnable implements Runnable
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWMzODIxZDRmNjFiMTdmODJmMGQ3YThlNTMxMjYwOGZmNTBlZGUyOWIxYjRkYzg5ODQ3YmU5NDI3ZDM2In19fQ=="      // Grey
     };
 
-    private static final int[] PIANO_MAIN = { 1, 3, 5, 7, 1, 3, 5, 7, 2, 4, 6, 8, 2, 4, 6, 8, 3, 5, 7, 9, 3, 5, 7, 9, 4, 6, 8, 10, 4, 6, 8, 10, 5, 7, 9, 11, 6, 8, 10, 12, 7, 9, 11, 13, 8, 10, 12, 14, -1, -1, -1, -1, 15, -1, 16, -1, 17, -1, 18, 18, 18, 18, 18, 18 };
-    private static final int[] PIANO_SECONDARY = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 21, -1, 22, -1, 23, -1, 24, 24, 24, 24, 24, 24 };
-    private static final int[] SNARE_DRUM = { 1, -1, -1, -1, 24, -1, -1, -1, 3, -1, -1, -1, 24, -1, -1, -1, 5, -1, -1, -1, 24, -1, -1, -1, 7, -1, -1, -1, 24, -1, -1, -1, 9, -1, -1, -1, 17, -1, -1, -1, 17, -1, -1, -1, 17, -1, -1, -1, -1, -1, -1, -1, 24, -1, 24, -1, 24, -1, 24, 24, 24, 24, 24, 24 };
-    private static final int[] BASS_GUITAR = { 0, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, -1, -1, -1, -1, 6, -1, -1, -1, -1, -1, -1, -1, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 20, -1, 21, -1, 22, -1, 23, -1, -1, -1, -1, -1 };
+    private static final int[] PIANO_MAIN = {1, 3, 5, 7, 1, 3, 5, 7, 2, 4, 6, 8, 2, 4, 6, 8, 3, 5, 7, 9, 3, 5, 7, 9, 4, 6, 8, 10, 4, 6, 8, 10, 5, 7, 9, 11, 6, 8, 10, 12, 7, 9, 11, 13, 8, 10, 12, 14, -1, -1, -1, -1, 15, -1, 16, -1, 17, -1, 18, 18, 18, 18, 18, 18};
+    private static final int[] PIANO_SECONDARY = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 21, -1, 22, -1, 23, -1, 24, 24, 24, 24, 24, 24};
+    private static final int[] SNARE_DRUM = {1, -1, -1, -1, 24, -1, -1, -1, 3, -1, -1, -1, 24, -1, -1, -1, 5, -1, -1, -1, 24, -1, -1, -1, 7, -1, -1, -1, 24, -1, -1, -1, 9, -1, -1, -1, 17, -1, -1, -1, 17, -1, -1, -1, 17, -1, -1, -1, -1, -1, -1, -1, 24, -1, 24, -1, 24, -1, 24, 24, 24, 24, 24, 24};
+    private static final int[] BASS_GUITAR = {0, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, -1, -1, -1, -1, 6, -1, -1, -1, -1, -1, -1, -1, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 20, -1, 21, -1, 22, -1, 23, -1, -1, -1, -1, -1};
 
     private final Hub hub;
     private final Graou graou;
@@ -63,8 +65,7 @@ class OpeningAnimationRunnable implements Runnable
     private Item present;
     private ArmorStand presentHolder;
 
-    OpeningAnimationRunnable(Hub hub, Graou graou, Player player, Pearl pearl, Location door, Location treasureLocation, Location openingLocation)
-    {
+    OpeningAnimationRunnable(Hub hub, Graou graou, Player player, Pearl pearl, Location door, Location treasureLocation, Location openingLocation) {
         this.hub = hub;
         this.graou = graou;
         this.player = player;
@@ -74,9 +75,9 @@ class OpeningAnimationRunnable implements Runnable
         this.openingLocation = openingLocation;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void run()
-    {
+    public void run() {
         this.graou.toggleHolograms(false);
         this.graou.getGraouEntity().setSitting(false);
 
@@ -86,8 +87,8 @@ class OpeningAnimationRunnable implements Runnable
         this.walk(this.treasureLocation, this::arrivedAtTreasure);
     }
 
-    private void arrivedAtTreasure()
-    {
+    @SuppressWarnings("deprecation")
+    private void arrivedAtTreasure() {
         this.treasureLocation.getWorld().playSound(this.treasureLocation, Sound.BLOCK_CHEST_OPEN, 1.0F, 1.0F);
 
         this.hub.getServer().getScheduler().runTaskLater(this.hub, () ->
@@ -121,21 +122,16 @@ class OpeningAnimationRunnable implements Runnable
         }, 15L);
     }
 
-    private void placedPresent()
-    {
-        new Thread()
-        {
+    private void placedPresent() {
+        new Thread() {
             private EntityGraouLaserTarget fakeTarget;
             private EntityGraouLaser[] lasers;
             private double angle = 0.0D;
 
             @Override
-            public void run()
-            {
-                for (int i = 0; i < 64; i++)
-                {
-                    for (Player p : OpeningAnimationRunnable.this.hub.getServer().getOnlinePlayers())
-                    {
+            public void run() {
+                for (int i = 0; i < 64; i++) {
+                    for (Player p : OpeningAnimationRunnable.this.hub.getServer().getOnlinePlayers()) {
                         OpeningAnimationRunnable.this.playNote(p, OpeningAnimationRunnable.this.openingLocation, Instrument.PIANO, PIANO_MAIN[i]);
                         OpeningAnimationRunnable.this.playNote(p, OpeningAnimationRunnable.this.openingLocation, Instrument.PIANO, PIANO_SECONDARY[i]);
                         OpeningAnimationRunnable.this.playNote(p, OpeningAnimationRunnable.this.openingLocation, Instrument.SNARE_DRUM, SNARE_DRUM[i]);
@@ -147,8 +143,7 @@ class OpeningAnimationRunnable implements Runnable
                     if (i >> 2 >= 12)
                         wait = 12 << 2;
 
-                    if (i == 0)
-                    {
+                    if (i == 0) {
                         OpeningAnimationRunnable.this.openingLocation.getWorld().playSound(OpeningAnimationRunnable.this.openingLocation, Sound.ENTITY_CREEPER_PRIMED, 1.0F, 0.85F);
 
                         OpeningAnimationRunnable.this.hub.getServer().getScheduler().runTask(OpeningAnimationRunnable.this.hub, () ->
@@ -163,8 +158,7 @@ class OpeningAnimationRunnable implements Runnable
 
                             this.lasers = new EntityGraouLaser[4];
 
-                            for (int j = 0; j < 4; j++)
-                            {
+                            for (int j = 0; j < 4; j++) {
                                 EntityGraouLaser laser = new EntityGraouLaser(world);
 
                                 laser.setPosition(OpeningAnimationRunnable.this.openingLocation.getX(), OpeningAnimationRunnable.this.openingLocation.getY(), OpeningAnimationRunnable.this.openingLocation.getZ());
@@ -175,9 +169,7 @@ class OpeningAnimationRunnable implements Runnable
                                 this.lasers[j] = laser;
                             }
                         });
-                    }
-                    else if (i == 48)
-                    {
+                    } else if (i == 48) {
                         OpeningAnimationRunnable.this.hub.getServer().getScheduler().runTask(OpeningAnimationRunnable.this.hub, () ->
                         {
                             OpeningAnimationRunnable.this.openingLocation.getWorld().createExplosion(OpeningAnimationRunnable.this.openingLocation.getBlockX(), OpeningAnimationRunnable.this.openingLocation.getBlockY(), OpeningAnimationRunnable.this.openingLocation.getBlockZ(), 2.0F, false, false);
@@ -185,22 +177,18 @@ class OpeningAnimationRunnable implements Runnable
 
                             OpeningAnimationRunnable.this.finishAnimation();
                         });
-                    }
-                    else if (i == 46)
-                    {
+                    } else if (i == 46) {
                         for (EntityGraouLaser laser : this.lasers)
                             laser.getBukkitEntity().remove();
 
                         this.fakeTarget.die();
-                    }
-                    else if (i < 46)
-                    {
+                    } else if (i < 46) {
                         int finalI = i;
 
                         OpeningAnimationRunnable.this.hub.getServer().getScheduler().runTask(OpeningAnimationRunnable.this.hub, () ->
                         {
                             for (int j = 0; j < 4; j++)
-                                this.lasers[j].getBukkitEntity().teleport(OpeningAnimationRunnable.this.openingLocation.clone().add(Math.cos(this.angle + Math.PI * j / 2) * (finalI / 4), 6, Math.sin(this.angle + Math.PI * j / 2) * (finalI / 4)));
+                                this.lasers[j].getBukkitEntity().teleport(OpeningAnimationRunnable.this.openingLocation.clone().add(Math.cos(this.angle + Math.PI * j / 2) * (finalI / 4.0), 6, Math.sin(this.angle + Math.PI * j / 2) * (finalI / 4.0)));
                         });
 
                         this.angle += 0.25D;
@@ -212,12 +200,9 @@ class OpeningAnimationRunnable implements Runnable
                             ParticleEffect.FIREWORKS_SPARK.display(0.1F, 0.1F, 0.1F, 0.5F, 5, OpeningAnimationRunnable.this.openingLocation.clone().add(0.0D, 0.25D, 0.0D), 150.0D);
                     }
 
-                    try
-                    {
+                    try {
                         Thread.sleep(158 - wait);
-                    }
-                    catch (InterruptedException e)
-                    {
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -225,8 +210,7 @@ class OpeningAnimationRunnable implements Runnable
         }.start();
     }
 
-    private void finishAnimation()
-    {
+    private void finishAnimation() {
         ArmorStand holder = this.openingLocation.getWorld().spawn(this.openingLocation.clone().subtract(0.0D, 1.35D, 0.0D), ArmorStand.class);
         holder.setVisible(false);
         holder.setInvulnerable(true);
@@ -237,7 +221,7 @@ class OpeningAnimationRunnable implements Runnable
         Item unlockedCosmeticItem = this.openingLocation.getWorld().dropItem(this.openingLocation, unlockedCosmetic.getIcon());
 
         holder.setCustomName(unlockedCosmetic.getIcon().getItemMeta().getDisplayName());
-        holder.setPassenger(unlockedCosmeticItem);
+        holder.addPassenger(unlockedCosmeticItem);
 
         this.hub.getServer().getScheduler().runTaskLater(this.hub, () ->
         {
@@ -248,22 +232,18 @@ class OpeningAnimationRunnable implements Runnable
         }, 20L * 5);
     }
 
-    private void walk(Location location, Runnable callback)
-    {
+    private void walk(Location location, Runnable callback) {
         this.graou.getGraouEntity().getPathfinderGoalWalkToTile().setTileToWalk(location.getX(), location.getY(), location.getZ());
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 Optional<Entity> entity = ProximityUtils.getNearbyEntities(location, 3.0D).stream()
                         .filter(e -> e.getUniqueId() != null)
                         .filter(e -> e.getUniqueId() == OpeningAnimationRunnable.this.graou.getGraouEntity().getUniqueID())
                         .findAny();
 
-                if (entity.isPresent())
-                {
+                if (entity.isPresent()) {
                     OpeningAnimationRunnable.this.graou.getGraouEntity().getPathfinderGoalWalkToTile().cancel();
                     OpeningAnimationRunnable.this.hub.getServer().getScheduler().runTask(OpeningAnimationRunnable.this.hub, callback);
 
@@ -273,8 +253,7 @@ class OpeningAnimationRunnable implements Runnable
         }.runTaskTimer(this.hub, 5L, 5L);
     }
 
-    private void playNote(Player player, Location location, Instrument instrument, int note)
-    {
+    private void playNote(Player player, Location location, Instrument instrument, int note) {
         if (note < 0)
             return;
 

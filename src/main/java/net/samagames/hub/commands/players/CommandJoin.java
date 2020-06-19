@@ -25,27 +25,23 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandJoin extends AbstractCommand
-{
-    public CommandJoin(Hub hub)
-    {
+public class CommandJoin extends AbstractCommand {
+    public CommandJoin(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
         if (args == null || args.length < 2)
             return true;
 
-        try
-        {
+        try {
             AbstractGame gameByIdentifier = this.hub.getGameManager().getGameByIdentifier(args[0]);
             List<GameSign> gameSignByTemplate = gameByIdentifier.getGameSignsByTemplate(args[1]);
 
             gameSignByTemplate.get(0).click(player);
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored) {}
 
         return true;
     }

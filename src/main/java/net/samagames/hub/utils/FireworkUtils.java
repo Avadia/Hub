@@ -27,10 +27,8 @@ import org.bukkit.inventory.meta.FireworkMeta;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class FireworkUtils
-{
-    public static void launchfw(Hub hub, Location location, final FireworkEffect effect)
-    {
+public class FireworkUtils {
+    public static void launchfw(Hub hub, Location location, final FireworkEffect effect) {
         Firework fw = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
         FireworkMeta fwm = fw.getFireworkMeta();
         fwm.addEffect(effect);

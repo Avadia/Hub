@@ -31,41 +31,31 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ShopBuyableCategory extends ShopCategory
-{
-    public ShopBuyableCategory(Hub hub, AbstractGame game, int storageId, int slot) throws Exception
-    {
+public class ShopBuyableCategory extends ShopCategory {
+    public ShopBuyableCategory(Hub hub, AbstractGame game, int storageId, int slot) throws Exception {
         super(hub, game, storageId, slot);
     }
 
     @Override
-    public void execute(Player player, ClickType clickType)
-    {
-        if (this.isOwned(player))
-        {
+    public void execute(Player player, ClickType clickType) {
+        if (this.isOwned(player)) {
             super.execute(player, clickType);
-        }
-        else if (!SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).hasEnoughCoins(this.itemDescription.getPriceCoins()))
-        {
+        } else if (!SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).hasEnoughCoins(this.itemDescription.getPriceCoins())) {
             player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Vous n'avez pas assez de pièces pour acheter cet objet.");
-        }
-        else
-        {
+        } else {
             GuiConfirm confirm = new GuiConfirm(this.hub, (AbstractGui) this.hub.getGuiManager().getPlayerGui(player), (parent) ->
             {
                 if (this.isOwned(player))
                     return;
 
                 SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).withdrawCoins(this.itemDescription.getPriceCoins(), (newAmount, difference, error) ->
-                {
-                    SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).addItem(this.storageId, this.itemDescription.getPriceCoins(), 0, true, (aBoolean, throwable) ->
-                    {
-                        player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.GREEN + "Vous avez acheté et équipé " + ChatColor.AQUA + this.getIcon().getItemMeta().getDisplayName());
+                        SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).addItem(this.storageId, this.itemDescription.getPriceCoins(), 0, true, (aBoolean, throwable) ->
+                        {
+                            player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.GREEN + "Vous avez acheté et équipé " + ChatColor.AQUA + this.getIcon().getItemMeta().getDisplayName());
 
-                        this.hub.getScoreboardManager().update(player);
-                        this.hub.getGuiManager().openGui(player, parent);
-                    });
-                });
+                            this.hub.getScoreboardManager().update(player);
+                            this.hub.getGuiManager().openGui(player, parent);
+                        }));
             });
 
             this.hub.getGuiManager().openGui(player, confirm);
@@ -76,8 +66,7 @@ public class ShopBuyableCategory extends ShopCategory
     }
 
     @Override
-    public ItemStack getFormattedIcon(Player player)
-    {
+    public ItemStack getFormattedIcon(Player player) {
         ItemStack stack = getIcon().clone();
         ItemMeta meta = stack.getItemMeta();
         List<String> lore = meta.getLore() != null ? meta.getLore() : new ArrayList<>();
@@ -93,8 +82,7 @@ public class ShopBuyableCategory extends ShopCategory
         return stack;
     }
 
-    public boolean isOwned(Player player)
-    {
+    public boolean isOwned(Player player) {
         if (this.itemDescription.getPriceCoins() == 0)
             return true;
 

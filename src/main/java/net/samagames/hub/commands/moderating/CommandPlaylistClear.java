@@ -23,16 +23,13 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandPlaylistClear extends AbstractCommand
-{
-    public CommandPlaylistClear(Hub hub)
-    {
+public class CommandPlaylistClear extends AbstractCommand {
+    public CommandPlaylistClear(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
         this.hub.getCosmeticManager().getJukeboxManager().clear();
         this.hub.getServer().broadcastMessage(PlayerManager.MODERATING_TAG + ChatColor.RED + "La playlist du jukebox a été vidée par un modérateur.");
 

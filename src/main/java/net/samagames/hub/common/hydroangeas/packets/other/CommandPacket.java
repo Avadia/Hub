@@ -18,26 +18,23 @@ import net.samagames.hub.common.hydroangeas.connection.Packet;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandPacket extends Packet
-{
+public class CommandPacket extends Packet {
     private String sourceUUID;
     private String action;
 
-    public CommandPacket() {}
+    public CommandPacket() {
+    }
 
-    public CommandPacket(String source, String action)
-    {
+    public CommandPacket(String source, String action) {
         this.sourceUUID = source;
         this.action = action;
     }
 
-    public String getAction()
-    {
+    public String getAction() {
         return action;
     }
 
-    public String getSourceUUID()
-    {
+    public String getSourceUUID() {
         return sourceUUID;
     }
 }

@@ -5,8 +5,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.List;
 
-public class NoteBlockPlayerMain
-{
+public class NoteBlockPlayerMain {
     public static HashMap<String, List<SongPlayer>> playingSongs = new HashMap<>();
     public static HashMap<String, Byte> playerVolume = new HashMap<>();
 
@@ -23,17 +22,15 @@ public class NoteBlockPlayerMain
         }
     }
 
-    public static void setPlayerVolume(Player p, byte volume)
-    {
+    public static void setPlayerVolume(Player p, byte volume) {
         playerVolume.put(p.getName(), volume);
     }
 
-    public static byte getPlayerVolume(Player p)
-    {
+    @SuppressWarnings("Java8MapApi")
+    public static byte getPlayerVolume(Player p) {
         Byte b = playerVolume.get(p.getName());
 
-        if (b == null)
-        {
+        if (b == null) {
             b = 100;
             playerVolume.put(p.getName(), b);
         }

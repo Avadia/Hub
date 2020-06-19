@@ -20,18 +20,17 @@ import org.bukkit.event.Listener;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractInteraction implements Listener
-{
+public abstract class AbstractInteraction implements Listener {
     protected final Hub hub;
 
-    public AbstractInteraction(Hub hub)
-    {
+    public AbstractInteraction(Hub hub) {
         this.hub = hub;
     }
 
     public abstract void onDisable();
 
     public abstract void play(Player player);
+
     public abstract void stop(Player player);
 
     public abstract boolean hasPlayer(Player player);

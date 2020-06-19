@@ -20,16 +20,13 @@ import net.samagames.hub.cosmetics.particles.effects.*;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class ParticleRegistry extends AbstractCosmeticRegistry<ParticleCosmetic>
-{
-    ParticleRegistry(Hub hub)
-    {
+class ParticleRegistry extends AbstractCosmeticRegistry<ParticleCosmetic> {
+    ParticleRegistry(Hub hub) {
         super(hub);
     }
 
     @Override
-    public void register() throws Exception
-    {
+    public void register() throws Exception {
         ParticleCosmetic fireParticle = new ParticleCosmetic(this.hub, 35, FireEffect.class);
         ParticleCosmetic rainParticle = new ParticleCosmetic(this.hub, 36, RainyEffect.class);
         ParticleCosmetic snowParticle = new ParticleCosmetic(this.hub, 37, SnowyEffect.class);

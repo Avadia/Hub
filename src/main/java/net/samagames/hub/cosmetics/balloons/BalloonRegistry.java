@@ -20,16 +20,13 @@ import org.bukkit.entity.EntityType;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class BalloonRegistry extends AbstractCosmeticRegistry<BalloonCosmetic>
-{
-    BalloonRegistry(Hub hub)
-    {
+class BalloonRegistry extends AbstractCosmeticRegistry<BalloonCosmetic> {
+    BalloonRegistry(Hub hub) {
         super(hub);
     }
 
     @Override
-    public void register() throws Exception
-    {
+    public void register() throws Exception {
         this.registerElement(new BalloonCosmetic(this.hub, 100, EntityType.COW, 1));
         this.registerElement(new BalloonCosmetic(this.hub, 101, EntityType.PIG, 1));
         this.registerElement(new BalloonCosmetic(this.hub, 102, EntityType.SHEEP, 1));

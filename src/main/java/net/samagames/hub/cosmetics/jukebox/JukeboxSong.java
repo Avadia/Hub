@@ -26,8 +26,7 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class JukeboxSong
-{
+public class JukeboxSong {
     private final Hub hub;
     private final JukeboxDiskCosmetic disk;
     private final Song song;
@@ -38,8 +37,7 @@ public class JukeboxSong
     private final int initialSeconds;
     private int secondsRemaining;
 
-    JukeboxSong(Hub hub, JukeboxDiskCosmetic disk, String playedBy)
-    {
+    JukeboxSong(Hub hub, JukeboxDiskCosmetic disk, String playedBy) {
         this.hub = hub;
         this.disk = disk;
         this.song = disk.getSong();
@@ -52,24 +50,20 @@ public class JukeboxSong
         this.mehers = new ArrayList<>();
     }
 
-    public void decrese()
-    {
+    public void decrese() {
         this.secondsRemaining--;
     }
 
-    public boolean woot(Player player)
-    {
+    public boolean woot(Player player) {
         if (this.playedBy.equals(player.getName()))
             return false;
 
-        if (this.mehers.contains(player.getUniqueId()))
-        {
+        if (this.mehers.contains(player.getUniqueId())) {
             this.mehers.remove(player.getUniqueId());
             this.player.addPlayer(player);
         }
 
-        if (!this.wooters.contains(player.getUniqueId()))
-        {
+        if (!this.wooters.contains(player.getUniqueId())) {
             this.wooters.add(player.getUniqueId());
             return true;
         }
@@ -77,16 +71,13 @@ public class JukeboxSong
         return false;
     }
 
-    public boolean meh(Player player)
-    {
+    public boolean meh(Player player) {
         if (this.playedBy.equals(player.getName()))
             return false;
 
-        if (this.wooters.contains(player.getUniqueId()))
-            this.wooters.remove(player.getUniqueId());
+        this.wooters.remove(player.getUniqueId());
 
-        if (!this.mehers.contains(player.getUniqueId()))
-        {
+        if (!this.mehers.contains(player.getUniqueId())) {
             this.mehers.add(player.getUniqueId());
             this.player.removePlayer(player);
 
@@ -99,48 +90,39 @@ public class JukeboxSong
         return false;
     }
 
-    public JukeboxDiskCosmetic getDisk()
-    {
+    public JukeboxDiskCosmetic getDisk() {
         return this.disk;
     }
 
-    public String getPlayedBy()
-    {
+    public String getPlayedBy() {
         return playedBy;
     }
 
-    public Song getSong()
-    {
+    public Song getSong() {
         return this.song;
     }
 
-    public SongPlayer getPlayer()
-    {
+    public SongPlayer getPlayer() {
         return this.player;
     }
 
-    public int getWoots()
-    {
+    public int getWoots() {
         return this.wooters.size();
     }
 
-    public int getMehs()
-    {
+    public int getMehs() {
         return this.mehers.size();
     }
 
-    public double getFormattedSecondsRemaining()
-    {
+    public double getFormattedSecondsRemaining() {
         return this.initialSeconds == -1 ? 100.0D : this.secondsRemaining * 100.0D / this.initialSeconds;
     }
 
-    public List<UUID> getWooters()
-    {
+    public List<UUID> getWooters() {
         return this.wooters;
     }
 
-    public List<UUID> getMehers()
-    {
+    public List<UUID> getMehers() {
         return this.mehers;
     }
 }

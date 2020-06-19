@@ -32,13 +32,11 @@ import java.util.stream.Collectors;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class HydroangeasManager extends AbstractManager
-{
+public class HydroangeasManager extends AbstractManager {
     private final ConnectionManager connectionManager;
     private final PacketReceiver packetReceiver;
 
-    public HydroangeasManager(Hub hub)
-    {
+    public HydroangeasManager(Hub hub) {
         super(hub);
 
         this.connectionManager = new ConnectionManager(hub, this);
@@ -46,53 +44,45 @@ public class HydroangeasManager extends AbstractManager
 
         SamaGamesAPI.get().getPubSub().subscribe("hydroHubReceiver", (channel, packet) ->
         {
-            try
-            {
+            try {
                 this.connectionManager.getPacket(packet);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
 
     @Override
-    public void onDisable() { /** Not needed **/ }
+    public void onDisable() { /* Not needed **/}
 
     @Override
-    public void onLogin(Player player) { /** Not needed **/ }
+    public void onLogin(Player player) { /* Not needed **/}
 
     @Override
-    public void onLogout(Player player) { /** Not needed **/ }
+    public void onLogout(Player player) { /* Not needed **/}
 
-    public void rejoinQueueToLeader(UUID leader, UUID player)
-    {
+    public void rejoinQueueToLeader(UUID leader, UUID player) {
         List<QPlayer> list = new ArrayList<>();
         list.add(new QPlayer(player, getPriority(player)));
 
         this.connectionManager.sendPacket(new QueueAttachPlayerPacket(new QPlayer(leader, getPriority(leader)), list));
     }
 
-    public void removePlayerFromQueues(UUID uuid)
-    {
+    public void removePlayerFromQueues(UUID uuid) {
         this.connectionManager.sendPacket(new QueueRemovePlayerPacket(new QPlayer(uuid, getPriority(uuid))));
     }
 
-    public void addPlayerToQueue(UUID player, String game, String map)
-    {
+    public void addPlayerToQueue(UUID player, String game, String map) {
         QPlayer qPlayer = new QPlayer(player, getPriority(player));
         this.connectionManager.sendPacket(new QueueAddPlayerPacket(QueuePacket.TypeQueue.NAMED, game, map, qPlayer));
     }
 
-    public void addPlayerToQueue(UUID player, String templateID)
-    {
+    public void addPlayerToQueue(UUID player, String templateID) {
         QPlayer qPlayer = new QPlayer(player, getPriority(player));
         this.connectionManager.sendPacket(new QueueAddPlayerPacket(QueuePacket.TypeQueue.NAMEDID, templateID, qPlayer));
     }
 
-    public void addPartyToQueue(UUID leader, UUID party, String game, String map)
-    {
+    public void addPartyToQueue(UUID leader, UUID party, String game, String map) {
         List<UUID> playersInParty = SamaGamesAPI.get().getPartiesManager().getPlayersInParty(party);
 
         List<QPlayer> players = playersInParty.stream().map(player -> new QPlayer(player, getPriority(player))).collect(Collectors.toList());
@@ -103,8 +93,7 @@ public class HydroangeasManager extends AbstractManager
         this.connectionManager.sendPacket(new QueueAttachPlayerPacket(qPlayer, players));
     }
 
-    public void addPartyToQueue(UUID leader, UUID party, String templateID)
-    {
+    public void addPartyToQueue(UUID leader, UUID party, String templateID) {
         List<UUID> playersInParty = SamaGamesAPI.get().getPartiesManager().getPlayersInParty(party);
 
         List<QPlayer> players = playersInParty.stream().map(player -> new QPlayer(player, getPriority(player))).collect(Collectors.toList());
@@ -115,18 +104,15 @@ public class HydroangeasManager extends AbstractManager
         this.connectionManager.sendPacket(new QueueAttachPlayerPacket(qPlayer, players));
     }
 
-    public void orderServer(String player, String template)
-    {
+    public void orderServer(String player, String template) {
         this.connectionManager.sendPacket(new CommandPacket(player, "order " + template));
     }
 
-    public int getPriority(UUID uuid)
-    {
+    public int getPriority(UUID uuid) {
         return SamaGamesAPI.get().getPermissionsManager().getPlayer(uuid).getRank();
     }
 
-    public PacketReceiver getPacketReceiver()
-    {
+    public PacketReceiver getPacketReceiver() {
         return this.packetReceiver;
     }
 }

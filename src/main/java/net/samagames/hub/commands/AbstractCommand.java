@@ -24,29 +24,23 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractCommand implements CommandExecutor
-{
+public abstract class AbstractCommand implements CommandExecutor {
     protected final Hub hub;
     private String permission;
 
-    public AbstractCommand(Hub hub)
-    {
+    public AbstractCommand(Hub hub) {
         this.hub = hub;
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
-    {
-        if (!(commandSender instanceof Player))
-        {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+        if (!(commandSender instanceof Player)) {
             commandSender.sendMessage(ChatColor.RED + "Vous devez être un joueur en jeu pour pouvoir utiliser cette commande.");
             return true;
         }
 
-        if (this.permission != null)
-        {
-            if (!hasPermission((Player) commandSender))
-            {
+        if (this.permission != null) {
+            if (!hasPermission((Player) commandSender)) {
                 commandSender.sendMessage(ChatColor.RED + "Vous n'avez pas la permission d'utiliser cette commande.");
                 return true;
             }
@@ -57,13 +51,11 @@ public abstract class AbstractCommand implements CommandExecutor
 
     public abstract boolean doAction(Player player, Command command, String s, String[] args);
 
-    public void setPermission(String permission)
-    {
+    public void setPermission(String permission) {
         this.permission = permission;
     }
 
-    protected boolean hasPermission(Player player)
-    {
+    protected boolean hasPermission(Player player) {
         return SamaGamesAPI.get().getPermissionsManager().hasPermission(player, this.permission);
     }
 }

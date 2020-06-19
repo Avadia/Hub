@@ -7,7 +7,6 @@ import net.samagames.hub.games.AbstractGame;
 import net.samagames.hub.games.leaderboards.HubLeaderboard;
 import net.samagames.hub.games.leaderboards.RotatingLeaderboard;
 import net.samagames.hub.games.shops.ShopCategory;
-import net.samagames.tools.RulesBook;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -31,41 +30,34 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class UHCZoneGame extends AbstractGame
-{
-    public UHCZoneGame(Hub hub)
-    {
+public class UHCZoneGame extends AbstractGame {
+    public UHCZoneGame(Hub hub) {
         super(hub);
     }
 
     @Override
-    public String getCodeName()
-    {
+    public String getCodeName() {
         return "uhczone";
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "Zone UHC";
     }
 
     @Override
-    public String getCategory()
-    {
+    public String getCategory() {
         return "PvP";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.GOLDEN_APPLE, 1);
     }
 
     @Override
-    public String[] getDescription()
-    {
-        return new String[] {
+    public String[] getDescription() {
+        return new String[]{
                 "La Zone où tous nos jeux Ultra Hard",
                 "Core sont réunis !",
                 "",
@@ -75,9 +67,8 @@ public class UHCZoneGame extends AbstractGame
     }
 
     @Override
-    public String[] getDevelopers()
-    {
-        return new String[] {
+    public String[] getDevelopers() {
+        return new String[]{
                 "IamBlueSlime",
                 "Rigner",
                 "Thog"
@@ -85,38 +76,32 @@ public class UHCZoneGame extends AbstractGame
     }
 
     @Override
-    public String getWebsiteDescriptionURL()
-    {
+    public String getWebsiteDescriptionURL() {
         return null;
     }
 
     @Override
-    public int getSlotInMainMenu()
-    {
+    public int getSlotInMainMenu() {
         return 23;
     }
 
     @Override
-    public ShopCategory getShopConfiguration()
-    {
+    public ShopCategory getShopConfiguration() {
         return null;
     }
 
     @Override
-    public Location getLobbySpawn()
-    {
+    public Location getLobbySpawn() {
         return new Location(this.hub.getWorld(), -58.5D, 108.0D, -3.5D, 90.0F, 0.0F);
     }
 
     @Override
-    public Location getWebsiteDescriptionSkull()
-    {
+    public Location getWebsiteDescriptionSkull() {
         return null;
     }
 
     @Override
-    public int getOnlinePlayers()
-    {
+    public int getOnlinePlayers() {
         int players = 0;
 
         players += this.hub.getGameManager().getGameByIdentifier("uhc").getOnlinePlayers();
@@ -130,8 +115,7 @@ public class UHCZoneGame extends AbstractGame
     }
 
     @Override
-    public List<HubLeaderboard> getLeaderBoards()
-    {
+    public List<HubLeaderboard> getLeaderBoards() {
         List<HubLeaderboard> leaderBoards = new ArrayList<>();
 
         List<HubLeaderboard.HubLeaderBoardStand> leaderBoardStands1 = new ArrayList<>();
@@ -168,26 +152,22 @@ public class UHCZoneGame extends AbstractGame
     }
 
     @Override
-    public State getState()
-    {
+    public State getState() {
         return State.POPULAR;
     }
 
     @Override
-    public boolean hasResourcesPack()
-    {
+    public boolean hasResourcesPack() {
         return false;
     }
 
     @Override
-    public boolean isPlayerFirstGame(IPlayerStats playerStats)
-    {
+    public boolean isPlayerFirstGame(IPlayerStats playerStats) {
         return false;
     }
 
     @Override
-    public boolean isGroup()
-    {
+    public boolean isGroup() {
         return true;
     }
 }

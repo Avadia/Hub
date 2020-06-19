@@ -23,27 +23,23 @@ import redis.clients.jedis.Jedis;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class HubRefresher implements Runnable, IPacketsReceiver
-{
+public class HubRefresher implements Runnable, IPacketsReceiver {
     private final Hub hub;
     private final CacheList hubs;
 
-    public HubRefresher(Hub hub)
-    {
+    public HubRefresher(Hub hub) {
         this.hub = hub;
         this.hubs = new CacheList();
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         Jedis jedis = SamaGamesAPI.get().getBungeeResource();
 
         if (jedis == null)
             return;
 
-        try
-        {
+        try {
             JsonHub thisHub = new JsonHub();
             thisHub.setHubNumber(Integer.parseInt(SamaGamesAPI.get().getServerName().split("_")[1]));
             thisHub.setConnectedPlayers(this.hub.getServer().getOnlinePlayers().size());
@@ -52,9 +48,7 @@ public class HubRefresher implements Runnable, IPacketsReceiver
             jedis.publish("hub-status", new Gson().toJson(thisHub));
 
             this.hubs.update();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -64,22 +58,19 @@ public class HubRefresher implements Runnable, IPacketsReceiver
     }
 
     @Override
-    public void receive(String channel, String data)
-    {
+    public void receive(String channel, String data) {
         JsonHub jsonHub = new Gson().fromJson(data, JsonHub.class);
         this.hubs.put(jsonHub.getHubNumber(), jsonHub);
     }
 
-    public JsonHub getHubByID(int id)
-    {
+    public JsonHub getHubByID(int id) {
         if (this.hubs.containsKey(id))
             return this.hubs.get(id);
 
         return null;
     }
 
-    public CacheList getHubs()
-    {
+    public CacheList getHubs() {
         return this.hubs;
     }
 }

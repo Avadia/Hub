@@ -34,8 +34,7 @@ import java.util.concurrent.Callable;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class GuiStatistics extends AbstractGui
-{
+class GuiStatistics extends AbstractGui {
     private static final int[] BASE_SLTOS = {10, 11, 12, 13, 14, 15, 16};
 
     private final Player playerToView;
@@ -43,16 +42,14 @@ class GuiStatistics extends AbstractGui
     private int lines = 0;
     private int slot = 0;
 
-    GuiStatistics(Hub hub, Player playerToView)
-    {
+    GuiStatistics(Hub hub, Player playerToView) {
         super(hub);
 
         this.playerToView = playerToView;
     }
 
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         this.inventory = this.hub.getServer().createInventory(null, 45, "Statistiques");
 
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
@@ -63,8 +60,7 @@ class GuiStatistics extends AbstractGui
     }
 
     @Override
-    public void update(Player player)
-    {
+    public void update(Player player) {
         IPlayerStats playerStats = SamaGamesAPI.get().getStatsManager().getPlayerStats(this.playerToView.getUniqueId());
 
         this.setGameStatisticsSlotData("Hub", new ItemStack(Material.COMPASS, 1), Arrays.asList(
@@ -152,10 +148,8 @@ class GuiStatistics extends AbstractGui
     }
 
     @Override
-    public void onClick(Player player, ItemStack stack, String action, ClickType clickType)
-    {
-        switch (action)
-        {
+    public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
+        switch (action) {
             case "website":
                 new FancyMessage(ChatColor.YELLOW + "Cliquez sur ").then("[Accéder]").color(ChatColor.GOLD).style(ChatColor.BOLD).link("https://www.samagames.net/stats/" + player.getName() + ".html").then(" pour accéder à vos statistiques en ligne.").color(ChatColor.YELLOW).send(player);
                 break;
@@ -166,8 +160,7 @@ class GuiStatistics extends AbstractGui
         }
     }
 
-    private void setGameStatisticsSlotData(String game, ItemStack icon, List<Pair<String, Callable<Integer>>> statistics)
-    {
+    private void setGameStatisticsSlotData(String game, ItemStack icon, List<Pair<String, Callable<Integer>>> statistics) {
         ItemMeta meta = icon.getItemMeta();
         meta.setDisplayName(ChatColor.GOLD + game);
 
@@ -175,14 +168,10 @@ class GuiStatistics extends AbstractGui
         lore.add(ChatColor.DARK_GRAY + "Statistique de " + game);
         lore.add("");
 
-        for (Pair<String, Callable<Integer>> statistic : statistics)
-        {
-            try
-            {
+        for (Pair<String, Callable<Integer>> statistic : statistics) {
+            try {
                 lore.add(ChatColor.GRAY + "- " + statistic.getLeft() + " : " + ChatColor.WHITE + statistic.getRight().call());
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -199,8 +188,7 @@ class GuiStatistics extends AbstractGui
 
         this.slot++;
 
-        if (this.slot == 7)
-        {
+        if (this.slot == 7) {
             this.slot = 0;
             this.lines++;
         }

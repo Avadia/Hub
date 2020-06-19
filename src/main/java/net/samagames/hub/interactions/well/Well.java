@@ -26,16 +26,14 @@ import org.bukkit.scheduler.BukkitTask;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class Well extends AbstractInteraction
-{
+class Well extends AbstractInteraction {
     public static final String TAG = ChatColor.DARK_PURPLE + "[" + ChatColor.LIGHT_PURPLE + "Puit magique" + ChatColor.DARK_PURPLE + "] " + ChatColor.RESET;
 
     private final Location cauldronLocation;
     private final Hologram hologram;
     private final BukkitTask particleTask;
 
-    Well(Hub hub, Location cauldronLocation, Location standsLocation)
-    {
+    Well(Hub hub, Location cauldronLocation, Location standsLocation) {
         super(hub);
 
         this.cauldronLocation = cauldronLocation;
@@ -48,39 +46,33 @@ class Well extends AbstractInteraction
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.particleTask.cancel();
     }
 
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         this.hologram.addReceiver(player);
     }
 
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         this.hologram.removeReceiver(player);
     }
 
     @Override
-    public void play(Player player)
-    {
+    public void play(Player player) {
         this.hub.getGuiManager().openGui(player, new GuiWell(this.hub, this));
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_SPLASH, 1.0F, 1.0F);
     }
 
     @Override
-    public void stop(Player player) { /** Not needed **/ }
+    public void stop(Player player) { /* Not needed **/}
 
-    public Location getCauldronLocation()
-    {
+    public Location getCauldronLocation() {
         return this.cauldronLocation;
     }
 
     @Override
-    public boolean hasPlayer(Player player)
-    {
+    public boolean hasPlayer(Player player) {
         return this.hub.getGuiManager().getPlayerGui(player) instanceof GuiWell;
     }
 }

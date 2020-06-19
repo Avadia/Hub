@@ -25,31 +25,25 @@ import org.bukkit.inventory.PlayerInventory;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiListener implements Listener
-{
+public class GuiListener implements Listener {
     private final Hub hub;
 
-    public GuiListener(Hub hub)
-    {
+    public GuiListener(Hub hub) {
         this.hub = hub;
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event)
-    {
-        if (event.getWhoClicked() instanceof Player)
-        {
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (event.getWhoClicked() instanceof Player) {
             Player player = (Player) event.getWhoClicked();
             AbstractGui gui = (AbstractGui) this.hub.getGuiManager().getPlayerGui(player);
 
-            if (event.getClickedInventory() instanceof PlayerInventory)
-            {
+            if (event.getClickedInventory() instanceof PlayerInventory) {
                 this.hub.getPlayerManager().getStaticInventory().doInteraction(player, event.getCurrentItem());
                 return;
             }
 
-            if (gui != null)
-            {
+            if (gui != null) {
                 String action = gui.getAction(event.getSlot());
 
                 if (action != null)
@@ -59,8 +53,7 @@ public class GuiListener implements Listener
     }
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event)
-    {
+    public void onInventoryClose(InventoryCloseEvent event) {
         if (this.hub.getGuiManager().getPlayerGui(event.getPlayer()) != null)
             this.hub.getGuiManager().removeClosedGui((Player) event.getPlayer());
     }

@@ -1,7 +1,8 @@
 package net.samagames.hub.cosmetics.gadgets.displayers;
 
-import de.slikey.effectlib.effect.*;
-import de.slikey.effectlib.util.ParticleEffect;
+import de.slikey.effectlib.effect.LineEffect;
+import de.slikey.effectlib.effect.SphereEffect;
+import de.slikey.effectlib.effect.TornadoEffect;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.gadgets.GadgetManager;
 import net.samagames.hub.utils.FireworkUtils;
@@ -33,8 +34,7 @@ import org.bukkit.util.Vector;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class NukeDisplayer extends AbstractDisplayer
-{
+public class NukeDisplayer extends AbstractDisplayer {
     private static final String TAG = ChatColor.DARK_RED + "" + ChatColor.BOLD + "[" + ChatColor.RED + ChatColor.BOLD + "Meow" + ChatColor.DARK_RED + ChatColor.BOLD + "] " + ChatColor.RED + ChatColor.BOLD;
 
     private CraftBossBar meowBossBar;
@@ -42,8 +42,7 @@ public class NukeDisplayer extends AbstractDisplayer
     private BukkitTask loopSecond;
 
     @SuppressWarnings("deprecation")
-    public NukeDisplayer(Hub hub, Player player)
-    {
+    public NukeDisplayer(Hub hub, Player player) {
         super(hub, player);
 
         this.addBlockToUse(this.baseLocation.clone().subtract(2.0D, 0.0D, 0.0D).add(0.0D, 0.0D, 2.0D), new SimpleBlock(Material.QUARTZ_BLOCK, 1));
@@ -78,11 +77,10 @@ public class NukeDisplayer extends AbstractDisplayer
         this.addBlockToUse(this.baseLocation.clone().subtract(2.0D, 0.0D, 2.0D).add(0.0D, 1.0D, 0.0D), new SimpleBlock(Material.REDSTONE_TORCH_ON, 5));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void display()
-    {
-        for (Location block : this.blocksUsed.keySet())
-        {
+    public void display() {
+        for (Location block : this.blocksUsed.keySet()) {
             block.getBlock().setType(this.blocksUsed.get(block).getType());
             block.getBlock().setData(this.blocksUsed.get(block).getData());
         }
@@ -95,56 +93,52 @@ public class NukeDisplayer extends AbstractDisplayer
         this.hub.getServer().getOnlinePlayers().forEach(this.meowBossBar::addPlayer);
 
         SphereEffect sphereEffect = new SphereEffect(this.hub.getCosmeticManager().getParticleManager().getEffectManager());
-        sphereEffect.particle = ParticleEffect.FLAME;
+        //sphereEffect.particle = ParticleEffect.FLAME;
         sphereEffect.radius = 0.15F;
         sphereEffect.setLocation(this.baseLocation.getBlock().getLocation().clone().add(0.5D, 5.5D, 0.5D));
         sphereEffect.infinite();
         sphereEffect.start();
 
         LineEffect cornerOneEffect = new LineEffect(this.hub.getCosmeticManager().getParticleManager().getEffectManager());
-        cornerOneEffect.particle = ParticleEffect.ENCHANTMENT_TABLE;
+        //cornerOneEffect.particle = ParticleEffect.ENCHANTMENT_TABLE;
         cornerOneEffect.setLocation(this.baseLocation.getBlock().getLocation().clone().subtract(2.0D, 0.0D, 0.0D).add(0.5D, 1.75D, 2.5D));
         cornerOneEffect.setTargetLocation(this.baseLocation.getBlock().getLocation().clone().add(0.5D, 5.5D, 0.5D));
         cornerOneEffect.infinite();
         cornerOneEffect.start();
 
         LineEffect cornerTwoEffect = new LineEffect(this.hub.getCosmeticManager().getParticleManager().getEffectManager());
-        cornerTwoEffect.particle = ParticleEffect.ENCHANTMENT_TABLE;
+        //cornerTwoEffect.particle = ParticleEffect.ENCHANTMENT_TABLE;
         cornerTwoEffect.setLocation(this.baseLocation.getBlock().getLocation().clone().add(2.5D, 1.75D, 2.5D));
         cornerTwoEffect.setTargetLocation(this.baseLocation.getBlock().getLocation().clone().add(0.5D, 5.5D, 0.5D));
         cornerTwoEffect.infinite();
         cornerTwoEffect.start();
 
         LineEffect cornerThreeEffect = new LineEffect(this.hub.getCosmeticManager().getParticleManager().getEffectManager());
-        cornerThreeEffect.particle = ParticleEffect.ENCHANTMENT_TABLE;
+        //cornerThreeEffect.particle = ParticleEffect.ENCHANTMENT_TABLE;
         cornerThreeEffect.setLocation(this.baseLocation.getBlock().getLocation().clone().subtract(0.0D, 0.0D, 2.0D).add(2.5D, 1.75D, 0.5D));
         cornerThreeEffect.setTargetLocation(this.baseLocation.getBlock().getLocation().clone().add(0.5D, 5.5D, 0.5D));
         cornerThreeEffect.infinite();
         cornerThreeEffect.start();
 
         LineEffect cornerFourEffect = new LineEffect(this.hub.getCosmeticManager().getParticleManager().getEffectManager());
-        cornerFourEffect.particle = ParticleEffect.ENCHANTMENT_TABLE;
+        //cornerFourEffect.particle = ParticleEffect.ENCHANTMENT_TABLE;
         cornerFourEffect.setLocation(this.baseLocation.getBlock().getLocation().clone().subtract(2.0D, 0.0D, 2.0D).add(0.5D, 1.75D, 0.5D));
         cornerFourEffect.setTargetLocation(this.baseLocation.getBlock().getLocation().clone().add(0.5D, 5.5D, 0.5D));
         cornerFourEffect.infinite();
         cornerFourEffect.start();
 
-        this.loopFirst = this.hub.getServer().getScheduler().runTaskTimerAsynchronously(this.hub, new Runnable()
-        {
+        this.loopFirst = this.hub.getServer().getScheduler().runTaskTimerAsynchronously(this.hub, new Runnable() {
             int ticks = 0;
             int timer = 10;
             float radius = 0.15F;
 
             @Override
-            public void run()
-            {
-                if (this.ticks == 20)
-                {
+            public void run() {
+                if (this.ticks == 20) {
                     this.ticks = 0;
                     this.timer--;
 
-                    if (this.timer == 0)
-                    {
+                    if (this.timer == 0) {
                         hub.getServer().broadcastMessage(TAG + "GRAOUUW !");
 
                         sphereEffect.cancel();
@@ -154,9 +148,7 @@ public class NukeDisplayer extends AbstractDisplayer
                         cornerFourEffect.cancel();
 
                         timeToSendCatInTheHairLikeTheHandsInTheFamousSing();
-                    }
-                    else if (this.timer <= 5)
-                    {
+                    } else if (this.timer <= 5) {
                         hub.getServer().broadcastMessage(TAG + this.timer);
                     }
 
@@ -164,9 +156,7 @@ public class NukeDisplayer extends AbstractDisplayer
 
                     for (Player player : hub.getServer().getOnlinePlayers())
                         player.playSound(player.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
-                }
-                else
-                {
+                } else {
                     sphereEffect.radius = this.radius += 0.01F;
                     this.ticks += 2;
                 }
@@ -175,10 +165,10 @@ public class NukeDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
-    private void timeToSendCatInTheHairLikeTheHandsInTheFamousSing()
-    {
+    private void timeToSendCatInTheHairLikeTheHandsInTheFamousSing() {
         this.loopFirst.cancel();
         this.meowBossBar.setProgress(1.0D);
 
@@ -189,21 +179,18 @@ public class NukeDisplayer extends AbstractDisplayer
         tornadoEffect.yOffset = 0.0D;
         tornadoEffect.tornadoHeight = 15.0F;
         tornadoEffect.maxTornadoRadius = 2.5F;
-        tornadoEffect.tornadoParticle = ParticleEffect.FIREWORKS_SPARK;
+        //tornadoEffect.tornadoParticle = ParticleEffect.FIREWORKS_SPARK;
         tornadoEffect.infinite();
         tornadoEffect.start();
 
-        this.loopSecond = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable()
-        {
+        this.loopSecond = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable() {
             int loops = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 this.loops++;
 
-                if (this.loops == 500)
-                {
+                if (this.loops == 500) {
                     baseLocation.getWorld().createExplosion(baseLocation.getX(), baseLocation.getY(), baseLocation.getZ(), 10, false, false);
                     meowBossBar.removeAll();
 
@@ -212,9 +199,7 @@ public class NukeDisplayer extends AbstractDisplayer
                     restore();
                     end();
                     callback();
-                }
-                else if (this.loops == 1)
-                {
+                } else if (this.loops == 1) {
                     player.getWorld().createExplosion(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), 5.0F, false, false);
                 }
 
@@ -224,7 +209,7 @@ public class NukeDisplayer extends AbstractDisplayer
                 ocelot.setCustomName(ChatColor.GOLD + "" + ChatColor.BOLD + "Meow");
                 ocelot.setCustomNameVisible(true);
 
-                meowBossBar.setProgress((100.0D - (this.loops * 100 / 500)) / 100);
+                meowBossBar.setProgress((100.0D - (this.loops * 100.0 / 500.0)) / 100);
 
                 if (GadgetManager.RANDOM.nextInt(5) == 3)
                     for (Player player : hub.getServer().getOnlinePlayers())
@@ -246,18 +231,15 @@ public class NukeDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 
-    private void callback()
-    {
+    private void callback() {
         this.loopSecond.cancel();
     }
 }

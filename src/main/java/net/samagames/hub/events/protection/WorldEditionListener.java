@@ -28,125 +28,106 @@ import org.bukkit.event.world.ChunkUnloadEvent;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class WorldEditionListener implements Listener
-{
+public class WorldEditionListener implements Listener {
     private final Hub hub;
 
-    public WorldEditionListener(Hub hub)
-    {
+    public WorldEditionListener(Hub hub) {
         this.hub = hub;
     }
 
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event)
-    {
+    public void onBlockBreak(BlockBreakEvent event) {
         if (!this.canDoAction(event.getPlayer()))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBurn(BlockBurnEvent event)
-    {
+    public void onBlockBurn(BlockBurnEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockDamage(BlockDamageEvent event)
-    {
+    public void onBlockDamage(BlockDamageEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockFade(BlockFadeEvent event)
-    {
+    public void onBlockFade(BlockFadeEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockForm(BlockFormEvent event)
-    {
+    public void onBlockForm(BlockFormEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onBlockFromTo(BlockFromToEvent event)
-    {
+    public void onBlockFromTo(BlockFromToEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onBlockGrow(BlockGrowEvent event)
-    {
+    public void onBlockGrow(BlockGrowEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onBlockIgnite(BlockIgniteEvent event)
-    {
+    public void onBlockIgnite(BlockIgniteEvent event) {
         if (!this.canDoAction(event.getPlayer()))
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void onBlockMultiPlace(BlockMultiPlaceEvent event)
-    {
+    public void onBlockMultiPlace(BlockMultiPlaceEvent event) {
         if (!this.canDoAction(event.getPlayer()))
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void onBlockPhysics(BlockPhysicsEvent event)
-    {
+    public void onBlockPhysics(BlockPhysicsEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event)
-    {
+    public void onBlockPlace(BlockPlaceEvent event) {
         if (!this.canDoAction(event.getPlayer()))
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void onBlockSpread(BlockSpreadEvent event)
-    {
+    public void onBlockSpread(BlockSpreadEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onEntityBlockForm(EntityBlockFormEvent event)
-    {
+    public void onEntityBlockForm(EntityBlockFormEvent event) {
         if (event.getEntity().getType() != EntityType.PLAYER || !this.canDoAction((Player) event.getEntity()))
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.TRAP_DOOR && !this.canDoAction(event.getPlayer()))
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void onLeavesDecay(LeavesDecayEvent event)
-    {
+    public void onLeavesDecay(LeavesDecayEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onWeatherChange(WeatherChangeEvent event)
-    {
+    public void onWeatherChange(WeatherChangeEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onChunkUnload(ChunkUnloadEvent event)
-    {
+    public void onChunkUnload(ChunkUnloadEvent event) {
         event.setCancelled(true);
     }
 
-    private boolean canDoAction(Player player)
-    {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private boolean canDoAction(Player player) {
         return this.hub.getPlayerManager().canBuild() && player != null && player.isOp();
     }
 }

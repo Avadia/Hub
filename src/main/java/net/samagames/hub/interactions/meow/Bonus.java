@@ -28,8 +28,7 @@ import java.util.function.Consumer;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class Bonus
-{
+class Bonus {
     private final int id;
     private final int slot;
     private final String name;
@@ -39,8 +38,7 @@ class Bonus
     private final String permissionNeeded;
     private final Consumer<Player> callback;
 
-    Bonus(int id, int slot, String name, String[] description, int reloadNumber, int reloadUnit, String permissionNeeded, Consumer<Player> callback)
-    {
+    Bonus(int id, int slot, String name, String[] description, int reloadNumber, int reloadUnit, String permissionNeeded, Consumer<Player> callback) {
         this.id = id;
         this.slot = slot;
         this.name = name;
@@ -51,8 +49,7 @@ class Bonus
         this.callback = callback;
     }
 
-    public void take(Player player)
-    {
+    public void take(Player player) {
         if (!this.isAbleFor(player))
             return;
 
@@ -78,8 +75,7 @@ class Bonus
         jedis.close();
     }
 
-    public ItemStack getIcon(Player player)
-    {
+    public ItemStack getIcon(Player player) {
         boolean able = this.isAbleFor(player);
 
         ItemStack stack = new ItemStack(able ? Material.COOKED_FISH : Material.RAW_FISH, 1);
@@ -90,8 +86,7 @@ class Bonus
         List<String> lore = new ArrayList<>(Arrays.asList(this.description));
         lore.add("");
 
-        if (!able)
-        {
+        if (!able) {
             long millis = new Date(this.getUnlockTime(player)).getTime() - new Date().getTime();
             long days = millis / (1000 * 60 * 60 * 24);
             long hours = (millis / (1000 * 60 * 60)) % 24;
@@ -99,10 +94,8 @@ class Bonus
 
             lore.add(ChatColor.RED + "Vous pourrez récupérer ce");
             lore.add(ChatColor.RED + "bonus dans : ");
-            lore.add(ChatColor.RED + "" + days + " jour" + (days > 1 ? "s" : "") + " " + hours + " heure" + (hours > 1 ? "s" : "") + " et " + minutes + " minute" + (minutes > 1 ? "s" : "")  + ".");
-        }
-        else
-        {
+            lore.add(ChatColor.RED + "" + days + " jour" + (days > 1 ? "s" : "") + " " + hours + " heure" + (hours > 1 ? "s" : "") + " et " + minutes + " minute" + (minutes > 1 ? "s" : "") + ".");
+        } else {
             lore.add(ChatColor.GREEN + "Récupérer votre bonus dès");
             lore.add(ChatColor.GREEN + "maintenant !");
         }
@@ -114,18 +107,15 @@ class Bonus
         return stack;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return this.id;
     }
 
-    public int getSlot()
-    {
+    public int getSlot() {
         return this.slot;
     }
 
-    public long getUnlockTime(Player player)
-    {
+    public long getUnlockTime(Player player) {
         if (this.isAbleFor(player))
             return 0;
 
@@ -141,8 +131,7 @@ class Bonus
         return Long.parseLong(value);
     }
 
-    public boolean isAbleFor(Player player)
-    {
+    public boolean isAbleFor(Player player) {
         if (this.permissionNeeded != null && !SamaGamesAPI.get().getPermissionsManager().hasPermission(player.getUniqueId(), this.permissionNeeded))
             return false;
 

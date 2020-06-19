@@ -25,24 +25,19 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandFly extends AbstractCommand
-{
-    public CommandFly(Hub hub)
-    {
+public class CommandFly extends AbstractCommand {
+    public CommandFly(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
-        if (!SamaGamesAPI.get().getPermissionsManager().hasPermission(player, "hub.fly"))
-        {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
+        if (!SamaGamesAPI.get().getPermissionsManager().hasPermission(player, "hub.fly")) {
             player.sendMessage(PlayerManager.SETTINGS_TAG + ChatColor.RED + "Vous n'avez pas le grade nécéssaire pour utiliser cette commande.");
             return true;
         }
 
-        if (player.getGameMode() != GameMode.ADVENTURE || this.hub.getPlayerManager().isBusy(player))
-        {
+        if (player.getGameMode() != GameMode.ADVENTURE || this.hub.getPlayerManager().isBusy(player)) {
             player.sendMessage(PlayerManager.SETTINGS_TAG + ChatColor.RED + "Vous ne pouvez pas utiliser cette commande actuellement.");
             return true;
         }

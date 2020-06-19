@@ -26,14 +26,12 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiCosmeticsCategory<COSMETIC extends AbstractCosmetic> extends AbstractGui
-{
+public class GuiCosmeticsCategory<COSMETIC extends AbstractCosmetic> extends AbstractGui {
     private final String title;
     private final AbstractCosmeticManager<COSMETIC> manager;
     private final boolean canBeRemoved;
 
-    public GuiCosmeticsCategory(Hub hub, String title, AbstractCosmeticManager<COSMETIC> manager, boolean canBeRemoved)
-    {
+    public GuiCosmeticsCategory(Hub hub, String title, AbstractCosmeticManager<COSMETIC> manager, boolean canBeRemoved) {
         super(hub);
 
         this.title = title;
@@ -42,20 +40,17 @@ public class GuiCosmeticsCategory<COSMETIC extends AbstractCosmetic> extends Abs
     }
 
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         int lines = 1;
         int slot = 0;
 
-        for (AbstractCosmetic cosmetic : this.manager.getRegistry().getElements().values())
-        {
+        for (AbstractCosmetic cosmetic : this.manager.getRegistry().getElements().values()) {
             if (!cosmetic.canView(player))
                 continue;
 
             slot++;
 
-            if (slot == 8)
-            {
+            if (slot == 8) {
                 slot = 0;
                 lines++;
             }
@@ -69,14 +64,12 @@ public class GuiCosmeticsCategory<COSMETIC extends AbstractCosmetic> extends Abs
     }
 
     @Override
-    public void update(Player player)
-    {
+    public void update(Player player) {
         int[] baseSlots = {10, 11, 12, 13, 14, 15, 16};
         int lines = 0;
         int slot = 0;
 
-        for (AbstractCosmetic cosmetic : this.manager.getRegistry().getElements().values())
-        {
+        for (AbstractCosmetic cosmetic : this.manager.getRegistry().getElements().values()) {
             if (!cosmetic.canView(player))
                 continue;
 
@@ -84,41 +77,31 @@ public class GuiCosmeticsCategory<COSMETIC extends AbstractCosmetic> extends Abs
 
             slot++;
 
-            if (slot == 7)
-            {
+            if (slot == 7) {
                 slot = 0;
                 lines++;
             }
         }
 
-        if (this.canBeRemoved)
-        {
+        if (this.canBeRemoved) {
             this.setSlotData(getBackIcon(), this.inventory.getSize() - 4, "back");
 
             boolean plural = !this.manager.restrictToOne();
 
             this.setSlotData(ChatColor.RED + "Désactiver " + (plural ? "vos" : "votre") + " cosmétique" + (plural ? "s" : "") + " actuel" + (plural ? "s" : ""), Material.FLINT_AND_STEEL, this.inventory.getSize() - 6, null, "delete");
-        }
-        else
-        {
+        } else {
             this.setSlotData(getBackIcon(), this.inventory.getSize() - 5, "back");
         }
     }
 
     @Override
-    public void onClick(Player player, ItemStack stack, String action, ClickType clickType)
-    {
-        if (action.startsWith("cosmetic_"))
-        {
+    public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
+        if (action.startsWith("cosmetic_")) {
             int cosmetic = Integer.parseInt(action.split("_")[1]);
             this.manager.enableCosmetic(player, this.manager.getRegistry().getElementByStorageId(cosmetic), clickType, false);
-        }
-        else if (action.equals("delete"))
-        {
+        } else if (action.equals("delete")) {
             this.manager.disableCosmetics(player, false, false);
-        }
-        else if (action.equals("back"))
-        {
+        } else if (action.equals("back")) {
             this.hub.getGuiManager().openGui(player, new GuiCosmetics(this.hub));
         }
     }

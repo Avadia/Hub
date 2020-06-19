@@ -27,8 +27,7 @@ import java.util.function.Function;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class BackEndGame extends AbstractGame
-{
+public class BackEndGame extends AbstractGame {
     private final String codeName;
     private final String publicName;
     private final Location spawn;
@@ -36,8 +35,7 @@ public class BackEndGame extends AbstractGame
     private final boolean hasResourcesPack;
     private final Function<IPlayerStats, Boolean> isPlayerFirstGameFunction;
 
-    public BackEndGame(Hub hub, String codeName, String publicName, Location spawn, String websiteDescriptionURL, boolean hasResourcesPack, Function<IPlayerStats, Boolean> isPlayerFirstGameFunction)
-    {
+    public BackEndGame(Hub hub, String codeName, String publicName, Location spawn, String websiteDescriptionURL, boolean hasResourcesPack, Function<IPlayerStats, Boolean> isPlayerFirstGameFunction) {
         super(hub);
 
         this.codeName = codeName;
@@ -48,98 +46,82 @@ public class BackEndGame extends AbstractGame
         this.isPlayerFirstGameFunction = isPlayerFirstGameFunction;
     }
 
-    public BackEndGame(Hub hub, String codeName, String publicName, Location spawn, String websiteDescriptionURL, boolean hasResourcesPack)
-    {
+    public BackEndGame(Hub hub, String codeName, String publicName, Location spawn, String websiteDescriptionURL, boolean hasResourcesPack) {
         this(hub, codeName, publicName, spawn, websiteDescriptionURL, hasResourcesPack, null);
     }
 
     @Override
-    public String getCodeName()
-    {
+    public String getCodeName() {
         return this.codeName;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return this.publicName;
     }
 
     @Override
-    public String getCategory()
-    {
+    public String getCategory() {
         return null;
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return null;
     }
 
     @Override
-    public String[] getDescription()
-    {
+    public String[] getDescription() {
         return null;
     }
 
     @Override
-    public String[] getDevelopers()
-    {
+    public String[] getDevelopers() {
         return null;
     }
 
     @Override
-    public String getWebsiteDescriptionURL()
-    {
+    public String getWebsiteDescriptionURL() {
         return this.websiteDescriptionURL;
     }
 
     @Override
-    public int getSlotInMainMenu()
-    {
+    public int getSlotInMainMenu() {
         return -1;
     }
 
     @Override
-    public ShopCategory getShopConfiguration()
-    {
+    public ShopCategory getShopConfiguration() {
         return null;
     }
 
     @Override
-    public Location getLobbySpawn()
-    {
+    public Location getLobbySpawn() {
         return this.spawn;
     }
 
     @Override
-    public Location getWebsiteDescriptionSkull()
-    {
+    public Location getWebsiteDescriptionSkull() {
         return null;
     }
 
     @Override
-    public List<HubLeaderboard> getLeaderBoards()
-    {
+    public List<HubLeaderboard> getLeaderBoards() {
         return null;
     }
 
     @Override
-    public State getState()
-    {
+    public State getState() {
         return State.OPENED;
     }
 
     @Override
-    public boolean hasResourcesPack()
-    {
+    public boolean hasResourcesPack() {
         return this.hasResourcesPack;
     }
 
     @Override
-    public boolean isPlayerFirstGame(IPlayerStats playerStats)
-    {
+    public boolean isPlayerFirstGame(IPlayerStats playerStats) {
         if (this.isPlayerFirstGameFunction == null)
             return false;
         else
@@ -147,8 +129,7 @@ public class BackEndGame extends AbstractGame
     }
 
     @Override
-    public boolean isGroup()
-    {
+    public boolean isGroup() {
         return false;
     }
 }

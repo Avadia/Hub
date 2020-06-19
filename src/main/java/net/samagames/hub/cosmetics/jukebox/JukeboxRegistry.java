@@ -20,16 +20,13 @@ import net.samagames.hub.cosmetics.common.AbstractCosmeticRegistry;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class JukeboxRegistry extends AbstractCosmeticRegistry<JukeboxDiskCosmetic>
-{
-    JukeboxRegistry(Hub hub)
-    {
+class JukeboxRegistry extends AbstractCosmeticRegistry<JukeboxDiskCosmetic> {
+    JukeboxRegistry(Hub hub) {
         super(hub);
     }
 
     @Override
-    public void register() throws Exception
-    {
+    public void register() throws Exception {
         JukeboxDiskCosmetic guilesThemeDisk = new JukeboxDiskCosmetic(this.hub, 0, NBSDecoder.parse("GuilesTheme"), 141);
         JukeboxDiskCosmetic ryusThemeDisk = new JukeboxDiskCosmetic(this.hub, 1, NBSDecoder.parse("RyusTheme"), 114);
         JukeboxDiskCosmetic kensThemeDisk = new JukeboxDiskCosmetic(this.hub, 2, NBSDecoder.parse("KensTheme"), 147);

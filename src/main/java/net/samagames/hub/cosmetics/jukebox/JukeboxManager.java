@@ -13,10 +13,7 @@ import net.samagames.tools.ParticleEffect;
 import net.samagames.tools.bossbar.BossBarAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.craftbukkit.v1_12_R1.boss.CraftBossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -42,8 +39,7 @@ import java.util.concurrent.TimeUnit;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
-{
+public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic> {
     public static final String JUKEBOX_TAG = ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Jukebox" + ChatColor.DARK_AQUA + "] " + ChatColor.RESET;
     private static final ParticleEffect WOOT_EFFECT = ParticleEffect.NOTE;
     private static final ParticleEffect MEH_EFFECT = ParticleEffect.VILLAGER_ANGRY;
@@ -58,8 +54,7 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
     private boolean lockFlag;
     private boolean isLocked;
 
-    public JukeboxManager(Hub hub)
-    {
+    public JukeboxManager(Hub hub) {
         super(hub, new JukeboxRegistry(hub));
 
         this.playlists = new LinkedList<>();
@@ -79,26 +74,21 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
 
         hub.getScheduledExecutorService().scheduleAtFixedRate(() ->
         {
-            if (this.currentPlaylist != null)
-            {
-                for (UUID wooter : this.currentPlaylist.getWooters())
-                {
+            if (this.currentPlaylist != null) {
+                for (UUID wooter : this.currentPlaylist.getWooters()) {
                     Player player = this.hub.getServer().getPlayer(wooter);
 
-                    if (player != null)
-                    {
+                    if (player != null) {
                         Location playerLocation = player.getLocation().clone();
                         playerLocation.setY(playerLocation.getY() + 2);
                         WOOT_EFFECT.display(new ParticleEffect.NoteColor(new Random().nextInt(10)), playerLocation, 160.0);
                     }
                 }
 
-                for (UUID meher : this.currentPlaylist.getMehers())
-                {
+                for (UUID meher : this.currentPlaylist.getMehers()) {
                     Player player = this.hub.getServer().getPlayer(meher);
 
-                    if (player != null)
-                    {
+                    if (player != null) {
                         Location playerLocation = player.getLocation().clone();
                         playerLocation.setY(playerLocation.getY() + 2);
                         MEH_EFFECT.display(0F, 1F, 0F, 1, 1, playerLocation, 160.0);
@@ -109,44 +99,36 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
     }
 
     @Override
-    public void enableCosmetic(Player player, JukeboxDiskCosmetic cosmetic, ClickType clickType, boolean login)
-    {
-        if (cosmetic.isOwned(player))
-        {
-            if (cosmetic.getAccessibility().canAccess(player))
-            {
+    public void enableCosmetic(Player player, JukeboxDiskCosmetic cosmetic, ClickType clickType, boolean login) {
+        if (cosmetic.isOwned(player)) {
+            if (cosmetic.getAccessibility().canAccess(player)) {
                 this.play(cosmetic, player);
 
                 AbstractGui gui = (AbstractGui) this.hub.getGuiManager().getPlayerGui(player);
 
                 if (gui != null)
                     gui.update(player);
-            }
-            else
-            {
+            } else {
                 player.sendMessage(PlayerManager.COSMETICS_TAG + ChatColor.RED + "Vous n'avez pas le grade nécessaire pour utiliser cette cosmétique.");
             }
-        }
-        else
-        {
+        } else {
             player.sendMessage(PlayerManager.COSMETICS_TAG + ChatColor.RED + "Vous ne possédez pas ce cosmétique. Tentez de le débloquer auprès de Graou !");
         }
     }
 
     @Override
-    public void enableCosmetic(Player player, JukeboxDiskCosmetic cosmetic, ClickType clickType, boolean login, NullType useless) { /** Not needed **/ }
+    public void enableCosmetic(Player player, JukeboxDiskCosmetic cosmetic, ClickType clickType, boolean login, NullType useless) { /* Not needed **/}
 
     @Override
-    public void disableCosmetic(Player player, JukeboxDiskCosmetic cosmetic, boolean logout, boolean replace, NullType useless) { /** Not needed **/ }
+    public void disableCosmetic(Player player, JukeboxDiskCosmetic cosmetic, boolean logout, boolean replace, NullType useless) { /* Not needed **/}
 
     @Override
-    public void restoreCosmetic(Player player) { /** Not needed **/ }
+    public void restoreCosmetic(Player player) { /* Not needed **/}
 
     @Override
-    public void update() { /** Not needed **/ }
+    public void update() { /* Not needed **/}
 
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
         {
             IPlayerSettings settings = SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId());
@@ -158,8 +140,7 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
         });
     }
 
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
         {
             this.removePlayer(player);
@@ -168,36 +149,25 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
 
     }
 
-    public void play(JukeboxDiskCosmetic disk, Player player)
-    {
+    public void play(JukeboxDiskCosmetic disk, Player player) {
         Song song = disk.getSong();
         JukeboxSong jukeboxSong = new JukeboxSong(this.hub, disk, player.getName());
         boolean canBypassLimit = SamaGamesAPI.get().getPermissionsManager().hasPermission(player, "hub.jukebox.limitbypass");
 
-        if (!canBypassLimit)
-        {
-            if ((this.containsSongFrom(player.getName()) || (this.currentPlaylist != null && this.currentPlaylist.getPlayedBy().equals(player.getName()))))
-            {
+        if (!canBypassLimit) {
+            if ((this.containsSongFrom(player.getName()) || (this.currentPlaylist != null && this.currentPlaylist.getPlayedBy().equals(player.getName())))) {
                 player.sendMessage(ChatColor.RED + "La playlist contient déjà une musique de vous.");
                 return;
-            }
-            else if (this.recentDJs.containsKey(player.getUniqueId()))
-            {
+            } else if (this.recentDJs.containsKey(player.getUniqueId())) {
                 player.sendMessage(ChatColor.RED + "Vous ne pouvez proposer un titre que dans " + Misc.formatTime(this.recentDJs.get(player.getUniqueId())) + ".");
                 return;
-            }
-            else if ((containsSong(song.getTitle()) || (this.currentPlaylist != null && this.currentPlaylist.getSong().getTitle().equals(song.getTitle()))))
-            {
+            } else if ((containsSong(song.getTitle()) || (this.currentPlaylist != null && this.currentPlaylist.getSong().getTitle().equals(song.getTitle())))) {
                 player.sendMessage(ChatColor.RED + "Cette musique est déjà dans la liste d'attente.");
                 return;
-            }
-            else if ((wasRecentlyPlayed(song.getTitle())))
-            {
+            } else if ((wasRecentlyPlayed(song.getTitle()))) {
                 player.sendMessage(ChatColor.RED + "Cette musique a déjà été jouée récemment. Merci d'attendre avant de l'ajouter à nouveau.");
                 return;
-            }
-            else if (this.isLocked)
-            {
+            } else if (this.isLocked) {
                 player.sendMessage(ChatColor.RED + "La playlist est actuellement vérrouillée.");
                 return;
             }
@@ -210,22 +180,16 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
         else
             this.recentDJs.put(player.getUniqueId(), 600);
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
-                if (recentDJs.containsKey(player.getUniqueId()))
-                {
+            public void run() {
+                if (recentDJs.containsKey(player.getUniqueId())) {
                     int now = recentDJs.get(player.getUniqueId()) - 1;
 
-                    if (now == 0)
-                    {
+                    if (now == 0) {
                         recentDJs.remove(player.getUniqueId());
                         this.cancel();
-                    }
-                    else
-                    {
+                    } else {
                         recentDJs.put(player.getUniqueId(), now);
                     }
                 }
@@ -237,14 +201,11 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
         player.sendMessage(JUKEBOX_TAG + ChatColor.GREEN + "Votre musique sera jouée prochainement. Position dans la playlist : " + ChatColor.AQUA + "#" + this.playlists.size());
     }
 
-    public boolean nextSong()
-    {
+    public boolean nextSong() {
         this.lockFlag = true;
 
-        try
-        {
-            if (this.currentPlaylist != null)
-            {
+        try {
+            if (this.currentPlaylist != null) {
                 this.recentsPlaylists.addLast(this.currentPlaylist);
 
                 if (this.recentsPlaylists.size() > 3)
@@ -257,40 +218,34 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
 
                 UUID playerUUID = SamaGamesAPI.get().getUUIDTranslator().getUUID(this.currentPlaylist.getPlayedBy());
 
-                if (playerUUID != null)
-                {
-                    try
-                    {
+                if (playerUUID != null) {
+                    try {
                         SamaGamesAPI.get().getStatsManager().getPlayerStats(playerUUID).getJukeBoxStatistics().incrByWoots(woots);
                         SamaGamesAPI.get().getStatsManager().getPlayerStats(playerUUID).getJukeBoxStatistics().incrByMehs(mehs);
 
                         this.hub.getServer().getScheduler().runTask(this.hub, () ->
                         {
-                            if (woots > 0)
-                            {
+                            if (woots > 0) {
                                 SamaGamesAPI.get().getAchievementManager().getAchievementByID(40).unlock(playerUUID);
                                 Arrays.asList(41, 42, 43, 44).forEach(id -> SamaGamesAPI.get().getAchievementManager().incrementAchievement(playerUUID, id, woots));
                             }
 
-                            Arrays.asList(55, 56, 57).forEach(id -> SamaGamesAPI.get().getAchievementManager().incrementAchievement(playerUUID, id, (int) Math.ceil(this.currentPlaylist.getDisk().getSeconds() / 60)));
+                            Arrays.asList(55, 56, 57).forEach(id -> SamaGamesAPI.get().getAchievementManager().incrementAchievement(playerUUID, id, (int) Math.ceil(this.currentPlaylist.getDisk().getSeconds() / 60.0)));
                         });
+                    } catch (NullPointerException ignored) {
                     }
-                    catch (NullPointerException ignored) {}
                 }
 
-                for (UUID wooter : this.currentPlaylist.getWooters())
-                {
-                    try
-                    {
+                for (UUID wooter : this.currentPlaylist.getWooters()) {
+                    try {
                         SamaGamesAPI.get().getStatsManager().getPlayerStats(wooter).getJukeBoxStatistics().incrByWootsGiven(1);
+                    } catch (NullPointerException ignored) {
                     }
-                    catch (NullPointerException ignored) {}
                 }
 
                 this.currentPlaylist = null;
 
-                if (this.barTask != null)
-                {
+                if (this.barTask != null) {
                     this.barTask.cancel();
                     this.barTask = null;
 
@@ -306,8 +261,7 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
 
             JukeboxSong nextSong = this.playlists.pollFirst();
 
-            if (nextSong != null)
-            {
+            if (nextSong != null) {
                 SongPlayer player = nextSong.getPlayer();
                 player.setAutoDestroy(true);
                 player.setPlaying(true);
@@ -319,16 +273,13 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
                 this.hub.getServer().broadcastMessage(JUKEBOX_TAG + ChatColor.GOLD + this.currentPlaylist.getPlayedBy() + ChatColor.YELLOW + " joue " + ChatColor.GOLD + ChatColor.ITALIC + this.currentPlaylist.getSong().getTitle() + ChatColor.YELLOW + " de " + ChatColor.GOLD + this.currentPlaylist.getSong().getAuthor());
                 this.hub.getServer().broadcastMessage(JUKEBOX_TAG + ChatColor.GRAY + ChatColor.ITALIC + "Tapez " + ChatColor.GREEN + "/woot" + ChatColor.GRAY + ChatColor.ITALIC + " pour apprécier ou " + ChatColor.RED + "/meh" + ChatColor.GRAY + ChatColor.ITALIC + " pour indiquer que vous n'aimez pas la musique jouée actuellement et la couper.");
 
-                if (this.barTask == null)
-                {
-                    this.barTask = this.hub.getServer().getScheduler().runTaskTimerAsynchronously(this.hub, new Runnable()
-                    {
-                        private ChatColor[] colors = {ChatColor.RED, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.DARK_RED, ChatColor.DARK_PURPLE, ChatColor.DARK_AQUA};
+                if (this.barTask == null) {
+                    this.barTask = this.hub.getServer().getScheduler().runTaskTimerAsynchronously(this.hub, new Runnable() {
+                        private final ChatColor[] colors = {ChatColor.RED, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.DARK_RED, ChatColor.DARK_PURPLE, ChatColor.DARK_AQUA};
                         private int i = 0;
 
                         @Override
-                        public void run()
-                        {
+                        public void run() {
                             ChatColor randomizedColor = this.colors[new Random().nextInt(this.colors.length)];
 
                             if (this.i <= 4)
@@ -351,24 +302,19 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
 
             this.lockFlag = false;
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             this.nextSong();
-        }
-        finally
-        {
+        } finally {
             this.lockFlag = false;
         }
 
         return false;
     }
 
-    public String skipSong(boolean becauseMehs)
-    {
-        if (this.currentPlaylist != null && this.currentPlaylist.getPlayer().isPlaying())
-        {
+    @SuppressWarnings("UnusedReturnValue")
+    public String skipSong(boolean becauseMehs) {
+        if (this.currentPlaylist != null && this.currentPlaylist.getPlayer().isPlaying()) {
             if (becauseMehs)
                 this.hub.getServer().broadcastMessage(JUKEBOX_TAG + ChatColor.RED + "La musique est passée car elle a reçu plus de 33% de votes négatifs.");
 
@@ -378,73 +324,57 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
                 return JUKEBOX_TAG + ChatColor.GREEN + "Musique suivante jouée.";
             else
                 return JUKEBOX_TAG + ChatColor.GOLD + "La musique a été arrêtée mais la playlist est vide.";
-        }
-        else
-        {
+        } else {
             return JUKEBOX_TAG + ChatColor.RED + "Aucun son n'est lu actuellement.";
         }
     }
 
-    public void clear()
-    {
+    public void clear() {
         this.playlists.clear();
     }
 
-    public void addPlayer(Player player)
-    {
-        if (this.currentPlaylist != null)
-        {
+    public void addPlayer(Player player) {
+        if (this.currentPlaylist != null) {
             this.currentPlaylist.getPlayer().addPlayer(player);
             this.bossBar.addPlayer(player);
         }
     }
 
-    public void removePlayer(Player player)
-    {
-        if (this.currentPlaylist != null)
-        {
+    public void removePlayer(Player player) {
+        if (this.currentPlaylist != null) {
             this.currentPlaylist.getPlayer().removePlayer(player);
             this.bossBar.addPlayer(player);
         }
     }
 
-    public void mute(Player player, boolean flag)
-    {
-        if (flag)
-        {
+    public void mute(Player player, boolean flag) {
+        if (flag) {
             this.mutedPlayers.add(player.getUniqueId());
             this.removePlayer(player);
-        }
-        else
-        {
+        } else {
             this.mutedPlayers.remove(player.getUniqueId());
             this.addPlayer(player);
         }
     }
 
-    public void toggleLock()
-    {
+    public void toggleLock() {
         this.isLocked = !this.isLocked;
     }
 
-    public JukeboxSong getCurrentSong()
-    {
+    public JukeboxSong getCurrentSong() {
         return this.currentPlaylist;
     }
 
-    public LinkedList<JukeboxSong> getPlaylists()
-    {
+    public LinkedList<JukeboxSong> getPlaylists() {
         return this.playlists;
     }
 
     @Override
-    public boolean restrictToOne()
-    {
+    public boolean restrictToOne() {
         return true;
     }
 
-    public boolean containsSongFrom(String playedBy)
-    {
+    public boolean containsSongFrom(String playedBy) {
         for (JukeboxSong song : this.playlists)
             if (song.getPlayedBy().equals(playedBy))
                 return true;
@@ -452,8 +382,7 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
         return false;
     }
 
-    public boolean containsSong(String title)
-    {
+    public boolean containsSong(String title) {
         for (JukeboxSong song : this.playlists)
             if (song.getSong().getTitle().equals(title))
                 return true;
@@ -461,8 +390,7 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
         return false;
     }
 
-    public boolean wasRecentlyPlayed(String title)
-    {
+    public boolean wasRecentlyPlayed(String title) {
         for (JukeboxSong song : this.recentsPlaylists)
             if (song.getSong().getTitle().equals(title))
                 return true;
@@ -470,8 +398,7 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
         return false;
     }
 
-    public boolean isLocked()
-    {
+    public boolean isLocked() {
         return this.isLocked;
     }
 }

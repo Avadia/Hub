@@ -5,13 +5,16 @@ import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.GamesNames;
 import net.samagames.api.games.Status;
 import net.samagames.hub.commands.CommandManager;
-import net.samagames.hub.common.refresh.HubRefresher;
 import net.samagames.hub.common.hydroangeas.HydroangeasManager;
 import net.samagames.hub.common.managers.EntityManager;
 import net.samagames.hub.common.managers.EventBus;
 import net.samagames.hub.common.players.ChatManager;
 import net.samagames.hub.common.players.PlayerManager;
-import net.samagames.hub.common.receivers.*;
+import net.samagames.hub.common.receivers.EventListener;
+import net.samagames.hub.common.receivers.MaintenanceListener;
+import net.samagames.hub.common.receivers.SamaritanListener;
+import net.samagames.hub.common.receivers.SoonListener;
+import net.samagames.hub.common.refresh.HubRefresher;
 import net.samagames.hub.common.tasks.TaskManager;
 import net.samagames.hub.cosmetics.CosmeticManager;
 import net.samagames.hub.events.*;
@@ -36,7 +39,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -58,8 +60,7 @@ import java.util.concurrent.TimeUnit;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class Hub extends JavaPlugin
-{
+public class Hub extends JavaPlugin {
     private static Hub instance;
 
     private World world;
@@ -88,11 +89,15 @@ public class Hub extends JavaPlugin
     private HostGameManager hostGameManager;
 
     private EventListener eventListener;
+    @SuppressWarnings("rawtypes")
     private ScheduledFuture hydroangeasSynchronization;
 
+    public static Hub getInstance() {
+        return instance;
+    }
+
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         instance = this;
 
         this.saveDefaultConfig();
@@ -107,8 +112,7 @@ public class Hub extends JavaPlugin
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
-        if (!this.getConfig().getBoolean("disconnected", false))
-        {
+        if (!this.getConfig().getBoolean("disconnected", false)) {
             this.hubRefresher = new HubRefresher(this);
             this.hubRefresherTask = this.getServer().getScheduler().runTaskTimerAsynchronously(this, this.hubRefresher, 20L * 3, 20L * 3);
             SamaGamesAPI.get().getPubSub().subscribe("hub-status", this.hubRefresher);
@@ -141,7 +145,7 @@ public class Hub extends JavaPlugin
         this.getServer().getPluginManager().registerEvents(new GuiListener(this), this);
         this.getServer().getPluginManager().registerEvents(new DoubleJumpListener(this), this);
         this.getServer().getPluginManager().registerEvents(new DevelopperListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new PetListener(), this);
+        //this.getServer().getPluginManager().registerEvents(new PetListener(), this);
 
         this.getServer().getPluginManager().registerEvents(new EntityEditionListener(this), this);
         this.getServer().getPluginManager().registerEvents(new InventoryEditionListener(this), this);
@@ -174,8 +178,7 @@ public class Hub extends JavaPlugin
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         if (this.hubRefresher != null)
             this.hubRefresherTask.cancel();
 
@@ -183,63 +186,96 @@ public class Hub extends JavaPlugin
         this.eventBus.onDisable();
     }
 
-    public World getWorld()
-    {
+    public World getWorld() {
         return this.world;
     }
 
-    public ScheduledExecutorService getExecutorMonoThread()
-    {
+    public ScheduledExecutorService getExecutorMonoThread() {
         return this.executorMonoThread;
     }
 
-    public ScheduledExecutorService getScheduledExecutorService()
-    {
+    public ScheduledExecutorService getScheduledExecutorService() {
         return this.scheduledExecutorService;
     }
 
-    public HubRefresher getHubRefresher()
-    {
+    public HubRefresher getHubRefresher() {
         return this.hubRefresher;
     }
 
-    public EventBus getEventBus()
-    {
+    public EventBus getEventBus() {
         return this.eventBus;
     }
 
-    public HydroangeasManager getHydroangeasManager() { return this.hydroangeasManager; }
-    public TaskManager getTaskManager() { return this.taskManager; }
-    public EntityManager getEntityManager() { return this.entityManager; }
-    public PlayerManager getPlayerManager() { return this.playerManager; }
-    public ChatManager getChatManager() { return this.chatManager; }
-    public GameManager getGameManager() { return this.gameManager; }
-    public SignManager getSignManager() { return this.signManager; }
-    public ScoreboardManager getScoreboardManager() { return this.scoreboardManager; }
-    public GuiManager getGuiManager() { return this.guiManager; }
-    public ParkourManager getParkourManager() { return this.parkourManager; }
-    public NPCManager getNPCManager() { return this.npcManager; }
-    public CommandManager getCommandManager() { return this.commandManager; }
-    public CosmeticManager getCosmeticManager() { return this.cosmeticManager; }
-    public InteractionManager getInteractionManager() { return this.interactionManager; }
-    public HostGameManager getHostGameManager() { return this.hostGameManager; }
+    public HydroangeasManager getHydroangeasManager() {
+        return this.hydroangeasManager;
+    }
 
-    public EventListener getEventListener()
-    {
+    public TaskManager getTaskManager() {
+        return this.taskManager;
+    }
+
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
+
+    public PlayerManager getPlayerManager() {
+        return this.playerManager;
+    }
+
+    public ChatManager getChatManager() {
+        return this.chatManager;
+    }
+
+    public GameManager getGameManager() {
+        return this.gameManager;
+    }
+
+    public SignManager getSignManager() {
+        return this.signManager;
+    }
+
+    public ScoreboardManager getScoreboardManager() {
+        return this.scoreboardManager;
+    }
+
+    public GuiManager getGuiManager() {
+        return this.guiManager;
+    }
+
+    public ParkourManager getParkourManager() {
+        return this.parkourManager;
+    }
+
+    public NPCManager getNPCManager() {
+        return this.npcManager;
+    }
+
+    public CommandManager getCommandManager() {
+        return this.commandManager;
+    }
+
+    public CosmeticManager getCosmeticManager() {
+        return this.cosmeticManager;
+    }
+
+    public InteractionManager getInteractionManager() {
+        return this.interactionManager;
+    }
+
+    public HostGameManager getHostGameManager() {
+        return this.hostGameManager;
+    }
+
+    public EventListener getEventListener() {
         return this.eventListener;
     }
 
-    public EffectLib getEffectLib()
-    {
+    public EffectLib getEffectLib() {
         Plugin effectLib = this.getServer().getPluginManager().getPlugin("EffectLib");
 
-        if (effectLib == null || !(effectLib instanceof EffectLib))
+        if (!(effectLib instanceof EffectLib))
             return null;
 
         return (EffectLib) effectLib;
-    }
-
-    public static Hub getInstance() {
-        return instance;
     }
 }

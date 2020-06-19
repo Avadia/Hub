@@ -38,8 +38,7 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DeveloperRoomParkour extends Parkour implements Listener
-{
+public class DeveloperRoomParkour extends Parkour implements Listener {
     private static final long MUSIC_LENGTH = 20L * 175;
 
     private final ArmorStand portalArmorStand;
@@ -48,8 +47,7 @@ public class DeveloperRoomParkour extends Parkour implements Listener
     private final Location minusFloor;
     private final String resourcePack;
 
-    public DeveloperRoomParkour(Hub hub, Location spawn, Location end, Location fail, Pair<Location, Location> portals, Location minusFloor, String resourcePack)
-    {
+    public DeveloperRoomParkour(Hub hub, Location spawn, Location end, Location fail, Pair<Location, Location> portals, Location minusFloor, String resourcePack) {
         super(hub, "Salle de test n°42", "de la", "la", spawn, end, fail, 0, 0, new ArrayList<>(), 5, 9);
 
         this.expected = new ArrayList<>();
@@ -67,8 +65,7 @@ public class DeveloperRoomParkour extends Parkour implements Listener
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         super.onDisable();
 
         this.portalTask.cancel();
@@ -76,33 +73,28 @@ public class DeveloperRoomParkour extends Parkour implements Listener
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         if (!this.isParkouring(event.getPlayer().getUniqueId()))
             return;
 
         event.setCancelled(true);
 
-        if (event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == Material.IRON_PLATE && event.getClickedBlock().getLocation().equals(this.minusFloor))
-        {
+        if (event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == Material.IRON_PLATE && event.getClickedBlock().getLocation().equals(this.minusFloor)) {
             event.getPlayer().teleport(this.fail);
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_PISTON_CONTRACT, 1.0F, 1.0F);
         }
     }
 
     @EventHandler
-    public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event)
-    {
+    public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event) {
         if (!this.expected.contains(event.getPlayer().getUniqueId()) || event.getStatus() != PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED)
             return;
 
         this.playMusic(event.getPlayer());
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 if (expected.contains(event.getPlayer().getUniqueId()))
                     playMusic(event.getPlayer());
                 else
@@ -112,17 +104,16 @@ public class DeveloperRoomParkour extends Parkour implements Listener
     }
 
     @Override
-    public void addPlayer(Player player)
-    {
+    public void addPlayer(Player player) {
         super.addPlayer(player);
 
         this.expected.add(player.getUniqueId());
         player.setResourcePack("http://resources.samagames.net/" + this.resourcePack + ".zip");
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void removePlayer(Player player)
-    {
+    public void removePlayer(Player player) {
         super.removePlayer(player);
 
         this.expected.remove(player.getUniqueId());
@@ -130,8 +121,8 @@ public class DeveloperRoomParkour extends Parkour implements Listener
         player.playEffect(player.getLocation(), Effect.RECORD_PLAY, 0);
     }
 
-    private void playMusic(Player player)
-    {
+    @SuppressWarnings("deprecation")
+    private void playMusic(Player player) {
         player.playEffect(player.getLocation(), Effect.RECORD_PLAY, Material.GREEN_RECORD.getId());
     }
 }

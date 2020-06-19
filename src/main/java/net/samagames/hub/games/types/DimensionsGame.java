@@ -30,41 +30,34 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DimensionsGame extends AbstractGame
-{
-    public DimensionsGame(Hub hub)
-    {
+public class DimensionsGame extends AbstractGame {
+    public DimensionsGame(Hub hub) {
         super(hub);
     }
 
     @Override
-    public String getCodeName()
-    {
+    public String getCodeName() {
         return "dimensions";
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "Dimensions";
     }
 
     @Override
-    public String getCategory()
-    {
+    public String getCategory() {
         return "PvP";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.EYE_OF_ENDER, 1);
     }
 
     @Override
-    public String[] getDescription()
-    {
-        return new String[] {
+    public String[] getDescription() {
+        return new String[]{
                 "Téléportez-vous d'un monde parallèle",
                 "à un autre et récupérez le maximum de",
                 "coffres. Ensuite, le combat pourra",
@@ -73,31 +66,26 @@ public class DimensionsGame extends AbstractGame
     }
 
     @Override
-    public String[] getDevelopers()
-    {
-        return new String[] {
+    public String[] getDevelopers() {
+        return new String[]{
                 "Silvanosky",
                 "zyuiop"
         };
     }
 
     @Override
-    public String getWebsiteDescriptionURL()
-    {
+    public String getWebsiteDescriptionURL() {
         return null;
     }
 
     @Override
-    public int getSlotInMainMenu()
-    {
+    public int getSlotInMainMenu() {
         return 21;
     }
 
     @Override
-    public ShopCategory getShopConfiguration()
-    {
-        try
-        {
+    public ShopCategory getShopConfiguration() {
+        try {
             ShopCategory shopCategory = new ShopCategory(this.hub, this, 142, 0);
 
             ShopImprovableItem teleport = new ShopImprovableItem(this.hub, "Temps de téléportation", 143, 11, 117);
@@ -122,29 +110,24 @@ public class DimensionsGame extends AbstractGame
             shopCategory.addContent(strengthAtKill);
 
             return shopCategory;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public Location getLobbySpawn()
-    {
+    public Location getLobbySpawn() {
         return new Location(this.hub.getWorld(), -13D, 87.0D, -51D, 180.0F, 0.0F);
     }
 
     @Override
-    public Location getWebsiteDescriptionSkull()
-    {
+    public Location getWebsiteDescriptionSkull() {
         return new Location(this.hub.getWorld(), 0.0, 87.0D, -49.0D, 0.0F, 0.0F);
     }
 
     @Override
-    public List<HubLeaderboard> getLeaderBoards()
-    {
+    public List<HubLeaderboard> getLeaderBoards() {
         List<HubLeaderboard> leaderBoards = new ArrayList<>();
 
         List<HubLeaderboard.HubLeaderBoardStand> leaderBoardStands1 = new ArrayList<>();
@@ -163,26 +146,22 @@ public class DimensionsGame extends AbstractGame
     }
 
     @Override
-    public State getState()
-    {
+    public State getState() {
         return State.SOON;
     }
 
     @Override
-    public boolean hasResourcesPack()
-    {
+    public boolean hasResourcesPack() {
         return false;
     }
 
     @Override
-    public boolean isPlayerFirstGame(IPlayerStats playerStats)
-    {
+    public boolean isPlayerFirstGame(IPlayerStats playerStats) {
         return playerStats.getDimensionsStatistics().getPlayedGames() == 0;
     }
 
     @Override
-    public boolean isGroup()
-    {
+    public boolean isGroup() {
         return false;
     }
 }

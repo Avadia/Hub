@@ -23,16 +23,13 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandShutup extends AbstractCommand
-{
-    public CommandShutup(Hub hub)
-    {
+public class CommandShutup extends AbstractCommand {
+    public CommandShutup(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
         boolean now = !this.hub.getChatManager().isChatLocked();
         this.hub.getChatManager().setChatLocked(now);
 

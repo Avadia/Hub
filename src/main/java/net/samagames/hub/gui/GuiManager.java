@@ -27,41 +27,34 @@ import java.util.concurrent.ConcurrentMap;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiManager extends AbstractManager implements IGuiManager
-{
+public class GuiManager extends AbstractManager implements IGuiManager {
     private final ConcurrentMap<UUID, AbstractGui> playersGui;
 
-    public GuiManager(Hub hub)
-    {
+    public GuiManager(Hub hub) {
         super(hub);
 
         this.playersGui = new ConcurrentHashMap<>();
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.hub.getServer().getOnlinePlayers().forEach(this::onLogout);
     }
 
     @Override
-    public void onLogin(Player player) { /** Not needed **/ }
+    public void onLogin(Player player) { /* Not needed **/}
 
     @Override
-    public void onLogout(Player player)
-    {
-        if (this.playersGui.containsKey(player.getUniqueId()))
-        {
+    public void onLogout(Player player) {
+        if (this.playersGui.containsKey(player.getUniqueId())) {
             this.playersGui.get(player.getUniqueId()).onClose(player);
             this.playersGui.remove(player.getUniqueId());
         }
     }
 
     @Override
-    public void openGui(Player player, AbstractGui gui)
-    {
-        if (this.playersGui.containsKey(player.getUniqueId()))
-        {
+    public void openGui(Player player, AbstractGui gui) {
+        if (this.playersGui.containsKey(player.getUniqueId())) {
             player.closeInventory();
             this.playersGui.remove(player.getUniqueId());
         }
@@ -71,37 +64,30 @@ public class GuiManager extends AbstractManager implements IGuiManager
     }
 
     @Override
-    public void closeGui(Player player)
-    {
-        if (this.playersGui.containsKey(player.getUniqueId()))
-        {
+    public void closeGui(Player player) {
+        if (this.playersGui.containsKey(player.getUniqueId())) {
             player.closeInventory();
             this.playersGui.remove(player.getUniqueId());
         }
     }
 
     @Override
-    public void removeClosedGui(Player player)
-    {
-        if (this.playersGui.containsKey(player.getUniqueId()))
-            this.playersGui.remove(player.getUniqueId());
+    public void removeClosedGui(Player player) {
+        this.playersGui.remove(player.getUniqueId());
     }
 
     @Override
-    public AbstractGui getPlayerGui(HumanEntity humanEntity)
-    {
+    public AbstractGui getPlayerGui(HumanEntity humanEntity) {
         return this.getPlayerGui(humanEntity.getUniqueId());
     }
 
     @Override
-    public AbstractGui getPlayerGui(UUID uuid)
-    {
-        return this.playersGui.containsKey(uuid) ? this.playersGui.get(uuid) : null;
+    public AbstractGui getPlayerGui(UUID uuid) {
+        return this.playersGui.getOrDefault(uuid, null);
     }
 
     @Override
-    public ConcurrentHashMap<UUID, AbstractGui> getPlayersGui()
-    {
+    public ConcurrentHashMap<UUID, AbstractGui> getPlayersGui() {
         return (ConcurrentHashMap<UUID, AbstractGui>) this.playersGui;
     }
 }

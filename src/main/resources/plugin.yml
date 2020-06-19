@@ -5,7 +5,7 @@ version: 2.0
 author: BlueSlime
 website: http://blueslime.fr
 
-depend: [SamaGamesAPI, ProtocolLib, LibsDisguises, SonarPet]
+depend: [SamaGamesAPI, ProtocolLib, LibsDisguises]
 
 commands:
   # Player commands ----------------------------
@@ -31,8 +31,8 @@ commands:
 
   # Animating commands -------------------------
   event:
-      description: Commande relative aux événements
-      usage: /event
+    description: Commande relative aux événements
+    usage: /event
 
   # Moderating commands ------------------------
   pllock:
@@ -61,9 +61,6 @@ commands:
   anguille:
     description: Commande relative aux anguilles de Maite
     usage: /anguille
-  nbs:
-    description: Commande relative au jukebox
-    usage: /nbs
   evacuate:
     description: Commande d'évacuation
     usage: /evacuate

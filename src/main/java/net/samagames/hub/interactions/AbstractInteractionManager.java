@@ -29,30 +29,25 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractInteractionManager<T extends AbstractInteraction> extends AbstractManager
-{
+public abstract class AbstractInteractionManager<T extends AbstractInteraction> extends AbstractManager {
     protected final List<T> interactions;
 
-    public AbstractInteractionManager(Hub hub, String name)
-    {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public AbstractInteractionManager(Hub hub, String name) {
         super(hub);
 
         this.interactions = new ArrayList<>();
 
         File yodelsConfigurationFile = new File(hub.getDataFolder(), "interactions" + File.separator + name + ".json");
 
-        if (!yodelsConfigurationFile.exists())
-        {
-            try
-            {
+        if (!yodelsConfigurationFile.exists()) {
+            try {
                 yodelsConfigurationFile.createNewFile();
 
                 PrintWriter writer = new PrintWriter(yodelsConfigurationFile);
                 writer.println("{ \"" + name + "\": [] }");
                 writer.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -69,27 +64,23 @@ public abstract class AbstractInteractionManager<T extends AbstractInteraction> 
     public abstract void loadConfiguration(JsonArray rootJson);
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.interactions.forEach(AbstractInteraction::onDisable);
     }
 
     @Override
-    public void onLogin(Player player) { /** Not needed **/ }
+    public void onLogin(Player player) { /* Not needed **/}
 
     @Override
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         this.interactions.stream().filter(interaction -> interaction.hasPlayer(player)).forEach(interaction -> interaction.stop(player));
     }
 
-    public List<T> getInteractions()
-    {
+    public List<T> getInteractions() {
         return this.interactions;
     }
 
-    public boolean hasPlayer(Player player)
-    {
+    public boolean hasPlayer(Player player) {
         return this.interactions.stream().filter((interaction) -> interaction.hasPlayer(player)).findFirst().orElse(null) != null;
     }
 }

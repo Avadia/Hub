@@ -25,17 +25,14 @@ import org.bukkit.inventory.meta.ItemMeta;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractGui extends net.samagames.api.gui.AbstractGui
-{
+public abstract class AbstractGui extends net.samagames.api.gui.AbstractGui {
     protected final Hub hub;
 
-    public AbstractGui(Hub hub)
-    {
+    public AbstractGui(Hub hub) {
         this.hub = hub;
     }
 
-    protected static ItemStack getBackIcon()
-    {
+    protected static ItemStack getBackIcon() {
         ItemStack stack = new ItemStack(Material.EMERALD, 1);
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(ChatColor.GREEN + "« Retour");
@@ -44,8 +41,7 @@ public abstract class AbstractGui extends net.samagames.api.gui.AbstractGui
         return stack;
     }
 
-    protected static ItemStack getCoinsIcon(Player player)
-    {
+    protected static ItemStack getCoinsIcon(Player player) {
         long coins = SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).getCoins();
 
         ItemStack stack = new ItemStack(Material.GOLD_INGOT, 1);
@@ -56,8 +52,7 @@ public abstract class AbstractGui extends net.samagames.api.gui.AbstractGui
         return stack;
     }
 
-    protected static ItemStack getPowdersIcon(Player player)
-    {
+    protected static ItemStack getPowdersIcon(Player player) {
         long powders = SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).getPowders();
 
         ItemStack stack = new ItemStack(Material.SUGAR, 1);
@@ -68,8 +63,7 @@ public abstract class AbstractGui extends net.samagames.api.gui.AbstractGui
         return stack;
     }
 
-    protected int getSlot(String action)
-    {
+    protected int getSlot(String action) {
         for (int slot : this.actions.keySet())
             if (this.actions.get(slot).equals(action))
                 return slot;

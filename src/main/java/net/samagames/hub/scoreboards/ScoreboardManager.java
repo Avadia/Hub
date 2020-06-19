@@ -28,16 +28,16 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ScoreboardManager extends AbstractManager
-{
+public class ScoreboardManager extends AbstractManager {
     private final Map<UUID, PersonalScoreboard> scoreboards;
+    @SuppressWarnings("rawtypes")
     private final ScheduledFuture glowingTask;
+    @SuppressWarnings("rawtypes")
     private final ScheduledFuture reloadingTask;
     private int ipCharIndex;
     private int cooldown;
 
-    public ScoreboardManager(Hub hub)
-    {
+    public ScoreboardManager(Hub hub) {
         super(hub);
 
         this.scoreboards = new HashMap<>();
@@ -60,8 +60,7 @@ public class ScoreboardManager extends AbstractManager
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.glowingTask.cancel(true);
         this.reloadingTask.cancel(true);
 
@@ -69,10 +68,8 @@ public class ScoreboardManager extends AbstractManager
     }
 
     @Override
-    public void onLogin(Player player)
-    {
-        if (this.scoreboards.containsKey(player.getUniqueId()))
-        {
+    public void onLogin(Player player) {
+        if (this.scoreboards.containsKey(player.getUniqueId())) {
             this.log(Level.WARNING, "The player '" + player.getUniqueId().toString() + "' already have a scoreboard!");
             return;
         }
@@ -82,10 +79,8 @@ public class ScoreboardManager extends AbstractManager
     }
 
     @Override
-    public void onLogout(Player player)
-    {
-        if (this.scoreboards.containsKey(player.getUniqueId()))
-        {
+    public void onLogout(Player player) {
+        if (this.scoreboards.containsKey(player.getUniqueId())) {
             this.scoreboards.get(player.getUniqueId()).onLogout();
             this.scoreboards.remove(player.getUniqueId());
 
@@ -93,47 +88,38 @@ public class ScoreboardManager extends AbstractManager
         }
     }
 
-    public void update(Player player)
-    {
+    public void update(Player player) {
         if (this.scoreboards.containsKey(player.getUniqueId()))
             this.scoreboards.get(player.getUniqueId()).reloadData();
     }
 
-    private String colorIpAt()
-    {
+    private String colorIpAt() {
         String ip = "mc.samagames.net";
 
-        if (this.cooldown > 0)
-        {
+        if (this.cooldown > 0) {
             this.cooldown--;
             return ip;
         }
 
         StringBuilder formattedIp = new StringBuilder();
 
-        if (this.ipCharIndex > 0)
-        {
-            formattedIp.append(ip.substring(0, this.ipCharIndex - 1));
-            formattedIp.append(ChatColor.GOLD).append(ip.substring(this.ipCharIndex - 1, this.ipCharIndex));
-        }
-        else
-        {
-            formattedIp.append(ip.substring(0, this.ipCharIndex));
+        if (this.ipCharIndex > 0) {
+            formattedIp.append(ip, 0, this.ipCharIndex - 1);
+            formattedIp.append(ChatColor.GOLD).append(ip, this.ipCharIndex - 1, this.ipCharIndex);
+        } else {
+            formattedIp.append(ip, 0, this.ipCharIndex);
         }
 
         formattedIp.append(ChatColor.RED).append(ip.charAt(this.ipCharIndex));
 
-        if (this.ipCharIndex + 1 < ip.length())
-        {
+        if (this.ipCharIndex + 1 < ip.length()) {
             formattedIp.append(ChatColor.GOLD).append(ip.charAt(this.ipCharIndex + 1));
 
             if (this.ipCharIndex + 2 < ip.length())
                 formattedIp.append(ChatColor.YELLOW).append(ip.substring(this.ipCharIndex + 2));
 
             this.ipCharIndex++;
-        }
-        else
-        {
+        } else {
             this.ipCharIndex = 0;
             this.cooldown = 50;
         }

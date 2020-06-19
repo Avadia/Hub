@@ -28,14 +28,12 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ConnectionManager extends AbstractManager
-{
+public class ConnectionManager extends AbstractManager {
     private final HydroangeasManager manager;
     private final Gson gson;
     private final Packet[] packets;
 
-    public ConnectionManager(Hub hub, HydroangeasManager manager)
-    {
+    public ConnectionManager(Hub hub, HydroangeasManager manager) {
         super(hub);
 
         this.manager = manager;
@@ -56,45 +54,38 @@ public class ConnectionManager extends AbstractManager
     }
 
     @Override
-    public void onDisable() { /** Not needed **/ }
+    public void onDisable() { /* Not needed **/}
 
     @Override
-    public void onLogin(Player player) { /** Not needed **/ }
+    public void onLogin(Player player) { /* Not needed **/}
 
     @Override
-    public void onLogout(Player player) { /** Not needed **/ }
+    public void onLogout(Player player) { /* Not needed **/}
 
-    public void getPacket(String packet)
-    {
+    public void getPacket(String packet) {
         String id;
 
-        try
-        {
+        try {
             id = packet.split(":")[0];
 
-            if (id == null || this.packets[Integer.parseInt(id)] == null)
-            {
+            if (id == null || this.packets[Integer.parseInt(id)] == null) {
                 this.log(Level.SEVERE, "Error bad packet ID in the channel");
                 return;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             this.log(Level.SEVERE, "Error packet no ID in the channel");
 
             return;
         }
 
-        packet = packet.substring(id.length()+1, packet.length());
+        packet = packet.substring(id.length() + 1);
 
-        this.handler(Integer.valueOf(id), packet);
+        this.handler(Integer.parseInt(id), packet);
     }
 
-    public int packetId(Packet p)
-    {
-        for (int i = 0; i < this.packets.length; i++)
-        {
+    public int packetId(Packet p) {
+        for (int i = 0; i < this.packets.length; i++) {
             if (this.packets[i] == null)
                 continue;
 
@@ -105,44 +96,32 @@ public class ConnectionManager extends AbstractManager
         return -1;
     }
 
-    public void sendPacket(String channel, Packet data)
-    {
+    public void sendPacket(String channel, Packet data) {
         int id = this.packetId(data);
 
-        if (id < 0)
-        {
+        if (id < 0) {
             this.log(Level.SEVERE, "Bad packet ID: " + id);
             return;
-        }
-        else if (channel == null)
-        {
+        } else if (channel == null) {
             this.log(Level.SEVERE, "Channel null !");
             return;
         }
 
-        try
-        {
+        try {
             SamaGamesAPI.get().getPubSub().send(channel, id + ":" + this.gson.toJson(data));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void sendPacket(Packet packet)
-    {
+    public void sendPacket(Packet packet) {
         this.sendPacket("global@hydroangeas-server", packet);
     }
 
-    public void handler(int id, String data)
-    {
-        try
-        {
+    public void handler(int id, String data) {
+        try {
             this.manager.getPacketReceiver().callPacket(this.gson.fromJson(data, this.packets[id].getClass()));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

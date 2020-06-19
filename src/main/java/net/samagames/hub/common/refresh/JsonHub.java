@@ -22,26 +22,22 @@ import java.util.HashMap;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class JsonHub
-{
+public class JsonHub {
+    private final HashMap<String, Integer> playersDetails;
     private int hubNumber;
     private int connectedPlayers;
-    private HashMap<String, Integer> playersDetails;
 
-    public JsonHub(int hubNumber, int connectedPlayers)
-    {
+    public JsonHub(int hubNumber, int connectedPlayers) {
         this.hubNumber = hubNumber;
         this.connectedPlayers = connectedPlayers;
         this.playersDetails = new HashMap<>();
     }
 
-    public JsonHub()
-    {
+    public JsonHub() {
         this.playersDetails = new HashMap<>();
     }
 
-    public void addConnectedPlayer(Player player)
-    {
+    public void addConnectedPlayer(Player player) {
         IPermissionsEntity user = SamaGamesAPI.get().getPermissionsManager().getPlayer(player.getUniqueId());
         String display = user.getDisplayTag();
 
@@ -54,28 +50,23 @@ public class JsonHub
             this.playersDetails.put(display, 1);
     }
 
-    public int getHubNumber()
-    {
+    public int getHubNumber() {
         return this.hubNumber;
     }
 
-    public void setHubNumber(int hubNumber)
-    {
+    public void setHubNumber(int hubNumber) {
         this.hubNumber = hubNumber;
     }
 
-    public int getConnectedPlayers()
-    {
+    public int getConnectedPlayers() {
         return this.connectedPlayers;
     }
 
-    public void setConnectedPlayers(int connectedPlayers)
-    {
+    public void setConnectedPlayers(int connectedPlayers) {
         this.connectedPlayers = connectedPlayers;
     }
 
-    public HashMap<String, Integer> getPlayersDetails()
-    {
+    public HashMap<String, Integer> getPlayersDetails() {
         return this.playersDetails;
     }
 }

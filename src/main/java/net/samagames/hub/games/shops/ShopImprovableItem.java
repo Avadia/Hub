@@ -33,65 +33,50 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ShopImprovableItem extends ShopIcon
-{
+public class ShopImprovableItem extends ShopIcon {
     private final List<ItemLevel> levels;
     private final String defaultDescription;
 
-    public ShopImprovableItem(Hub hub, String categoryName, int storageId, int slot, Integer defaultStorageId) throws Exception
-    {
+    public ShopImprovableItem(Hub hub, String categoryName, int storageId, int slot, Integer defaultStorageId) throws Exception {
         super(hub, categoryName, storageId, slot, new int[0]);
 
         this.levels = new ArrayList<>();
 
-        if (defaultStorageId != null)
-        {
+        if (defaultStorageId != null) {
             IItemDescription defaultItemDescription = SamaGamesAPI.get().getShopsManager().getItemDescription(defaultStorageId);
             this.defaultDescription = defaultItemDescription.getItemDesc();
-        }
-        else
-        {
+        } else {
             this.defaultDescription = null;
         }
     }
 
     @Override
-    public void resetCurrents(Player player)
-    {
-        try
-        {
+    public void resetCurrents(Player player) {
+        try {
             if (SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(this.storageId) != null)
                 SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).setSelectedItem(this.storageId, false);
 
             for (ItemLevel level : this.levels)
                 if (SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(level.getStorageId()) != null)
                     SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).setSelectedItem(level.getStorageId(), false);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void addLevel(int storageId)
-    {
-        try
-        {
+    public void addLevel(int storageId) {
+        try {
             IItemDescription itemDescription = SamaGamesAPI.get().getShopsManager().getItemDescription(storageId);
             this.levels.add(new ItemLevel(storageId, itemDescription.getItemDesc(), itemDescription.getPriceCoins()));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void execute(Player player, ClickType clickType)
-    {
+    public void execute(Player player, ClickType clickType) {
         ItemLevel next = this.levels.get(0);
 
-        if (SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(this.levels.get(0).getStorageId()) != null)
-        {
+        if (SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(this.levels.get(0).getStorageId()) != null) {
             if (this.getLevel(player) == 0)
                 next = this.levels.get(1);
             else
@@ -101,20 +86,13 @@ public class ShopImprovableItem extends ShopIcon
         if (this.getLevel(player) != 0)
             next = this.getNextItem(player);
 
-        if (next == null)
-        {
+        if (next == null) {
             player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Vous avez déjà débloqué le niveau maximum de cette amélioration.");
-        }
-        else if (!CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()).canAccess(player))
-        {
+        } else if (!CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()).canAccess(player)) {
             player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Vous n'avez pas le grade nécessaire pour acheter cet objet.");
-        }
-        else if (!SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).hasEnoughCoins(next.getCost()))
-        {
+        } else if (!SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).hasEnoughCoins(next.getCost())) {
             player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Vous n'avez pas assez de pièces pour acheter cette amélioration.");
-        }
-        else
-        {
+        } else {
             final ItemLevel finalLevel = next;
 
             GuiConfirm confirm = new GuiConfirm(this.hub, (AbstractGui) this.hub.getGuiManager().getPlayerGui(player), (parent) ->
@@ -146,17 +124,13 @@ public class ShopImprovableItem extends ShopIcon
     }
 
     @Override
-    public ItemStack getFormattedIcon(Player player)
-    {
+    public ItemStack getFormattedIcon(Player player) {
         int currentLevel = -1;
         ItemLevel next;
 
-        if (SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(this.levels.get(0).getStorageId()) == null)
-        {
+        if (SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(this.levels.get(0).getStorageId()) == null) {
             next = this.levels.get(0);
-        }
-        else
-        {
+        } else {
             currentLevel = this.getLevel(player);
 
             if (currentLevel == 0)
@@ -171,14 +145,12 @@ public class ShopImprovableItem extends ShopIcon
         List<String> lore = meta.getLore() != null ? meta.getLore() : new ArrayList<>();
         lore.add("");
 
-        if (this.defaultDescription != null)
-        {
+        if (this.defaultDescription != null) {
             lore.add(ChatColor.GREEN + "Par défaut : " + this.defaultDescription);
             lore.add("");
         }
 
-        for (int i = 0; i < this.levels.size(); i++)
-        {
+        for (int i = 0; i < this.levels.size(); i++) {
             ItemLevel level = this.levels.get(i);
             String prefix = "";
 
@@ -192,8 +164,7 @@ public class ShopImprovableItem extends ShopIcon
             lore.add(prefix + "Niveau " + (i + 1) + " : " + level.getDescription());
         }
 
-        if (CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()) != CosmeticAccessibility.ALL)
-        {
+        if (CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()) != CosmeticAccessibility.ALL) {
             lore.add("");
             lore.add(ChatColor.GRAY + "Vous devez posséder le grade");
             lore.add(CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()).getDisplay() + ChatColor.GRAY + " pour pouvoir utiliser cet");
@@ -213,12 +184,10 @@ public class ShopImprovableItem extends ShopIcon
         return icon;
     }
 
-    private int getLevel(Player player)
-    {
+    private int getLevel(Player player) {
         int level = 0;
 
-        for (ItemLevel itemLevel : this.levels)
-        {
+        for (ItemLevel itemLevel : this.levels) {
             ITransaction transaction = SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(itemLevel.getStorageId());
 
             if (transaction != null && transaction.isSelected())
@@ -230,8 +199,7 @@ public class ShopImprovableItem extends ShopIcon
         return 0;
     }
 
-    private ItemLevel getNextItem(Player player)
-    {
+    private ItemLevel getNextItem(Player player) {
         int level = this.getLevel(player);
         level++;
 

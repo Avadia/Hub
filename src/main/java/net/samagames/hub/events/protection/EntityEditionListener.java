@@ -27,99 +27,84 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class EntityEditionListener implements Listener
-{
+public class EntityEditionListener implements Listener {
     private final Hub hub;
 
-    public EntityEditionListener(Hub hub)
-    {
+    public EntityEditionListener(Hub hub) {
         this.hub = hub;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCreatureSpawn(CreatureSpawnEvent event)
-    {
+    public void onCreatureSpawn(CreatureSpawnEvent event) {
         if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM)
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityCombustByBlock(EntityCombustByBlockEvent event)
-    {
+    public void onEntityCombustByBlock(EntityCombustByBlockEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityDamage(EntityDamageEvent event)
-    {
+    public void onEntityDamage(EntityDamageEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityDeath(EntityDeathEvent event)
-    {
+    public void onEntityDeath(EntityDeathEvent event) {
         event.setDroppedExp(0);
         event.getDrops().clear();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityExplode(EntityExplodeEvent event)
-    {
+    public void onEntityExplode(EntityExplodeEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityInteract(EntityInteractEvent event)
-    {
+    public void onEntityInteract(EntityInteractEvent event) {
         if (event.getEntity().getType() != EntityType.PLAYER || !this.canDoAction((Player) event.getEntity()))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTame(EntityTameEvent event)
-    {
+    public void onEntityTame(EntityTameEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTarget(EntityTargetEvent event)
-    {
+    public void onEntityTarget(EntityTargetEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onExplosionPrime(ExplosionPrimeEvent event)
-    {
+    public void onExplosionPrime(ExplosionPrimeEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerFood(FoodLevelChangeEvent event)
-    {
+    public void onPlayerFood(FoodLevelChangeEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onSlimeSplit(SlimeSplitEvent event)
-    {
+    public void onSlimeSplit(SlimeSplitEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onHangingBreak(HangingBreakEvent event)
-    {
+    public void onHangingBreak(HangingBreakEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onArmorStandEdit(PlayerArmorStandManipulateEvent event)
-    {
+    public void onArmorStandEdit(PlayerArmorStandManipulateEvent event) {
         if (!this.canDoAction(event.getPlayer()))
             event.setCancelled(true);
     }
 
-    private boolean canDoAction(Player player)
-    {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private boolean canDoAction(Player player) {
         return this.hub.getPlayerManager().canBuild() && player != null && player.isOp() && player.getGameMode() == GameMode.CREATIVE;
     }
 }

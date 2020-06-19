@@ -18,8 +18,7 @@ import org.bukkit.ChatColor;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public enum CosmeticRarity
-{
+public enum CosmeticRarity {
     COMMON("Commun", ChatColor.GREEN),
     RARE("Rare", ChatColor.BLUE),
     EPIC("Epic", ChatColor.DARK_PURPLE),
@@ -31,19 +30,16 @@ public enum CosmeticRarity
     private final String name;
     private final ChatColor color;
 
-    CosmeticRarity(String name, ChatColor color)
-    {
+    CosmeticRarity(String name, ChatColor color) {
         this.name = name;
         this.color = color;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
-    public ChatColor getColor()
-    {
+    public ChatColor getColor() {
         return this.color;
     }
 }

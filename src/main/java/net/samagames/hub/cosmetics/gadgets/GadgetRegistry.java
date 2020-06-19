@@ -21,16 +21,13 @@ import net.samagames.hub.cosmetics.gadgets.displayers.*;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class GadgetRegistry extends AbstractCosmeticRegistry<GadgetCosmetic>
-{
-    GadgetRegistry(Hub hub)
-    {
+class GadgetRegistry extends AbstractCosmeticRegistry<GadgetCosmetic> {
+    GadgetRegistry(Hub hub) {
         super(hub);
     }
 
     @Override
-    public void register() throws Exception
-    {
+    public void register() throws Exception {
         GadgetCosmetic expressBotaniaGadget = new GadgetCosmetic(this.hub, 9, ExpressBotaniaDisplayer.class, 60);
         GadgetCosmetic holyCreeperGadget = new GadgetCosmetic(this.hub, 10, HolyCreeperDisplayer.class, 40);
         GadgetCosmetic magicCakeGadget = new GadgetCosmetic(this.hub, 11, MagicCakeDisplayer.class, 60);

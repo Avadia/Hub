@@ -1,9 +1,9 @@
 package net.samagames.hub.interactions.graou.entity;
 
 import net.minecraft.server.v1_12_R1.*;
-import org.bukkit.event.entity.EntityTargetEvent;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 /*
  * This file is part of Hub.
@@ -21,12 +21,19 @@ import java.lang.reflect.Field;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class EntityGraouLaser extends EntityGuardian
-{
+public class EntityGraouLaser extends EntityGuardian {
     private static Field datawatcherField;
 
-    public EntityGraouLaser(World world)
-    {
+    static {
+        try {
+            datawatcherField = EntityGuardian.class.getDeclaredField("bB");
+            datawatcherField.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public EntityGraouLaser(World world) {
         super(world);
 
         this.setInvisible(true);
@@ -35,110 +42,84 @@ public class EntityGraouLaser extends EntityGuardian
     }
 
     @Override
-    protected void r()
-    {
+    protected void r() {
         this.goalRandomStroll = new PathfinderGoalRandomStroll(this, 1.0D, 80);
         this.goalSelector.a(4, new PathfinderGoalGuardianAttack(this));
         this.goalSelector.a(7, this.goalRandomStroll);
         this.goalRandomStroll.a(3);
     }
 
-    public void a(int var1)
-    {
-        try
-        {
+    @SuppressWarnings("unchecked")
+    public void a(int var1) {
+        try {
             this.datawatcher.set((DataWatcherObject<Integer>) datawatcherField.get(this), var1);
-        }
-        catch (IllegalAccessException e)
-        {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {}
+    public void b(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    public boolean c(NBTTagCompound nbttagcompound)
-    {
+    public boolean c(NBTTagCompound nbttagcompound) {
         return false;
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {}
+    public void a(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    public boolean d(NBTTagCompound nbttagcompound)
-    {
+    public boolean d(NBTTagCompound nbttagcompound) {
         return false;
     }
 
     @Override
-    public void f(NBTTagCompound nbttagcompound) {}
+    public void f(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    protected SoundEffect F()
-    {
+    protected SoundEffect F() {
         return null;
     }
 
-    static class PathfinderGoalGuardianAttack extends PathfinderGoal
-    {
+    static class PathfinderGoalGuardianAttack extends PathfinderGoal {
         private final EntityGraouLaser entity;
-        private int b;
 
-        public PathfinderGoalGuardianAttack(EntityGraouLaser entity)
-        {
+        public PathfinderGoalGuardianAttack(EntityGraouLaser entity) {
             this.entity = entity;
             this.a(3);
         }
 
-        public boolean a()
-        {
+        public boolean a() {
             EntityLiving var1 = this.entity.getGoalTarget();
             return var1 != null && var1.isAlive();
         }
 
-        public boolean b()
-        {
+        public boolean b() {
             return super.b();
         }
 
-        public void c()
-        {
-            this.b = -10;
+        public void c() {
             this.entity.getNavigation().p();
             this.entity.getControllerLook().a(this.entity.getGoalTarget(), 90.0F, 90.0F);
             this.entity.impulse = true;
         }
 
-        public void d()
-        {
+        public void d() {
             this.entity.goalRandomStroll.i();
         }
 
-        public void e()
-        {
+        public void e() {
             EntityLiving target = this.entity.getGoalTarget();
             this.entity.getNavigation().p();
             this.entity.getControllerLook().a(target, 90.0F, 90.0F);
 
-            this.entity.a(target.getId());
+            this.entity.a(Objects.requireNonNull(target).getId());
 
             super.e();
-        }
-    }
-
-    static
-    {
-        try
-        {
-            datawatcherField = EntityGuardian.class.getDeclaredField("bB");
-            datawatcherField.setAccessible(true);
-        }
-        catch (NoSuchFieldException e)
-        {
-            e.printStackTrace();
         }
     }
 }

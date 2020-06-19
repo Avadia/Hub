@@ -37,13 +37,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class SonicSquid extends AbstractInteraction implements Listener
-{
+class SonicSquid extends AbstractInteraction implements Listener {
     private final Map<UUID, EntitySonicSquid> squids;
     private final BukkitTask checkTask;
 
-    SonicSquid(Hub hub)
-    {
+    SonicSquid(Hub hub) {
         super(hub);
 
         this.hub.getServer().getPluginManager().registerEvents(this, this.hub);
@@ -54,8 +52,7 @@ class SonicSquid extends AbstractInteraction implements Listener
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.checkTask.cancel();
 
         this.squids.values().forEach(EntitySonicSquid::die);
@@ -65,8 +62,7 @@ class SonicSquid extends AbstractInteraction implements Listener
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event)
-    {
+    public void onPlayerMove(PlayerMoveEvent event) {
         if (this.hasPlayer(event.getPlayer()))
             return;
 
@@ -83,22 +79,19 @@ class SonicSquid extends AbstractInteraction implements Listener
     }
 
     @EventHandler
-    public void onEntityDismount(EntityDismountEvent event)
-    {
+    public void onEntityDismount(EntityDismountEvent event) {
         if (event.getEntity().getType() != EntityType.PLAYER)
             return;
 
         if (!this.hasPlayer((Player) event.getEntity()))
             return;
 
-        event.getDismounted().setPassenger(event.getEntity());
+        event.getDismounted().addPassenger(event.getEntity());
     }
 
     @Override
-    public void play(Player player)
-    {
-        if (!this.squids.containsKey(player.getUniqueId()) && player.getGameMode() != GameMode.SPECTATOR)
-        {
+    public void play(Player player) {
+        if (!this.squids.containsKey(player.getUniqueId()) && player.getGameMode() != GameMode.SPECTATOR) {
             WorldServer world = ((CraftWorld) player.getWorld()).getHandle();
             EntitySonicSquid sonicSquidEntity = new EntitySonicSquid(world, player);
             world.addEntity(sonicSquidEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
@@ -110,18 +103,15 @@ class SonicSquid extends AbstractInteraction implements Listener
     }
 
     @Override
-    public void stop(Player player)
-    {
-        if (this.squids.containsKey(player.getUniqueId()))
-        {
+    public void stop(Player player) {
+        if (this.squids.containsKey(player.getUniqueId())) {
             this.squids.get(player.getUniqueId()).die();
             this.squids.remove(player.getUniqueId());
         }
     }
 
     @Override
-    public boolean hasPlayer(Player player)
-    {
+    public boolean hasPlayer(Player player) {
         return this.squids.containsKey(player.getUniqueId());
     }
 }

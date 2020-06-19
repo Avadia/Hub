@@ -30,30 +30,25 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class EnderSwapDisplayer extends AbstractDisplayer
-{
+public class EnderSwapDisplayer extends AbstractDisplayer {
     private final List<Location> teleportPositions;
     private BukkitTask teleportTask;
 
-    public EnderSwapDisplayer(Hub hub, Player player)
-    {
+    public EnderSwapDisplayer(Hub hub, Player player) {
         super(hub, player);
 
         this.teleportPositions = new ArrayList<>();
 
         Location last = this.baseLocation;
 
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             Location randomizedLocation = last.clone().add(GadgetManager.RANDOM.nextInt(80) - 40, 0, GadgetManager.RANDOM.nextInt(80) - 40);
             randomizedLocation.setY(250);
 
-            while (randomizedLocation.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR)
-            {
+            while (randomizedLocation.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
                 randomizedLocation.subtract(0.0D, 1.0D, 0.0D);
 
-                if (randomizedLocation.getBlockY() < 10)
-                {
+                if (randomizedLocation.getBlockY() < 10) {
                     randomizedLocation.setY(250);
                     break;
                 }
@@ -65,8 +60,7 @@ public class EnderSwapDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void display()
-    {
+    public void display() {
         this.player.playSound(this.player.getLocation(), Sound.ENTITY_ENDERMEN_AMBIENT, 1.0F, 1.0F);
 
         this.teleportTask = this.hub.getServer().getScheduler().runTaskTimerAsynchronously(this.hub, () ->
@@ -83,8 +77,7 @@ public class EnderSwapDisplayer extends AbstractDisplayer
 
                     this.teleportPositions.remove(0);
 
-                    if (this.teleportPositions.isEmpty())
-                    {
+                    if (this.teleportPositions.isEmpty()) {
                         this.end();
                         this.teleportTask.cancel();
                     }
@@ -95,17 +88,16 @@ public class EnderSwapDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
     @Override
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 }

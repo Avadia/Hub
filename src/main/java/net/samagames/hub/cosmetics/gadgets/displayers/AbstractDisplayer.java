@@ -24,8 +24,7 @@ import java.util.*;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractDisplayer
-{
+public abstract class AbstractDisplayer {
     protected static final Random RANDOM = new Random();
 
     protected final Hub hub;
@@ -35,8 +34,7 @@ public abstract class AbstractDisplayer
     protected final List<UUID> interactingPlayers;
     protected Location baseLocation;
 
-    public AbstractDisplayer(Hub hub, Player player)
-    {
+    public AbstractDisplayer(Hub hub, Player player) {
         this.hub = hub;
         this.player = player;
         this.blocksUsed = new HashMap<>();
@@ -46,39 +44,36 @@ public abstract class AbstractDisplayer
     }
 
     public abstract void display();
+
     public abstract void handleInteraction(Entity who, Entity with);
+
     public abstract boolean isInteractionsEnabled();
+
     public abstract boolean canUse();
 
-    public void end()
-    {
+    public void end() {
         this.hub.getCosmeticManager().getGadgetManager().callbackGadget(this);
     }
 
-    public void addBlockToUse(Location location, SimpleBlock block)
-    {
+    public void addBlockToUse(Location location, SimpleBlock block) {
         this.blocksUsed.put(new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()), block);
         this.blocksBefore.put(new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()), new SimpleBlock(location.getBlock()));
     }
 
-    public void addBlocksToUse(Map<Location, SimpleBlock> blocks)
-    {
-        for (Location block : blocks.keySet())
-        {
+    public void addBlocksToUse(Map<Location, SimpleBlock> blocks) {
+        for (Location block : blocks.keySet()) {
             this.blocksUsed.put(new Location(block.getWorld(), block.getBlockX(), block.getBlockY(), block.getBlockZ()), blocks.get(block));
             this.blocksBefore.put(new Location(block.getWorld(), block.getBlockX(), block.getBlockY(), block.getBlockZ()), new SimpleBlock(block.getBlock()));
         }
     }
 
-    public void interactWith(Player player)
-    {
+    public void interactWith(Player player) {
         this.interactingPlayers.add(player.getUniqueId());
     }
 
-    public void restore()
-    {
-        for (Location block : this.blocksUsed.keySet())
-        {
+    @SuppressWarnings("deprecation")
+    public void restore() {
+        for (Location block : this.blocksUsed.keySet()) {
             block.getBlock().setType(this.blocksBefore.get(block).getType());
             block.getBlock().setData(this.blocksBefore.get(block).getData());
         }
@@ -87,12 +82,11 @@ public abstract class AbstractDisplayer
         this.blocksBefore.clear();
     }
 
-    public void restore(Location location)
-    {
+    @SuppressWarnings("deprecation")
+    public void restore(Location location) {
         Location finalLocation = new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
-        if (this.blocksUsed.containsKey(finalLocation) && this.blocksBefore.containsKey(finalLocation))
-        {
+        if (this.blocksUsed.containsKey(finalLocation) && this.blocksBefore.containsKey(finalLocation)) {
             this.blocksUsed.remove(finalLocation);
             finalLocation.getBlock().setType(this.blocksBefore.get(finalLocation).getType());
             finalLocation.getBlock().setData(this.blocksBefore.get(finalLocation).getData());
@@ -100,33 +94,27 @@ public abstract class AbstractDisplayer
         }
     }
 
-    public Player getPlayer()
-    {
+    public Player getPlayer() {
         return this.player;
     }
 
-    public Map<Location, SimpleBlock> getBlocksUsed()
-    {
+    public Map<Location, SimpleBlock> getBlocksUsed() {
         return this.blocksUsed;
     }
 
-    public boolean canInteractWith(Player player)
-    {
+    public boolean canInteractWith(Player player) {
         return !this.hub.getPlayerManager().isBusy(player);
     }
 
-    public boolean isBlockGloballyUsed(Location location)
-    {
+    public boolean isBlockGloballyUsed(Location location) {
         return this.hub.getCosmeticManager().getGadgetManager().isBlockUsed(location);
     }
 
-    public boolean isBlockUsed(Location location)
-    {
+    public boolean isBlockUsed(Location location) {
         return this.blocksUsed.containsKey(new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
-    public boolean isInteractingWith(Player player)
-    {
+    public boolean isInteractingWith(Player player) {
         return this.interactingPlayers.contains(player.getUniqueId());
     }
 }

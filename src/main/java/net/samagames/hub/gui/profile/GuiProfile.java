@@ -7,7 +7,6 @@ import net.samagames.hub.gui.AbstractGui;
 import net.samagames.hub.gui.achievements.GuiAchievements;
 import net.samagames.hub.utils.NumberUtils;
 import net.samagames.tools.PlayerUtils;
-import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
@@ -35,22 +34,19 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiProfile extends AbstractGui
-{
-    public GuiProfile(Hub hub)
-    {
+public class GuiProfile extends AbstractGui {
+    public GuiProfile(Hub hub) {
         super(hub);
     }
 
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         this.inventory = this.hub.getServer().createInventory(null, 45, "Profil");
 
         this.setSlotData(this.createPlayerHead(player), 13, "none");
-        this.setSlotData(ChatColor.GOLD + "Statistiques", Material.ENCHANTED_BOOK, 20, new String[] { ChatColor.GRAY + "Retrouvez vos scores et classements !" }, "stats");
-        this.setSlotData(ChatColor.GOLD + "Objectifs", Material.DIAMOND, 22, new String[] { ChatColor.GRAY + "Allez-vous réussir à tous les", ChatColor.GRAY + "compléter ?" }, "achievements");
-        this.setSlotData(ChatColor.GOLD + "Paramètres", Material.DIODE, 24, new String[] { ChatColor.GRAY + "Vos préférences sur le serveur" }, "settings");
+        this.setSlotData(ChatColor.GOLD + "Statistiques", Material.ENCHANTED_BOOK, 20, new String[]{ChatColor.GRAY + "Retrouvez vos scores et classements !"}, "stats");
+        this.setSlotData(ChatColor.GOLD + "Objectifs", Material.DIAMOND, 22, new String[]{ChatColor.GRAY + "Allez-vous réussir à tous les", ChatColor.GRAY + "compléter ?"}, "achievements");
+        this.setSlotData(ChatColor.GOLD + "Paramètres", Material.DIODE, 24, new String[]{ChatColor.GRAY + "Vos préférences sur le serveur"}, "settings");
 
         this.setSlotData(getBackIcon(), this.inventory.getSize() - 5, "back");
 
@@ -58,10 +54,8 @@ public class GuiProfile extends AbstractGui
     }
 
     @Override
-    public void onClick(Player player, ItemStack stack, String action, ClickType clickType)
-    {
-        switch (action)
-        {
+    public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
+        switch (action) {
             case "stats":
                 this.hub.getGuiManager().openGui(player, new GuiStatistics(this.hub, player));
                 break;
@@ -80,13 +74,12 @@ public class GuiProfile extends AbstractGui
         }
     }
 
-    private ItemStack createPlayerHead(Player player)
-    {
+    private ItemStack createPlayerHead(Player player) {
         AbstractPlayerData playerData = SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId());
 
         ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
         SkullMeta meta = (SkullMeta) stack.getItemMeta();
-        meta.setOwner(player.getName());
+        meta.setOwningPlayer(player);
         meta.setDisplayName(PlayerUtils.getFullyFormattedPlayerName(player));
 
         List<String> lore = new ArrayList<>();

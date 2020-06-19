@@ -31,26 +31,22 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class Yodel extends AbstractInteraction
-{
-    private Location boarding;
-    private Location start;
-    private Location end;
-    private Location landing;
-
-    private double length;
-
+class Yodel extends AbstractInteraction {
+    private static final Map<UUID, YodelRunner> runnerList = new HashMap<>();
     private final BukkitTask startTask;
     private final ArmorStand startBeacon;
-    private static final Map<UUID, YodelRunner> runnerList = new HashMap<>();
+    private final Location boarding;
+    private final Location start;
+    private final Location end;
+    private final Location landing;
+    private final double length;
 
-    Yodel(Hub hub, Location boarding, Location start, Location end, Location landing)
-    {
+    Yodel(Hub hub, Location boarding, Location start, Location end, Location landing) {
         super(hub);
         this.boarding = boarding.clone();
-        this.start    = start.clone();
-        this.end      = end.clone();
-        this.landing  = landing.clone();
+        this.start = start.clone();
+        this.end = end.clone();
+        this.landing = landing.clone();
 
         this.length = start.distanceSquared(end);
 
@@ -62,39 +58,32 @@ class Yodel extends AbstractInteraction
         this.startTask = ProximityUtils.onNearbyOf(this.hub, this.startBeacon, 0.5D, 0.5D, 0.5D, Player.class, this::play);
     }
 
-    public Location getBoarding()
-    {
+    public Location getBoarding() {
         return boarding.clone();
     }
 
-    public Location getStart()
-    {
+    public Location getStart() {
         return start.clone();
     }
 
-    public Location getEnd()
-    {
+    public Location getEnd() {
         return end.clone();
     }
 
-    public Location getLanding()
-    {
+    public Location getLanding() {
         return landing.clone();
     }
 
-    public Vector getAngleVector()
-    {
+    public Vector getAngleVector() {
         return end.toVector().subtract(start.toVector());
     }
 
-    public double getLength()
-    {
+    public double getLength() {
         return length;
     }
 
     @Override
-    public void play(Player player)
-    {
+    public void play(Player player) {
         if (runnerList.containsKey(player.getUniqueId()) || player.getGameMode() == GameMode.SPECTATOR)
             return;
 
@@ -106,14 +95,12 @@ class Yodel extends AbstractInteraction
     }
 
     @Override
-    public boolean hasPlayer(Player player)
-    {
+    public boolean hasPlayer(Player player) {
         return runnerList.containsKey(player.getUniqueId());
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         runnerList.values().forEach(YodelRunner::stop);
 
         this.startTask.cancel();
@@ -121,12 +108,10 @@ class Yodel extends AbstractInteraction
     }
 
     @Override
-    public void stop(Player player)
-    {
+    public void stop(Player player) {
         YodelRunner runner = runnerList.get(player.getUniqueId());
 
-        if (runner != null)
-        {
+        if (runner != null) {
             runner.stop();
             this.hub.getServer().getScheduler().runTaskLater(this.hub, () -> runnerList.remove(player.getUniqueId()), 40L);
         }

@@ -4,7 +4,6 @@ import net.samagames.hub.Hub;
 import net.samagames.tools.ParticleEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -30,20 +29,17 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DoubleJumpListener implements Listener
-{
+public class DoubleJumpListener implements Listener {
     private final List<UUID> allowed;
     private final Hub hub;
 
-    public DoubleJumpListener(Hub hub)
-    {
+    public DoubleJumpListener(Hub hub) {
         this.allowed = new ArrayList<>();
         this.hub = hub;
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event)
-    {
+    public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE)
             return;
 
@@ -53,16 +49,14 @@ public class DoubleJumpListener implements Listener
         if (this.hub.getPlayerManager().isBusy(event.getPlayer()))
             return;
 
-        if (((LivingEntity) event.getPlayer()).isOnGround())
-        {
+        if (event.getPlayer().isOnGround()) {
             event.getPlayer().setAllowFlight(true);
             this.allowed.add(event.getPlayer().getUniqueId());
         }
     }
 
     @EventHandler
-    public void onPlayerToggleFlight(PlayerToggleFlightEvent event)
-    {
+    public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         if (!this.allowed.contains(event.getPlayer().getUniqueId()))
             return;
 

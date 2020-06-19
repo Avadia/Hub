@@ -26,45 +26,36 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractManager implements EntryPoints
-{
+public abstract class AbstractManager implements EntryPoints {
     protected final Hub hub;
     private String filename;
 
-    public AbstractManager(Hub hub, String filename)
-    {
+    public AbstractManager(Hub hub, String filename) {
         this(hub);
 
         this.filename = filename;
     }
 
-    public AbstractManager(Hub hub)
-    {
+    public AbstractManager(Hub hub) {
         this.hub = hub;
 
         if (!(this instanceof AbstractInteractionManager))
             this.hub.getEventBus().registerManager(this);
     }
 
-    public void log(Level level, String message)
-    {
+    public void log(Level level, String message) {
         this.hub.getLogger().log(level, "[" + this.getClass().getSimpleName() + "] " + message);
     }
 
-    protected JsonObject reloadConfiguration()
-    {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    protected JsonObject reloadConfiguration() {
         File configuration = new File(this.hub.getDataFolder(), this.filename);
 
-        if (!configuration.exists())
-        {
-            try(PrintWriter writer = new PrintWriter(configuration))
-            {
+        if (!configuration.exists()) {
+            try (PrintWriter writer = new PrintWriter(configuration)) {
                 configuration.createNewFile();
                 writer.println("{}");
-                writer.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

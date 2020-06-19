@@ -31,14 +31,30 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class Parkour
-{
+public class Parkour {
     public static final String TAG = ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Parcours" + ChatColor.DARK_AQUA + "] " + ChatColor.RESET;
     private static final ItemStack QUIT_STACK;
     private static final ItemStack CHECKPOINT_STACK;
 
-    protected final Hub hub;
+    static {
+        QUIT_STACK = new ItemStack(Material.BARRIER, 1);
 
+        ItemMeta quitStackMeta = QUIT_STACK.getItemMeta();
+        quitStackMeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Quitter le parcours");
+
+        QUIT_STACK.setItemMeta(quitStackMeta);
+
+        // ---
+
+        CHECKPOINT_STACK = new ItemStack(Material.ENDER_PEARL, 1);
+
+        ItemMeta checkpointStackMeta = CHECKPOINT_STACK.getItemMeta();
+        checkpointStackMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Aller au dernier Checkpoint");
+
+        CHECKPOINT_STACK.setItemMeta(checkpointStackMeta);
+    }
+
+    protected final Hub hub;
     protected final Map<UUID, Long> playersIn;
     protected final Map<UUID, List<Location>> playersCheckpoints;
     protected final Map<UUID, Integer> tries;
@@ -58,8 +74,7 @@ public class Parkour
     protected final List<ArmorStand> checkpointsTooltips;
     protected final ParkourBackend backend;
 
-    public Parkour(Hub hub, String parkourName, String prefix, String winPrefix, Location spawn, Location end, Location fail, int minimalHeight, int lifesOnCheckpoint, List<Location> checkpoints, int difficulty, int achievementId)
-    {
+    public Parkour(Hub hub, String parkourName, String prefix, String winPrefix, Location spawn, Location end, Location fail, int minimalHeight, int lifesOnCheckpoint, List<Location> checkpoints, int difficulty, int achievementId) {
         this.hub = hub;
 
         this.playersIn = new ConcurrentHashMap<>();
@@ -75,15 +90,15 @@ public class Parkour
         this.fail = fail;
         this.achievementId = achievementId;
 
-        String temporaryStars = "";
+        StringBuilder temporaryStars = new StringBuilder();
 
         for (int i = 0; i < difficulty; i++)
-            temporaryStars += ChatColor.GOLD + "\u272F";
+            temporaryStars.append(ChatColor.GOLD).append("\u272F");
 
         for (int i = difficulty; i < 5; i++)
-            temporaryStars += ChatColor.DARK_GRAY + "\u272F";
+            temporaryStars.append(ChatColor.DARK_GRAY).append("\u272F");
 
-        this.stars = temporaryStars;
+        this.stars = temporaryStars.toString();
         this.minimalHeight = minimalHeight;
         this.lifesOnCheckpoint = lifesOnCheckpoint;
 
@@ -107,8 +122,7 @@ public class Parkour
 
         this.checkpointsTooltips = new ArrayList<>();
 
-        for (Location checkpoint : checkpoints)
-        {
+        for (Location checkpoint : checkpoints) {
             ArmorStand tooltip = checkpoint.getWorld().spawn(checkpoint.clone().subtract(0.0D, 1.0D, 0.0D), ArmorStand.class);
             tooltip.setVisible(false);
             tooltip.setGravity(false);
@@ -124,8 +138,7 @@ public class Parkour
         this.hub.getTaskManager().getCirclesTask().addCircleAt(end);
     }
 
-    public void onDisable()
-    {
+    public void onDisable() {
         this.backend.stop();
 
         this.startTooltip.remove();
@@ -133,8 +146,7 @@ public class Parkour
         this.checkpointsTooltips.forEach(Entity::remove);
     }
 
-    public void checkpoint(Player player, Location location)
-    {
+    public void checkpoint(Player player, Location location) {
         List<Location> playerCheckpoints = new ArrayList<>(this.playersCheckpoints.get(player.getUniqueId()));
         Location checkpointFormatted = new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
@@ -149,10 +161,8 @@ public class Parkour
         player.sendMessage(TAG + ChatColor.WHITE + "Checkpoint !");
     }
 
-    public void addPlayer(Player player)
-    {
-        if (this.hub.getPlayerManager().isBusy(player))
-        {
+    public void addPlayer(Player player) {
+        if (this.hub.getPlayerManager().isBusy(player)) {
             player.sendMessage(TAG + ChatColor.RED + "Vous êtes actuellement occupé, veuillez réessayer plus tard. Ce message survient lors de l'utilisation d'un gadget ou d'une action à caractère prioritaire.");
             return;
         }
@@ -175,39 +185,33 @@ public class Parkour
             player.getInventory().clear();
             player.getInventory().setHeldItemSlot(4);
 
-            if (this.checkpointsTooltips.isEmpty())
-            {
+            if (this.checkpointsTooltips.isEmpty()) {
                 player.getInventory().setItem(4, QUIT_STACK);
-            }
-            else
-            {
+            } else {
                 player.getInventory().setItem(3, QUIT_STACK);
                 player.getInventory().setItem(5, CHECKPOINT_STACK);
             }
 
             for (UUID playerIn : this.playersIn.keySet())
-                player.hidePlayer(this.hub.getServer().getPlayer(playerIn));
+                player.hidePlayer(this.hub, this.hub.getServer().getPlayer(playerIn));
         });
 
-        if (this.hub.getCosmeticManager().getPetManager().getEquippedCosmetics(player) != null)
-            this.hub.getCosmeticManager().getPetManager().disableCosmetics(player, false, false);
+//        if (this.hub.getCosmeticManager().getPetManager().getEquippedCosmetics(player) != null)
+//            this.hub.getCosmeticManager().getPetManager().disableCosmetics(player, false, false);
     }
 
-    public void winPlayer(Player player)
-    {
+    public void winPlayer(Player player) {
         UUID playerId = player.getUniqueId();
         long begin = this.playersIn.get(playerId);
-        double duration = Math.floor((System.currentTimeMillis() - begin) / 100) / 10;
+        double duration = Math.floor((System.currentTimeMillis() - begin) / 100.0) / 10;
 
         this.hub.getServer().broadcastMessage(TAG + ChatColor.GREEN + player.getName() + ChatColor.WHITE + " a réussi " + this.winPrefix + " " + ChatColor.AQUA + this.parkourName + ChatColor.WHITE + " en " + ChatColor.GREEN + duration + ChatColor.WHITE + " secondes !");
 
-        this.hub.getServer().getScheduler().scheduleSyncRepeatingTask(this.hub, new Runnable()
-        {
+        this.hub.getServer().getScheduler().scheduleSyncRepeatingTask(this.hub, new Runnable() {
             int count = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 if (count >= 20)
                     return;
 
@@ -217,17 +221,17 @@ public class Parkour
                 Random r = new Random();
 
                 int rt = r.nextInt(4) + 1;
-                FireworkEffect.Type type = FireworkEffect.Type.BALL;
+                FireworkEffect.Type type;
 
                 if (rt == 1)
                     type = FireworkEffect.Type.BALL;
-                if (rt == 2)
+                else if (rt == 2)
                     type = FireworkEffect.Type.BALL_LARGE;
-                if (rt == 3)
+                else if (rt == 3)
                     type = FireworkEffect.Type.BURST;
-                if (rt == 4)
+                else if (rt == 4)
                     type = FireworkEffect.Type.CREEPER;
-                if (rt == 5)
+                else
                     type = FireworkEffect.Type.STAR;
 
                 int r1i = r.nextInt(17) + 1;
@@ -256,8 +260,7 @@ public class Parkour
         this.restoreFly(player);
     }
 
-    public void failPlayer(Player player)
-    {
+    public void failPlayer(Player player) {
         if (this.locks.contains(player.getUniqueId()))
             return;
 
@@ -266,13 +269,10 @@ public class Parkour
         int now = this.tries.get(player.getUniqueId()) - 1;
         this.tries.put(player.getUniqueId(), now);
 
-        if (now > 0)
-        {
+        if (now > 0) {
             player.sendMessage(TAG + ChatColor.WHITE + "Il ne vous reste plus que " + now + " essai" + (now == 1 ? "" : "s") + " !");
             player.teleport(this.playersCheckpoints.get(player.getUniqueId()).get(this.playersCheckpoints.get(player.getUniqueId()).size() - 1));
-        }
-        else
-        {
+        } else {
             player.sendMessage(TAG + ChatColor.WHITE + "Vous avez échoué :'(");
             player.teleport(this.fail);
 
@@ -283,8 +283,7 @@ public class Parkour
         this.locks.remove(player.getUniqueId());
     }
 
-    public void quitPlayer(Player player)
-    {
+    public void quitPlayer(Player player) {
         player.sendMessage(TAG + ChatColor.WHITE + "Vous avez quitté le parcours :'(");
         player.teleport(this.fail);
 
@@ -292,8 +291,7 @@ public class Parkour
         this.removePlayer(player);
     }
 
-    public void removePlayer(Player player)
-    {
+    public void removePlayer(Player player) {
         this.playersIn.remove(player.getUniqueId());
         this.playersCheckpoints.remove(player.getUniqueId());
 
@@ -302,84 +300,69 @@ public class Parkour
 
         IPermissionsEntity permissionsEntity = SamaGamesAPI.get().getPermissionsManager().getPlayer(player.getUniqueId());
 
-        if (permissionsEntity.hasPermission("network.vipplus") && SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isElytraActivated())
-        {
+        if (permissionsEntity.hasPermission("network.vipplus") && SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isElytraActivated()) {
             player.getInventory().setChestplate(new ItemStack(Material.ELYTRA));
             this.hub.getPlayerManager().getStaticInventory().setInventoryToPlayer(player);
         }
 
-        for (UUID playerIn : this.playersIn.keySet())
-        {
+        for (UUID playerIn : this.playersIn.keySet()) {
             this.hub.getServer().getScheduler().runTask(this.hub, () ->
             {
-                player.showPlayer(this.hub.getServer().getPlayer(playerIn));
-                this.hub.getServer().getPlayer(playerIn).showPlayer(player);
+                player.showPlayer(this.hub, this.hub.getServer().getPlayer(playerIn));
+                this.hub.getServer().getPlayer(playerIn).showPlayer(this.hub, player);
             });
         }
     }
 
-    public String getParkourName()
-    {
+    public String getParkourName() {
         return this.parkourName;
     }
 
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return this.prefix;
     }
 
-    public Location getSpawn()
-    {
+    public Location getSpawn() {
         return this.spawn;
     }
 
-    public Location getEnd()
-    {
+    public Location getEnd() {
         return this.end;
     }
 
-    public Location getFail()
-    {
+    public Location getFail() {
         return this.fail;
     }
 
-    public String getStars()
-    {
+    public String getStars() {
         return this.stars;
     }
 
-    public int getMinimalHeight()
-    {
+    public int getMinimalHeight() {
         return this.minimalHeight;
     }
 
-    public ArmorStand getStartTooltip()
-    {
+    public ArmorStand getStartTooltip() {
         return this.startTooltip;
     }
 
-    public ArmorStand getEndTooltip()
-    {
+    public ArmorStand getEndTooltip() {
         return this.endTooltip;
     }
 
-    public Map<UUID, Long> getPlayersIn()
-    {
+    public Map<UUID, Long> getPlayersIn() {
         return this.playersIn;
     }
 
-    public boolean isParkouring(UUID player)
-    {
+    public boolean isParkouring(UUID player) {
         return this.playersIn.containsKey(player);
     }
 
-    public String getTag()
-    {
+    public String getTag() {
         return TAG;
     }
 
-    private void restoreFly(Player player)
-    {
+    private void restoreFly(Player player) {
         this.hub.getServer().getScheduler().runTask(this.hub, () ->
         {
             player.setFlySpeed(PlayerManager.FLY_SPEED);
@@ -388,24 +371,5 @@ public class Parkour
             if (player.hasPermission("hub.fly"))
                 player.setAllowFlight(true);
         });
-    }
-
-    static
-    {
-        QUIT_STACK = new ItemStack(Material.BARRIER, 1);
-
-        ItemMeta quitStackMeta = QUIT_STACK.getItemMeta();
-        quitStackMeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Quitter le parcours");
-
-        QUIT_STACK.setItemMeta(quitStackMeta);
-
-        // ---
-
-        CHECKPOINT_STACK = new ItemStack(Material.ENDER_PEARL, 1);
-
-        ItemMeta checkpointStackMeta = CHECKPOINT_STACK.getItemMeta();
-        checkpointStackMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Aller au dernier Checkpoint");
-
-        CHECKPOINT_STACK.setItemMeta(checkpointStackMeta);
     }
 }

@@ -29,20 +29,17 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ClothManager extends AbstractCosmeticManager<ClothCosmetic>
-{
+public class ClothManager extends AbstractCosmeticManager<ClothCosmetic> {
     private final Map<UUID, ClothPreviewTask> previewers;
 
-    public ClothManager(Hub hub)
-    {
+    public ClothManager(Hub hub) {
         super(hub, new ClothRegistry(hub));
 
         this.previewers = new HashMap<>();
     }
 
     @Override
-    public void enableCosmetic(Player player, ClothCosmetic cosmetic, ClickType clickType, boolean login)
-    {
+    public void enableCosmetic(Player player, ClothCosmetic cosmetic, ClickType clickType, boolean login) {
         if (clickType == ClickType.RIGHT)
             this.startPreview(player, cosmetic);
         else
@@ -50,8 +47,7 @@ public class ClothManager extends AbstractCosmeticManager<ClothCosmetic>
     }
 
     @Override
-    public void enableCosmetic(Player player, ClothCosmetic cosmetic, ClickType clickType, boolean login, NullType useless)
-    {
+    public void enableCosmetic(Player player, ClothCosmetic cosmetic, ClickType clickType, boolean login, NullType useless) {
         if (this.getEquippedCosmetics(player) != null)
             this.getEquippedCosmetics(player).stream().filter(c -> cosmetic.getSlot() == c.getSlot()).forEach(c -> this.disableCosmetic(player, c, false, true));
 
@@ -62,8 +58,7 @@ public class ClothManager extends AbstractCosmeticManager<ClothCosmetic>
     }
 
     @Override
-    public void disableCosmetic(Player player, ClothCosmetic cosmetic, boolean logout, boolean replace, NullType useless)
-    {
+    public void disableCosmetic(Player player, ClothCosmetic cosmetic, boolean logout, boolean replace, NullType useless) {
         if (this.previewers.containsKey(player.getUniqueId()))
             this.stopPreview(player);
 
@@ -74,16 +69,14 @@ public class ClothManager extends AbstractCosmeticManager<ClothCosmetic>
     }
 
     @Override
-    public void update() { /** Not needed **/ }
+    public void update() { /* Not needed **/}
 
     @Override
-    public boolean restrictToOne()
-    {
+    public boolean restrictToOne() {
         return false;
     }
 
-    public void startPreview(Player player, ClothCosmetic cosmetic)
-    {
+    public void startPreview(Player player, ClothCosmetic cosmetic) {
         ItemStack[] armorContent = new ItemStack[4];
 
         if (this.getEquippedCosmetics(player) != null)
@@ -102,10 +95,8 @@ public class ClothManager extends AbstractCosmeticManager<ClothCosmetic>
         this.previewers.put(player.getUniqueId(), clothPreviewTask);
     }
 
-    public void stopPreview(Player player)
-    {
-        if (this.previewers.containsKey(player.getUniqueId()))
-        {
+    public void stopPreview(Player player) {
+        if (this.previewers.containsKey(player.getUniqueId())) {
             this.previewers.get(player.getUniqueId()).stop();
             this.previewers.remove(player.getUniqueId());
 
@@ -113,8 +104,7 @@ public class ClothManager extends AbstractCosmeticManager<ClothCosmetic>
         }
     }
 
-    public boolean isPreviewing(Player player)
-    {
+    public boolean isPreviewing(Player player) {
         return this.previewers.containsKey(player.getUniqueId());
     }
 }

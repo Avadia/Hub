@@ -23,12 +23,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlayersAwayFromKeyboardTask extends AbstractTask
-{
+public class PlayersAwayFromKeyboardTask extends AbstractTask {
     private final Map<UUID, Integer> timers;
 
-    PlayersAwayFromKeyboardTask(Hub hub)
-    {
+    PlayersAwayFromKeyboardTask(Hub hub) {
         super(hub);
 
         this.timers = new ConcurrentHashMap<>();
@@ -36,12 +34,9 @@ public class PlayersAwayFromKeyboardTask extends AbstractTask
     }
 
     @Override
-    public void run()
-    {
-        for (UUID uuid : this.timers.keySet())
-        {
-            if (this.hub.getServer().getPlayer(uuid) == null)
-            {
+    public void run() {
+        for (UUID uuid : this.timers.keySet()) {
+            if (this.hub.getServer().getPlayer(uuid) == null) {
                 this.removePlayer(uuid);
                 continue;
             }
@@ -53,27 +48,21 @@ public class PlayersAwayFromKeyboardTask extends AbstractTask
             {
                 SamaGamesAPI.get().getAchievementManager().getAchievementByID(53).unlock(uuid);
                 this.removePlayer(uuid);
-            }
-            else
-            {
+            } else {
                 this.timers.put(uuid, timer);
             }
         }
     }
 
-    public void registerPlayer(UUID uuid)
-    {
+    public void registerPlayer(UUID uuid) {
         this.timers.put(uuid, 0);
     }
 
-    public void removePlayer(UUID uuid)
-    {
-        if (this.timers.containsKey(uuid))
-            this.timers.remove(uuid);
+    public void removePlayer(UUID uuid) {
+        this.timers.remove(uuid);
     }
 
-    public void resetPlayer(UUID uuid)
-    {
+    public void resetPlayer(UUID uuid) {
         if (this.timers.containsKey(uuid))
             this.timers.put(uuid, 0);
     }

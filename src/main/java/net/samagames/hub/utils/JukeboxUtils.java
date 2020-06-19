@@ -27,12 +27,14 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class JukeboxUtils
-{
+public class JukeboxUtils {
     private static final Random RANDOM;
 
-    public static Material randomMusic()
-    {
+    static {
+        RANDOM = new Random();
+    }
+
+    public static Material randomMusic() {
         ArrayList<Material> records = new ArrayList<>();
 
         for (Material material : Material.values())
@@ -42,20 +44,14 @@ public class JukeboxUtils
         return records.get(RANDOM.nextInt(records.size()));
     }
 
-    public static void playRecord(Location loc, Material record)
-    {
+    @SuppressWarnings("deprecation")
+    public static void playRecord(Location loc, Material record) {
         for (Player p : Bukkit.getOnlinePlayers())
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(new PacketPlayOutWorldEvent(1010, new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), record.getId(), false));
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutWorldEvent(1010, new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), record.getId(), false));
     }
 
-    public static void stopRecord(Location loc)
-    {
+    public static void stopRecord(Location loc) {
         for (Player p : Bukkit.getOnlinePlayers())
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(new PacketPlayOutWorldEvent(1010, new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), 0, false));
-    }
-
-    static
-    {
-        RANDOM = new Random();
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutWorldEvent(1010, new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), 0, false));
     }
 }

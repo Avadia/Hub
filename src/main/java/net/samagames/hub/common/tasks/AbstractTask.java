@@ -19,18 +19,15 @@ import org.bukkit.scheduler.BukkitTask;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-abstract class AbstractTask implements Runnable
-{
+abstract class AbstractTask implements Runnable {
     protected final Hub hub;
     protected BukkitTask task;
 
-    AbstractTask(Hub hub)
-    {
+    AbstractTask(Hub hub) {
         this.hub = hub;
     }
 
-    public void cancel()
-    {
+    public void cancel() {
         this.task.cancel();
     }
 }

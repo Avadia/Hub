@@ -3,7 +3,7 @@ package net.samagames.hub.cosmetics.particles.effects;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
 
 import java.util.Random;
 
@@ -23,12 +23,10 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class NervousEffect extends Effect
-{
-    private Random random;
+public class NervousEffect extends Effect {
+    private final Random random;
 
-    public NervousEffect(EffectManager effectManager)
-    {
+    public NervousEffect(EffectManager effectManager) {
         super(effectManager);
         this.type = EffectType.REPEATING;
         this.period = 4;
@@ -38,10 +36,9 @@ public class NervousEffect extends Effect
     }
 
     @Override
-    public void onRun()
-    {
+    public void onRun() {
         double dx = this.random.nextDouble() % 0.2F;
         double dz = this.random.nextDouble() % 0.2F;
-        display(ParticleEffect.VILLAGER_ANGRY, this.getEntity().getLocation().add(dx, 2D, dz));
+        display(Particle.VILLAGER_ANGRY, this.getEntity().getLocation().add(dx, 2D, dz));
     }
 }

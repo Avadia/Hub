@@ -37,32 +37,40 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
-{
+class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
     private static final ItemStack QUIT_STACK;
+
+    static {
+        QUIT_STACK = new ItemStack(Material.BARRIER, 1);
+
+        ItemMeta quitStackMeta = QUIT_STACK.getItemMeta();
+        quitStackMeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Quitter le tutoriel");
+
+        QUIT_STACK.setItemMeta(quitStackMeta);
+    }
 
     private final Hub hub;
     private final NPCTutorial tutorial;
     private final List<UUID> expected;
 
-    WelcomeTutorialNPCAction(Hub hub)
-    {
+    @SuppressWarnings("deprecation")
+    WelcomeTutorialNPCAction(Hub hub) {
         this.hub = hub;
         this.tutorial = new NPCTutorial();
         this.expected = new ArrayList<>();
 
-        /**
-         * Chapter I
-         * Location: On the wheel of the Dimensions sign
+        /*
+          Chapter I
+          Location: On the wheel of the Dimensions sign
          */
         this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), -20.5D, 132.0D, -55.1D, -10F, 22.5F), ChatColor.GOLD + "Salut l'aventurier !", Arrays.asList(
                 Pair.of("Bienvenue sur SamaGames !", 72L),
                 Pair.of("Laissez-moi donc vous guider...", 43L)
         ), Material.GREEN_RECORD.getId()));
 
-        /**
-         * Chapter II
-         * Location: On the 'S' under the golden apple
+        /*
+          Chapter II
+          Location: On the 'S' under the golden apple
          */
         this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), 36.5D, 133.0D, -4.5D, 89.2F, 26.3F), ChatColor.GOLD + "Kékesé SamaGames ?", Arrays.asList(
                 Pair.of("Ceci est un très bon début ;)", 75L),
@@ -71,9 +79,9 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
                 Pair.of("Alors n'oubliez pas d'inviter vos amis !", 42L)
         ), Material.RECORD_3.getId()));
 
-        /**
-         * Chapter III
-         * Location: On a spark of the Uppervoid tnt
+        /*
+          Chapter III
+          Location: On a spark of the Uppervoid tnt
          */
         this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), -10.5D, 131.0D, 70.5D, 179.2F, 19.7F), ChatColor.GOLD + "Où suis-je ?", Arrays.asList(
                 Pair.of("Vous êtes actuellement au Hub !", 57L),
@@ -82,9 +90,9 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
                 Pair.of("entre nos magnifiques joueurs.", 44L)
         ), Material.RECORD_4.getId()));
 
-        /**
-         * Chapter IV
-         * Location: On front of the DoubleRunner's signs
+        /*
+          Chapter IV
+          Location: On front of the DoubleRunner's signs
          */
         this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), -80.5D, 111.0D, -10.5D, 180.0F, 0.0F), ChatColor.GOLD + "Comment jouer ?", Arrays.asList(
                 Pair.of("Voici des panneaux de jeu.", 50L),
@@ -94,9 +102,9 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
                 Pair.of("et vous serez ensuite téléportés.", 45L)
         ), Material.RECORD_5.getId()));
 
-        /**
-         * Chapter V
-         * Location: At the spawn before the Dimensions's yodel
+        /*
+          Chapter V
+          Location: At the spawn before the Dimensions's yodel
          */
         this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), -9.5D, 103.0D, -11.5D, 138.5F, 31.5F), ChatColor.GOLD + "Vroom vroom ?", Arrays.asList(
                 Pair.of("Et non ! Ce sont des tyroliennes ;)", 60L),
@@ -104,9 +112,9 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
                 Pair.of("pour vous déplacer à travers le Hub.", 57L)
         ), Material.RECORD_6.getId()));
 
-        /**
-         * Chapter VI
-         * Location: In front of a tornado
+        /*
+          Chapter VI
+          Location: In front of a tornado
          */
         this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), 10.0D, 70.5D, -25.5D, -58.5F, 23.2F), ChatColor.GOLD + "Et si je suis perdu ?", Arrays.asList(
                 Pair.of("Ne vous inquiétez pas !", 45L),
@@ -114,9 +122,9 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
                 Pair.of("un voyage dans le ciel afin de vous retrouver.", 64L)
         ), Material.RECORD_7.getId()));
 
-        /**
-         * Chapter VII
-         * Location: In front of Meow
+        /*
+          Chapter VII
+          Location: In front of Meow
          */
         this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), -13.5D, 101.0D, -2.5D, 121.0F, 28.0F), ChatColor.GOLD + "Qui est Meow ?", Arrays.asList(
                 Pair.of("Voici Meow, notre chat.", 60L),
@@ -125,9 +133,9 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
                 Pair.of("l'achat d'un grade.", 35L)
         ), Material.RECORD_8.getId()));
 
-        /**
-         * Chapter VIII
-         * Location: At the spawn
+        /*
+          Chapter VIII
+          Location: At the spawn
          */
         this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), -11.5D, 106.0D, -1.5D, -90.0F, 90.0F), ChatColor.GOLD + "C'est tout ?", Arrays.asList(
                 Pair.of("Oh que non cher ami...", 43L),
@@ -162,8 +170,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
     }
 
     @EventHandler
-    public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event)
-    {
+    public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event) {
         if (!this.expected.contains(event.getPlayer().getUniqueId()) || event.getStatus() != PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED)
             return;
 
@@ -172,8 +179,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getItem() == null || !event.getItem().equals(QUIT_STACK))
             return;
 
@@ -181,10 +187,8 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
     }
 
     @Override
-    public void done(boolean right, Player player)
-    {
-        if (right && !this.expected.contains(player.getUniqueId()))
-        {
+    public void done(boolean right, Player player) {
+        if (right && !this.expected.contains(player.getUniqueId())) {
             this.expected.add(player.getUniqueId());
 
             player.sendMessage(ChatColor.YELLOW + "Nous allons vous envoyer un resource pack. Merci de l'accepter pour pouvoir voir le tutoriel.");
@@ -197,15 +201,5 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener
                 player.setResourcePack("http://resources.samagames.net/WelcomeTutorial.zip");
             }, 10L);
         }
-    }
-
-    static
-    {
-        QUIT_STACK = new ItemStack(Material.BARRIER, 1);
-
-        ItemMeta quitStackMeta = QUIT_STACK.getItemMeta();
-        quitStackMeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Quitter le tutoriel");
-
-        QUIT_STACK.setItemMeta(quitStackMeta);
     }
 }

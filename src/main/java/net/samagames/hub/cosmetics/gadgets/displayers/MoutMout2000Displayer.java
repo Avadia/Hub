@@ -36,18 +36,15 @@ import java.lang.reflect.Field;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class MoutMout2000Displayer extends AbstractDisplayer
-{
+public class MoutMout2000Displayer extends AbstractDisplayer {
     private BukkitTask loopTask;
 
-    public MoutMout2000Displayer(Hub hub, Player player)
-    {
+    public MoutMout2000Displayer(Hub hub, Player player) {
         super(hub, player);
     }
 
     @Override
-    public void display()
-    {
+    public void display() {
         World craftbukkitWorld = ((CraftWorld) this.player.getWorld()).getHandle();
         MoutMout2000Sheep craftbukkitSheep = new MoutMout2000Sheep(craftbukkitWorld);
         craftbukkitSheep.setPosition(this.player.getLocation().getX(), this.player.getLocation().getY(), this.player.getLocation().getZ());
@@ -58,18 +55,15 @@ public class MoutMout2000Displayer extends AbstractDisplayer
         sheep.setCustomNameVisible(true);
         sheep.setColor(DyeColor.WHITE);
 
-        this.loopTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable()
-        {
+        this.loopTask = this.hub.getServer().getScheduler().runTaskTimer(this.hub, new Runnable() {
             int timer = 0;
             int ticks = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 this.ticks++;
 
-                if (ticks == 10)
-                {
+                if (ticks == 10) {
                     int r1i = GadgetManager.RANDOM.nextInt(17) + 1;
                     int r2i = GadgetManager.RANDOM.nextInt(17) + 1;
                     Color c1 = ColorUtils.getColor(r1i);
@@ -80,15 +74,12 @@ public class MoutMout2000Displayer extends AbstractDisplayer
 
                     FireworkEffect effect = FireworkEffect.builder().flicker(GadgetManager.RANDOM.nextBoolean()).withColor(c1).withFade(c2).with(FireworkEffect.Type.BURST).trail(GadgetManager.RANDOM.nextBoolean()).build();
                     FireworkUtils.launchfw(hub, sheep.getLocation(), effect);
-                }
-                else if (ticks == 20)
-                {
+                } else if (ticks == 20) {
                     this.ticks = 0;
                     this.timer++;
                 }
 
-                if (timer == 15)
-                {
+                if (timer == 15) {
                     sheep.getLocation().getWorld().createExplosion(sheep.getLocation().getX(), sheep.getLocation().getY(), sheep.getLocation().getZ(), 5, false, false);
                     sheep.remove();
                     end();
@@ -99,34 +90,29 @@ public class MoutMout2000Displayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 
-    private void callback()
-    {
+    private void callback() {
         this.loopTask.cancel();
     }
 
-    public static class MoutMout2000Sheep extends EntitySheep
-    {
-        MoutMout2000Sheep(World world)
-        {
+    public static class MoutMout2000Sheep extends EntitySheep {
+        MoutMout2000Sheep(World world) {
             super(world);
 
             Field bField;
 
-            try
-            {
+            try {
                 bField = PathfinderGoalSelector.class.getDeclaredField("b");
                 bField.setAccessible(true);
                 Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
@@ -140,13 +126,12 @@ public class MoutMout2000Displayer extends AbstractDisplayer
                 ((Navigation) getNavigation()).a(true);
                 this.goalSelector.a(0, new PathfinderGoalFloat(this));
                 this.goalSelector.a(1, new PathfinderGoalPanic(this, 3.0D));
+            } catch (ReflectiveOperationException ignored) {
             }
-            catch (ReflectiveOperationException ignored) {}
         }
 
         @Override
-        public boolean cV()
-        {
+        public boolean cV() {
             return true;
         }
     }

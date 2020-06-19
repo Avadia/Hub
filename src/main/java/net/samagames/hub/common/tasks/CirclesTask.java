@@ -24,15 +24,13 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CirclesTask extends AbstractTask
-{
+public class CirclesTask extends AbstractTask {
     private static final double RADIUS = 0.5D;
 
     private final List<Location> locations;
     private double i;
 
-    CirclesTask(Hub hub)
-    {
+    CirclesTask(Hub hub) {
         super(hub);
 
         this.locations = new ArrayList<>();
@@ -40,8 +38,7 @@ public class CirclesTask extends AbstractTask
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         for (Location location : this.locations)
             ParticleEffect.FIREWORKS_SPARK.display(0.0F, 0.0F, 0.0F, 0.0F, 1, new Location(location.getWorld(), location.getX() + Math.cos(this.i) * RADIUS, location.getY() + 0.15D, location.getZ() + Math.sin(this.i) * RADIUS), 32.0D);
 
@@ -51,15 +48,12 @@ public class CirclesTask extends AbstractTask
             this.i = 0.0D;
     }
 
-    public void addCircleAt(Location center)
-    {
+    public void addCircleAt(Location center) {
         if (!this.locations.contains(center))
             this.locations.add(center);
     }
 
-    public void removeCircleAt(Location center)
-    {
-        if (this.locations.contains(center))
-            this.locations.remove(center);
+    public void removeCircleAt(Location center) {
+        this.locations.remove(center);
     }
 }

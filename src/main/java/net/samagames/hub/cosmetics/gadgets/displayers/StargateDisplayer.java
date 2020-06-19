@@ -1,7 +1,6 @@
 package net.samagames.hub.cosmetics.gadgets.displayers;
 
 import de.slikey.effectlib.effect.HelixEffect;
-import de.slikey.effectlib.util.ParticleEffect;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.gadgets.GadgetManager;
 import net.samagames.tools.ProximityUtils;
@@ -34,17 +33,14 @@ import java.util.Map;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class StargateDisplayer extends AbstractDisplayer
-{
+public class StargateDisplayer extends AbstractDisplayer {
     private final Location basePortalLocation;
     private final Location exitPortalLocation;
+    private final Map<Location, SimpleBlock> portals;
     private HelixEffect helixEffect;
     private BukkitTask portalTask;
 
-    private Map<Location, SimpleBlock> portals;
-
-    public StargateDisplayer(Hub hub, Player player)
-    {
+    public StargateDisplayer(Hub hub, Player player) {
         super(hub, player);
 
         this.basePortalLocation = this.baseLocation.add(3.0D, 0.0D, 0.0D).getBlock().getLocation();
@@ -60,10 +56,8 @@ public class StargateDisplayer extends AbstractDisplayer
 
     @SuppressWarnings("deprecation")
     @Override
-    public void display()
-    {
-        for (Location block : this.blocksUsed.keySet())
-        {
+    public void display() {
+        for (Location block : this.blocksUsed.keySet()) {
             block.getBlock().setType(this.blocksUsed.get(block).getType());
             block.getBlock().setData(this.blocksUsed.get(block).getData());
         }
@@ -79,14 +73,13 @@ public class StargateDisplayer extends AbstractDisplayer
             this.basePortalLocation.getWorld().playSound(this.basePortalLocation, Sound.ENTITY_ENDERMEN_SCREAM, 1.0F, 6.0F);
             this.basePortalLocation.getWorld().createExplosion(basePortalLocation.getX(), basePortalLocation.getY(), basePortalLocation.getZ(), 10, false, false);
 
-            for (Location block : this.portals.keySet())
-            {
+            for (Location block : this.portals.keySet()) {
                 block.getBlock().setType(Material.PORTAL);
                 block.getBlock().setData((byte) 2);
             }
 
             this.helixEffect = new HelixEffect(this.hub.getCosmeticManager().getParticleManager().getEffectManager());
-            this.helixEffect.particle = ParticleEffect.FIREWORKS_SPARK;
+            //this.helixEffect.particle = ParticleEffect.FIREWORKS_SPARK;
             this.helixEffect.radius = 10;
             this.helixEffect.setLocation(this.basePortalLocation.clone().add(0.5D, 0.25D, 1.5D));
             this.helixEffect.infinite();
@@ -96,8 +89,7 @@ public class StargateDisplayer extends AbstractDisplayer
             {
                 Location blackHoleLocation = this.basePortalLocation.clone().add(0.5D, 2.0D, 0.5D);
 
-                for (Entity entity : ProximityUtils.getNearbyEntities(blackHoleLocation, 12, EntityType.PLAYER))
-                {
+                for (Entity entity : ProximityUtils.getNearbyEntities(blackHoleLocation, 12, EntityType.PLAYER)) {
                     Player player = (Player) entity;
 
                     if (this.hub.getPlayerManager().isBusy(player))
@@ -107,8 +99,7 @@ public class StargateDisplayer extends AbstractDisplayer
                     Vector blackholeVector = new Vector(blackHoleLocation.getX(), blackHoleLocation.getY(), blackHoleLocation.getZ());
                     player.setVelocity(blackholeVector.subtract(entityVector).normalize().multiply(0.25F));
 
-                    if (player.getLocation().distanceSquared(blackHoleLocation) <= 1.0D)
-                    {
+                    if (player.getLocation().distanceSquared(blackHoleLocation) <= 1.0D) {
                         player.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 
                         this.hub.getServer().getScheduler().runTaskLater(this.hub, () -> player.teleport(this.exitPortalLocation), 5L);
@@ -131,14 +122,13 @@ public class StargateDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
-    private Map<Location, SimpleBlock> createPortalFrame(Location basePortalLocation, boolean exit)
-    {
+    private Map<Location, SimpleBlock> createPortalFrame(Location basePortalLocation, boolean exit) {
         Map<Location, SimpleBlock> blocks = new HashMap<>();
 
-        if (exit)
-        {
+        if (exit) {
             blocks.put(basePortalLocation, new SimpleBlock(Material.STAINED_CLAY, 3));
             blocks.put(basePortalLocation.clone().subtract(0.0D, 0.0D, 1.0D), new SimpleBlock(Material.STAINED_CLAY, 3));
             blocks.put(basePortalLocation.clone().subtract(0.0D, 0.0D, 2.0D).add(1.0D, 0.0D, 0.0D), new SimpleBlock(Material.STAINED_CLAY, 3));
@@ -155,9 +145,7 @@ public class StargateDisplayer extends AbstractDisplayer
             blocks.put(basePortalLocation.clone().add(2.0D, 0.0D, 3.0D), new SimpleBlock(Material.STAINED_CLAY, 3));
             blocks.put(basePortalLocation.clone().add(1.0D, 0.0D, 2.0D), new SimpleBlock(Material.STAINED_CLAY, 3));
             blocks.put(basePortalLocation.clone().add(0.0D, 0.0D, 1.0D), new SimpleBlock(Material.STAINED_CLAY, 3));
-        }
-        else
-        {
+        } else {
             blocks.put(basePortalLocation, new SimpleBlock(Material.STAINED_CLAY, 1));
             blocks.put(basePortalLocation.clone().subtract(0.0D, 0.0D, 1.0D), new SimpleBlock(Material.STAINED_CLAY, 1));
             blocks.put(basePortalLocation.clone().subtract(0.0D, 0.0D, 2.0D).add(0.0D, 1.0D, 0.0D), new SimpleBlock(Material.STAINED_CLAY, 1));
@@ -191,8 +179,7 @@ public class StargateDisplayer extends AbstractDisplayer
         return blocks;
     }
 
-    private Map<Location, SimpleBlock> createPortal(Location basePortalLocation)
-    {
+    private Map<Location, SimpleBlock> createPortal(Location basePortalLocation) {
         Map<Location, SimpleBlock> blocks = new HashMap<>();
 
         blocks.put(basePortalLocation.clone().subtract(0.0D, 0.0D, 1.0D).add(0.0D, 1.0D, 0.0D), new SimpleBlock(Material.AIR, 1));
@@ -221,14 +208,12 @@ public class StargateDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
     @Override
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 }

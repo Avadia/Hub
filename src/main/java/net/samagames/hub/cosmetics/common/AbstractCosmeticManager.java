@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
 import javax.lang.model.type.NullType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
@@ -30,24 +32,19 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractCosmeticManager<COSMETIC extends AbstractCosmetic>
-{
+public abstract class AbstractCosmeticManager<COSMETIC extends AbstractCosmetic> {
     protected final Hub hub;
+    private final AbstractCosmeticRegistry<COSMETIC> registry;
     protected ConcurrentMap<UUID, List<COSMETIC>> equipped;
-    private AbstractCosmeticRegistry<COSMETIC> registry;
 
-    public AbstractCosmeticManager(Hub hub, AbstractCosmeticRegistry<COSMETIC> registry)
-    {
+    public AbstractCosmeticManager(Hub hub, AbstractCosmeticRegistry<COSMETIC> registry) {
         this.hub = hub;
         this.registry = registry;
 
-        try
-        {
+        try {
             hub.getCosmeticManager().log(Level.INFO, "Loading registry " + this.getClass().getSimpleName() + "...");
             this.registry.register();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             hub.getCosmeticManager().log(Level.SEVERE, "Failed to load the registry " + this.getClass().getSimpleName() + "!");
             e.printStackTrace();
         }
@@ -56,24 +53,19 @@ public abstract class AbstractCosmeticManager<COSMETIC extends AbstractCosmetic>
     }
 
     public abstract void enableCosmetic(Player player, COSMETIC cosmetic, ClickType clickType, boolean login, NullType useless);
+
     public abstract void disableCosmetic(Player player, COSMETIC cosmetic, boolean logout, boolean replace, NullType useless);
 
     public abstract void update();
 
     public abstract boolean restrictToOne();
 
-    public void enableCosmetic(Player player, COSMETIC cosmetic, ClickType clickType, boolean login)
-    {
-        if (cosmetic.isOwned(player))
-        {
-            if (cosmetic.getAccessibility().canAccess(player))
-            {
-                if (this.equipped.containsKey(player.getUniqueId()) && this.equipped.get(player.getUniqueId()).stream().filter(c -> c.compareTo(cosmetic) > 0).findAny().isPresent())
-                {
+    public void enableCosmetic(Player player, COSMETIC cosmetic, ClickType clickType, boolean login) {
+        if (cosmetic.isOwned(player)) {
+            if (cosmetic.getAccessibility().canAccess(player)) {
+                if (this.equipped.containsKey(player.getUniqueId()) && this.equipped.get(player.getUniqueId()).stream().anyMatch(c -> c.compareTo(cosmetic) > 0)) {
                     player.sendMessage(PlayerManager.COSMETICS_TAG + ChatColor.RED + "Vous utilisez déjà ce cosmétique.");
-                }
-                else
-                {
+                } else {
                     if (this.restrictToOne())
                         this.disableCosmetics(player, false, true);
 
@@ -87,12 +79,9 @@ public abstract class AbstractCosmeticManager<COSMETIC extends AbstractCosmetic>
                     if (this.restrictToOne())
                         this.resetCurrents(player);
 
-                    try
-                    {
+                    try {
                         SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).setSelectedItem(cosmetic.getStorageId(), true);
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -101,33 +90,23 @@ public abstract class AbstractCosmeticManager<COSMETIC extends AbstractCosmetic>
                     if (gui != null)
                         gui.update(player);
                 }
-            }
-            else
-            {
+            } else {
                 player.sendMessage(PlayerManager.COSMETICS_TAG + ChatColor.RED + "Vous n'avez pas le grade nécessaire pour utiliser cette cosmétique.");
             }
-        }
-        else
-        {
+        } else {
             player.sendMessage(PlayerManager.COSMETICS_TAG + ChatColor.RED + "Vous ne possédez pas ce cosmétique. Tentez de le débloquer auprès de Graou !");
         }
     }
 
-    public void disableCosmetic(Player player, COSMETIC cosmetic, boolean logout, boolean replace)
-    {
-        if (this.equipped.containsKey(player.getUniqueId()) && this.equipped.get(player.getUniqueId()).contains(cosmetic))
-        {
+    public void disableCosmetic(Player player, COSMETIC cosmetic, boolean logout, boolean replace) {
+        if (this.equipped.containsKey(player.getUniqueId()) && this.equipped.get(player.getUniqueId()).contains(cosmetic)) {
             this.disableCosmetic(player, cosmetic, logout, replace, null);
             this.equipped.get(player.getUniqueId()).remove(cosmetic);
 
-            if (!logout)
-            {
-                try
-                {
+            if (!logout) {
+                try {
                     SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).setSelectedItem(cosmetic.getStorageId(), false);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -139,8 +118,7 @@ public abstract class AbstractCosmeticManager<COSMETIC extends AbstractCosmetic>
         }
     }
 
-    public void disableCosmetics(Player player, boolean logout, boolean replace)
-    {
+    public void disableCosmetics(Player player, boolean logout, boolean replace) {
         if (this.getEquippedCosmetics(player) == null)
             return;
 
@@ -148,59 +126,45 @@ public abstract class AbstractCosmeticManager<COSMETIC extends AbstractCosmetic>
             this.disableCosmetic(player, cosmetic, logout, replace);
     }
 
-    public void restoreCosmetic(Player player)
-    {
+    public void restoreCosmetic(Player player) {
         this.registry.getElements().keySet().stream().filter(storageId -> SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(storageId) != null).forEach(storageId ->
         {
-            try
-            {
+            try {
                 if (SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).isSelectedItem(storageId))
                     this.enableCosmetic(player, this.getRegistry().getElementByStorageId(storageId), ClickType.LEFT, true);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public void resetCurrents(Player player)
-    {
+    public void resetCurrents(Player player) {
         this.registry.getElements().keySet().stream().filter(storageId -> SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(storageId) != null).forEach(storageId ->
         {
-            try
-            {
+            try {
                 SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).setSelectedItem(storageId, false);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public List<COSMETIC> getEquippedCosmetics(Player player)
-    {
-        if (this.equipped.containsKey(player.getUniqueId()))
-        {
+    public List<COSMETIC> getEquippedCosmetics(Player player) {
+        if (this.equipped.containsKey(player.getUniqueId())) {
             if (!this.equipped.get(player.getUniqueId()).isEmpty())
                 return this.equipped.get(player.getUniqueId());
             else
                 return null;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public AbstractCosmeticRegistry<COSMETIC> getRegistry()
-    {
+    public AbstractCosmeticRegistry<COSMETIC> getRegistry() {
         return this.registry;
     }
 
-    public boolean isCosmeticEquipped(Player player, AbstractCosmetic cosmetic)
-    {
-        return this.equipped.get(player.getUniqueId()).stream().filter(c -> c.compareTo(cosmetic) > 0).findAny().isPresent();
+    public boolean isCosmeticEquipped(Player player, AbstractCosmetic cosmetic) {
+        return this.equipped.get(player.getUniqueId()).stream().anyMatch(c -> c.compareTo(cosmetic) > 0);
     }
 }

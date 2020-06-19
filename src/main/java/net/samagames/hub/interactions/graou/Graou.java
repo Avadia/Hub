@@ -8,7 +8,6 @@ import net.samagames.hub.Hub;
 import net.samagames.hub.interactions.AbstractInteraction;
 import net.samagames.hub.interactions.graou.entity.EntityGraou;
 import net.samagames.tools.holograms.Hologram;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -17,7 +16,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /*
  * This file is part of Hub.
@@ -35,8 +36,7 @@ import java.util.*;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class Graou extends AbstractInteraction
-{
+class Graou extends AbstractInteraction {
     public static final String TAG = ChatColor.GOLD + "[" + ChatColor.YELLOW + "Graou" + ChatColor.GOLD + "] " + ChatColor.RESET;
     private static final String GRAOU_NAME = ChatColor.GOLD + "" + ChatColor.BOLD + "Graou";
 
@@ -49,8 +49,7 @@ class Graou extends AbstractInteraction
     private BukkitTask animationTask;
     private UUID playerUsing;
 
-    Graou(Hub hub, Location catLocation, Location door, Location treasureLocations, Location openingLocations)
-    {
+    Graou(Hub hub, Location catLocation, Location door, Location treasureLocations, Location openingLocations) {
         super(hub);
 
         this.holograms = new HashMap<>();
@@ -73,16 +72,14 @@ class Graou extends AbstractInteraction
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         if (this.animationTask != null)
             this.animationTask.cancel();
 
         this.graouEntity.die();
     }
 
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         if (this.holograms.containsKey(player.getUniqueId()))
             this.onLogout(player);
 
@@ -100,10 +97,8 @@ class Graou extends AbstractInteraction
         this.holograms.put(player.getUniqueId(), hologram);
     }
 
-    public void onLogout(Player player)
-    {
-        if (this.playerUsing != null && this.playerUsing == player.getUniqueId())
-        {
+    public void onLogout(Player player) {
+        if (this.playerUsing != null && this.playerUsing == player.getUniqueId()) {
             this.playerUsing = null;
 
             this.animationTask.cancel();
@@ -112,8 +107,7 @@ class Graou extends AbstractInteraction
             this.respawn();
         }
 
-        if (this.holograms.containsKey(player.getUniqueId()))
-        {
+        if (this.holograms.containsKey(player.getUniqueId())) {
             Hologram hologram = this.holograms.get(player.getUniqueId());
             hologram.removeLinesForPlayers();
             hologram.removeReceiver(player);
@@ -123,8 +117,7 @@ class Graou extends AbstractInteraction
     }
 
     @Override
-    public void play(Player player)
-    {
+    public void play(Player player) {
         this.hub.getGuiManager().openGui(player, new GuiGraou(this.hub, this));
         player.playSound(player.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
 
@@ -133,10 +126,9 @@ class Graou extends AbstractInteraction
     }
 
     @Override
-    public void stop(Player player) { /** Not needed **/ }
+    public void stop(Player player) { /* Not needed **/}
 
-    public void update(Player player)
-    {
+    public void update(Player player) {
         int perls = this.hub.getInteractionManager().getGraouManager().getPlayerPearls(player.getUniqueId()).size();
         Hologram hologram = this.holograms.get(player.getUniqueId());
 
@@ -148,10 +140,8 @@ class Graou extends AbstractInteraction
         hologram.sendLines(player);
     }
 
-    public void openBox(Player player, Pearl pearl)
-    {
-        if (this.animationTask != null)
-        {
+    public void openBox(Player player, Pearl pearl) {
+        if (this.animationTask != null) {
             player.sendMessage(TAG + ChatColor.RED + "Je suis actuellement occupé avec un autre joueur.");
             return;
         }
@@ -162,8 +152,7 @@ class Graou extends AbstractInteraction
         this.animationTask = this.hub.getServer().getScheduler().runTask(this.hub, new OpeningAnimationRunnable(this.hub, this, player, pearl, this.door, this.treasureLocations, this.openingLocations));
     }
 
-    public void animationFinished(Player player, Pearl pearl)
-    {
+    public void animationFinished(Player player, Pearl pearl) {
         this.animationTask.cancel();
         this.animationTask = null;
 
@@ -174,8 +163,7 @@ class Graou extends AbstractInteraction
         this.stop(player);
     }
 
-    public void respawn()
-    {
+    public void respawn() {
         this.graouEntity.getNavigation().a((PathEntity) null, 1.0F);
         this.graouEntity.setPositionRotation(this.catLocation.getX(), this.catLocation.getY(), this.catLocation.getZ(), this.catLocation.getYaw(), this.catLocation.getPitch());
         this.graouEntity.positionChanged = true;
@@ -184,22 +172,19 @@ class Graou extends AbstractInteraction
         this.toggleHolograms(true);
     }
 
-    public void toggleHolograms(boolean visible)
-    {
+    public void toggleHolograms(boolean visible) {
         if (visible)
             this.holograms.values().forEach(Hologram::sendLinesForPlayers);
         else
             this.holograms.values().forEach(Hologram::removeLinesForPlayers);
     }
 
-    public EntityGraou getGraouEntity()
-    {
+    public EntityGraou getGraouEntity() {
         return this.graouEntity;
     }
 
     @Override
-    public boolean hasPlayer(Player player)
-    {
+    public boolean hasPlayer(Player player) {
         return this.hub.getGuiManager().getPlayerGui(player) instanceof GuiGraou;
     }
 }

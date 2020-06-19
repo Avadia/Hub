@@ -3,22 +3,16 @@ package net.samagames.hub.cosmetics.common;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.shops.IItemDescription;
 import net.samagames.hub.Hub;
-import net.samagames.hub.common.players.PlayerManager;
-import net.samagames.hub.gui.AbstractGui;
-import net.samagames.hub.gui.shop.GuiConfirm;
-import net.samagames.hub.utils.NumberUtils;
 import net.samagames.tools.GlowEffect;
 import net.samagames.tools.PersistanceUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 /*
  * This file is part of Hub.
@@ -36,8 +30,7 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractCosmetic implements Comparable<AbstractCosmetic>
-{
+public abstract class AbstractCosmetic implements Comparable<AbstractCosmetic> {
     protected final Hub hub;
     private final String categoryName;
     private final int storageId;
@@ -45,10 +38,9 @@ public abstract class AbstractCosmetic implements Comparable<AbstractCosmetic>
     private final CosmeticRarity rarity;
     private final CosmeticAccessibility accessibility;
     private final int initialPrice;
-    private String permissionNeededToView;
+    private final String permissionNeededToView;
 
-    public AbstractCosmetic(Hub hub, String categoryName, int storageId) throws Exception
-    {
+    public AbstractCosmetic(Hub hub, String categoryName, int storageId) throws Exception {
         this.hub = hub;
         this.categoryName = categoryName;
         this.storageId = storageId;
@@ -78,18 +70,15 @@ public abstract class AbstractCosmetic implements Comparable<AbstractCosmetic>
         this.icon.setItemMeta(meta);
     }
 
-    public void unlock(Player player)
-    {
+    public void unlock(Player player) {
         SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).addItem(this.storageId, 0, 0, false);
     }
 
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return this.icon;
     }
 
-    public ItemStack getIcon(Player player)
-    {
+    public ItemStack getIcon(Player player) {
         ItemStack cloned = this.icon.clone();
         ItemMeta meta = cloned.getItemMeta();
 
@@ -100,34 +89,27 @@ public abstract class AbstractCosmetic implements Comparable<AbstractCosmetic>
         else
             lore.add("");
 
-        if (!this.isOwned(player))
-        {
+        if (!this.isOwned(player)) {
             cloned = new ItemStack(Material.INK_SACK, 1, (short) 8);
             meta = cloned.getItemMeta();
             meta.setDisplayName(this.icon.getItemMeta().getDisplayName());
 
-            if (this.accessibility != CosmeticAccessibility.ALL)
-            {
+            if (this.accessibility != CosmeticAccessibility.ALL) {
                 lore.add(ChatColor.GRAY + "Vous devez posséder le grade");
                 lore.add(this.accessibility.getDisplay() + ChatColor.GRAY + " pour pouvoir utiliser ce");
                 lore.add(ChatColor.GRAY + "cosmétique.");
                 lore.add("");
             }
 
-            if (this.accessibility != CosmeticAccessibility.STAFF && this.accessibility != CosmeticAccessibility.ADMIN)
-            {
+            if (this.accessibility != CosmeticAccessibility.STAFF && this.accessibility != CosmeticAccessibility.ADMIN) {
                 lore.add(ChatColor.YELLOW + "Echangez une perle à " + ChatColor.GOLD + "Graou" + ChatColor.YELLOW + " pour");
                 lore.add(ChatColor.YELLOW + "tenter de débloquer ce cosmétique.");
-            }
-            else
-            {
+            } else {
                 lore.add(ChatColor.YELLOW + "Cliquez pour débloquer ce cosmétique.");
             }
 
             cloned.removeEnchantment(GlowEffect.getGlow());
-        }
-        else
-        {
+        } else {
             lore.add(ChatColor.GREEN + "Cliquez pour utiliser");
         }
 
@@ -140,38 +122,31 @@ public abstract class AbstractCosmetic implements Comparable<AbstractCosmetic>
         return cloned;
     }
 
-    public String getCategoryName()
-    {
+    public String getCategoryName() {
         return this.categoryName;
     }
 
-    public int getStorageId()
-    {
+    public int getStorageId() {
         return this.storageId;
     }
 
-    public int getRefundPrice()
-    {
+    public int getRefundPrice() {
         return this.initialPrice / 100;
     }
 
-    public CosmeticRarity getRarity()
-    {
+    public CosmeticRarity getRarity() {
         return this.rarity;
     }
 
-    public CosmeticAccessibility getAccessibility()
-    {
+    public CosmeticAccessibility getAccessibility() {
         return this.accessibility;
     }
 
-    public boolean canView(Player player)
-    {
+    public boolean canView(Player player) {
         return this.permissionNeededToView == null || SamaGamesAPI.get().getPermissionsManager().hasPermission(player, this.permissionNeededToView);
     }
 
-    public boolean isOwned(Player player)
-    {
+    public boolean isOwned(Player player) {
         if (this.permissionNeededToView != null && this.canView(player))
             return true;
 
@@ -179,8 +154,7 @@ public abstract class AbstractCosmetic implements Comparable<AbstractCosmetic>
     }
 
     @Override
-    public int compareTo(AbstractCosmetic cosmetic)
-    {
+    public int compareTo(AbstractCosmetic cosmetic) {
         if (cosmetic.getStorageId() == this.storageId)
             return 1;
         else

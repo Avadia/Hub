@@ -20,8 +20,7 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class HostGameInfoToHubPacket extends Packet
-{
+public class HostGameInfoToHubPacket extends Packet {
     private UUID event;
     private UUID creator;
 

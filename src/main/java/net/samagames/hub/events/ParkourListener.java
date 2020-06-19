@@ -30,24 +30,19 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ParkourListener implements Listener
-{
+public class ParkourListener implements Listener {
     private final Hub hub;
-    private List<UUID> cooldown;
+    private final List<UUID> cooldown;
 
-    public ParkourListener(Hub hub)
-    {
+    public ParkourListener(Hub hub) {
         this.hub = hub;
         this.cooldown = new ArrayList<>();
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
-        if (event.getAction().equals(Action.PHYSICAL))
-        {
-            if (event.getClickedBlock().getType().equals(Material.GOLD_PLATE) || event.getClickedBlock().getType().equals(Material.IRON_PLATE))
-            {
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getAction().equals(Action.PHYSICAL)) {
+            if (event.getClickedBlock().getType().equals(Material.GOLD_PLATE) || event.getClickedBlock().getType().equals(Material.IRON_PLATE)) {
                 Parkour parkour = this.hub.getParkourManager().getPlayerParkour(event.getPlayer().getUniqueId());
 
                 if (parkour != null)
@@ -57,8 +52,7 @@ public class ParkourListener implements Listener
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event)
-    {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
         {
             Parkour parkour = this.hub.getParkourManager().getPlayerParkour(event.getPlayer().getUniqueId());
@@ -69,8 +63,7 @@ public class ParkourListener implements Listener
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event)
-    {
+    public void onPlayerMove(PlayerMoveEvent event) {
         if (this.cooldown.contains(event.getPlayer().getUniqueId()))
             return;
 

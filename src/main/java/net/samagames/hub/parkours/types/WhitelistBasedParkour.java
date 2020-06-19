@@ -23,12 +23,10 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class WhitelistBasedParkour extends Parkour
-{
+public class WhitelistBasedParkour extends Parkour {
     private final List<Material> whitelist;
 
-    public WhitelistBasedParkour(Hub hub, String prefix, String winPrefix, String parkourName, Location spawn, Location end, Location fail, int minimalHeight, int lifesToAdd, List<Location> checkpoints, List<Material> whitelist, int difficulty, int achievementId)
-    {
+    public WhitelistBasedParkour(Hub hub, String prefix, String winPrefix, String parkourName, Location spawn, Location end, Location fail, int minimalHeight, int lifesToAdd, List<Location> checkpoints, List<Material> whitelist, int difficulty, int achievementId) {
         super(hub, prefix, winPrefix, parkourName, spawn, end, fail, minimalHeight, lifesToAdd, checkpoints, difficulty, achievementId);
 
         this.whitelist = whitelist;
@@ -46,8 +44,7 @@ public class WhitelistBasedParkour extends Parkour
         this.whitelist.add(Material.WALL_SIGN);
     }
 
-    public boolean isWhitelisted(Material material)
-    {
+    public boolean isWhitelisted(Material material) {
         return this.whitelist.contains(material);
     }
 }

@@ -23,18 +23,15 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SoonListener implements IPacketsReceiver
-{
+public class SoonListener implements IPacketsReceiver {
     private final Hub hub;
 
-    public SoonListener(Hub hub)
-    {
+    public SoonListener(Hub hub) {
         this.hub = hub;
     }
 
     @Override
-    public void receive(String channel, String packet)
-    {
+    public void receive(String channel, String packet) {
         String[] data = packet.split(":");
 
         String game = data[0];

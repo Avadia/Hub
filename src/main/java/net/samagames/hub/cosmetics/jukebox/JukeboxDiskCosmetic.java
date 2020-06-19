@@ -3,12 +3,6 @@ package net.samagames.hub.cosmetics.jukebox;
 import com.xxmicloxx.NoteBlockAPI.Song;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.common.AbstractCosmetic;
-import net.samagames.hub.cosmetics.common.CosmeticAccessibility;
-import net.samagames.hub.cosmetics.common.CosmeticRarity;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Random;
 
 /*
  * This file is part of Hub.
@@ -26,26 +20,22 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class JukeboxDiskCosmetic extends AbstractCosmetic
-{
+public class JukeboxDiskCosmetic extends AbstractCosmetic {
     private final Song song;
     private final int seconds;
 
-    public JukeboxDiskCosmetic(Hub hub, int storageId, Song song, int seconds) throws Exception
-    {
+    public JukeboxDiskCosmetic(Hub hub, int storageId, Song song, int seconds) throws Exception {
         super(hub, "Disque", storageId);
 
         this.song = song;
         this.seconds = seconds;
     }
 
-    public Song getSong()
-    {
+    public Song getSong() {
         return this.song;
     }
 
-    public int getSeconds()
-    {
+    public int getSeconds() {
         return this.seconds;
     }
 }

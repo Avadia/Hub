@@ -24,56 +24,48 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class InventoryEditionListener implements Listener
-{
+public class InventoryEditionListener implements Listener {
     private final Hub hub;
 
-    public InventoryEditionListener(Hub hub)
-    {
+    public InventoryEditionListener(Hub hub) {
         this.hub = hub;
     }
 
     @EventHandler
-    public void onCraftItem(CraftItemEvent event)
-    {
+    public void onCraftItem(CraftItemEvent event) {
         if (!(event.getWhoClicked() instanceof Player) || !this.canDoAction((Player) event.getWhoClicked()))
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void onFurnaceBurn(FurnaceBurnEvent event)
-    {
+    public void onFurnaceBurn(FurnaceBurnEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onFurnaceSmelt(FurnaceSmeltEvent event)
-    {
+    public void onFurnaceSmelt(FurnaceSmeltEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event)
-    {
+    public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player) || !this.canDoAction((Player) event.getWhoClicked()))
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void onInventoryInteract(InventoryInteractEvent event)
-    {
+    public void onInventoryInteract(InventoryInteractEvent event) {
         if (!(event.getWhoClicked() instanceof Player) || !this.canDoAction((Player) event.getWhoClicked()))
             event.setCancelled(true);
     }
 
     @EventHandler
-    public void onSecondHandItemSwap(PlayerSwapHandItemsEvent event)
-    {
+    public void onSecondHandItemSwap(PlayerSwapHandItemsEvent event) {
         event.setCancelled(true);
     }
 
-    private boolean canDoAction(Player player)
-    {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private boolean canDoAction(Player player) {
         return this.hub.getPlayerManager().canBuild() && player != null && player.isOp() && player.getGameMode() == GameMode.CREATIVE;
     }
 }

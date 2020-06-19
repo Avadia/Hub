@@ -19,18 +19,15 @@ import net.samagames.hub.Hub;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SignReloadListener implements IPacketsReceiver
-{
+public class SignReloadListener implements IPacketsReceiver {
     private final Hub hub;
 
-    public SignReloadListener(Hub hub)
-    {
+    public SignReloadListener(Hub hub) {
         this.hub = hub;
     }
 
     @Override
-    public void receive(String channel, String packet)
-    {
+    public void receive(String channel, String packet) {
         this.hub.getSignManager().reloadList();
     }
 }

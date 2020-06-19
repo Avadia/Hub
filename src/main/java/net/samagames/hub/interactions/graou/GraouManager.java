@@ -22,7 +22,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import redis.clients.jedis.Jedis;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /*
@@ -41,13 +44,11 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GraouManager extends AbstractInteractionManager<Graou> implements Listener
-{
+public class GraouManager extends AbstractInteractionManager<Graou> implements Listener {
     private final PearlLogic pearlLogic;
     private final List<UUID> lock;
 
-    public GraouManager(Hub hub)
-    {
+    public GraouManager(Hub hub) {
         super(hub, "graou");
 
         this.pearlLogic = new PearlLogic(hub);
@@ -60,34 +61,28 @@ public class GraouManager extends AbstractInteractionManager<Graou> implements L
     }
 
     @Override
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         super.onLogin(player);
 
         this.interactions.forEach(graou -> graou.onLogin(player));
     }
 
     @Override
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         super.onLogout(player);
 
         this.interactions.forEach(graou -> graou.onLogout(player));
 
-        if (this.lock.contains(player.getUniqueId()))
-            this.lock.remove(player.getUniqueId());
+        this.lock.remove(player.getUniqueId());
     }
 
-    public void update(Player player)
-    {
+    public void update(Player player) {
         this.interactions.forEach(graou -> graou.update(player));
     }
 
     @EventHandler
-    public void onPlayerInteractEntity(PlayerInteractEntityEvent event)
-    {
-        if (event.getRightClicked().getType() == EntityType.OCELOT)
-        {
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        if (event.getRightClicked().getType() == EntityType.OCELOT) {
             if (this.lock.contains(event.getPlayer().getUniqueId()))
                 return;
 
@@ -95,10 +90,8 @@ public class GraouManager extends AbstractInteractionManager<Graou> implements L
             this.lock.add(event.getPlayer().getUniqueId());
             this.hub.getServer().getScheduler().runTaskLater(this.hub, () -> this.lock.remove(event.getPlayer().getUniqueId()), 10L);
 
-            for (Graou graou : this.interactions)
-            {
-                if (graou.getGraouEntity().getBukkitEntity().getUniqueId().equals(event.getRightClicked().getUniqueId()))
-                {
+            for (Graou graou : this.interactions) {
+                if (graou.getGraouEntity().getBukkitEntity().getUniqueId().equals(event.getRightClicked().getUniqueId())) {
                     graou.play(event.getPlayer());
                     break;
                 }
@@ -107,13 +100,11 @@ public class GraouManager extends AbstractInteractionManager<Graou> implements L
     }
 
     @Override
-    public void loadConfiguration(JsonArray rootJson)
-    {
+    public void loadConfiguration(JsonArray rootJson) {
         if (rootJson.size() == 0)
             return;
 
-        for (int i = 0; i < rootJson.size(); i++)
-        {
+        for (int i = 0; i < rootJson.size(); i++) {
             JsonObject graouJson = rootJson.get(i).getAsJsonObject();
 
             Location catLocation = LocationUtils.str2loc(graouJson.get("cat").getAsString());
@@ -128,21 +119,20 @@ public class GraouManager extends AbstractInteractionManager<Graou> implements L
         }
     }
 
-    public void deletePlayerPearl(UUID player, UUID pearl)
-    {
+    public void deletePlayerPearl(UUID player, UUID pearl) {
         Jedis jedis = SamaGamesAPI.get().getBungeeResource();
 
         if (jedis == null)
             return;
 
-        if (jedis.exists("pearls:" + player.toString() + ":" + pearl.toString()))
-            jedis.del("pearls:" + player.toString() + ":" + pearl.toString());
+        final String key = "pearls:" + player.toString() + ":" + pearl.toString();
+        if (jedis.exists(key))
+            jedis.del(key);
 
         jedis.close();
     }
 
-    public List<Pearl> getPlayerPearls(UUID player)
-    {
+    public List<Pearl> getPlayerPearls(UUID player) {
         List<Pearl> pearls = new ArrayList<>();
         Jedis jedis = SamaGamesAPI.get().getBungeeResource();
 
@@ -154,13 +144,12 @@ public class GraouManager extends AbstractInteractionManager<Graou> implements L
 
         jedis.close();
 
-        Collections.sort(pearls, (o1, o2) -> o1.getStars() - o2.getStars());
+        pearls.sort(Comparator.comparingInt(Pearl::getStars));
 
         return pearls;
     }
 
-    public PearlLogic getPearlLogic()
-    {
+    public PearlLogic getPearlLogic() {
         return this.pearlLogic;
     }
 }

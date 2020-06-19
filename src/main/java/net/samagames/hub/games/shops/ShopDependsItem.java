@@ -31,59 +31,42 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ShopDependsItem extends ShopItem
-{
-    private ShopItem dependsOn;
+public class ShopDependsItem extends ShopItem {
+    private final ShopItem dependsOn;
 
-    public ShopDependsItem(Hub hub, String categoryName, int storageId, int slot, int[] resetIds, ShopItem dependsOn) throws Exception
-    {
+    public ShopDependsItem(Hub hub, String categoryName, int storageId, int slot, int[] resetIds, ShopItem dependsOn) throws Exception {
         super(hub, categoryName, storageId, slot, resetIds);
 
         this.dependsOn = dependsOn;
     }
 
     @Override
-    public void execute(Player player, ClickType clickType)
-    {
-        if (this.isActive(player))
-        {
+    public void execute(Player player, ClickType clickType) {
+        if (this.isActive(player)) {
             player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Cet objet est déjà équipé.");
-        }
-        else if (this.isOwned(player) || this.isDefaultItem())
-        {
+        } else if (this.isOwned(player) || this.isDefaultItem()) {
             this.resetCurrents(player);
 
-            try
-            {
+            try {
                 if (SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(this.storageId) == null)
                     SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).addItem(this.storageId, 0, 0, true);
                 else
                     SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).setSelectedItem(this.storageId, true);
-                
+
                 player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.GREEN + "Vous avez équipé " + ChatColor.AQUA + this.getIcon().getItemMeta().getDisplayName());
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Une erreur s'est produite. Veuillez réessayer ultérieurement.");
 
                 return;
             }
-        }
-        else if (!CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()).canAccess(player))
-        {
+        } else if (!CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()).canAccess(player)) {
             player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Vous n'avez pas le grade nécessaire pour acheter cet objet.");
-        }
-        else if (this.dependsOn != null && !hasDepend(player))
-        {
+        } else if (this.dependsOn != null && !hasDepend(player)) {
             player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Il est nécessaire de posséder " + ChatColor.AQUA + this.dependsOn.getIcon().getItemMeta().getDisplayName() + ChatColor.RED + " pour acheter cela.");
-        }
-        else if (!SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).hasEnoughCoins(this.itemDescription.getPriceCoins()))
-        {
+        } else if (!SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).hasEnoughCoins(this.itemDescription.getPriceCoins())) {
             player.sendMessage(PlayerManager.SHOPPING_TAG + ChatColor.RED + "Vous n'avez pas assez de pièces pour acheter cela.");
-        }
-        else
-        {
+        } else {
             GuiConfirm confirm = new GuiConfirm(this.hub, (AbstractGui) this.hub.getGuiManager().getPlayerGui(player), (parent) ->
             {
                 if (this.isActive(player))
@@ -114,14 +97,12 @@ public class ShopDependsItem extends ShopItem
     }
 
     @Override
-    public ItemStack getFormattedIcon(Player player)
-    {
+    public ItemStack getFormattedIcon(Player player) {
         ItemStack stack = getIcon().clone();
         ItemMeta meta = stack.getItemMeta();
         List<String> lore = meta.getLore() != null ? meta.getLore() : new ArrayList<>();
 
-        if (CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()) != CosmeticAccessibility.ALL)
-        {
+        if (CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()) != CosmeticAccessibility.ALL) {
             lore.add("");
             lore.add(ChatColor.GRAY + "Vous devez posséder le grade");
             lore.add(CosmeticAccessibility.valueOf(this.itemDescription.getRankAccessibility()).getDisplay() + ChatColor.GRAY + " pour pouvoir utiliser cet");
@@ -134,7 +115,7 @@ public class ShopDependsItem extends ShopItem
             lore.add(ChatColor.GREEN + "Objet actif");
         else if (this.isOwned(player) || this.isDefaultItem())
             lore.add(ChatColor.GREEN + "Objet possédé");
-        else if (( this.dependsOn != null && this.hasDepend(player)) || this.dependsOn == null)
+        else if (this.dependsOn == null || this.hasDepend(player))
             lore.add(ChatColor.GRAY + "Prix : " + ChatColor.GOLD + this.itemDescription.getPriceCoins() + " pièces");
         else
             lore.add(ChatColor.RED + "Nécessite " + ChatColor.AQUA + this.dependsOn.getIcon().getItemMeta().getDisplayName());
@@ -145,14 +126,12 @@ public class ShopDependsItem extends ShopItem
         return stack;
     }
 
-    public ShopDependsItem defaultItem()
-    {
+    public ShopDependsItem defaultItem() {
         super.defaultItem();
         return this;
     }
 
-    private boolean hasDepend(Player player)
-    {
+    private boolean hasDepend(Player player) {
         return this.dependsOn.isDefaultItem() || SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(this.dependsOn.getStorageId()) != null;
     }
 }

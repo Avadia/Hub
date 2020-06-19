@@ -20,19 +20,16 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class EntityGraou extends EntityOcelot
-{
+public class EntityGraou extends EntityOcelot {
     private PathfinderGoalWalkToTile pathfinderGoalWalkToTile;
 
-    public EntityGraou(World world)
-    {
+    public EntityGraou(World world) {
         super(world);
 
         this.setCatType(3);
     }
 
-    public void postInit(float yaw, float pitch)
-    {
+    public void postInit(float yaw, float pitch) {
         super.setYawPitch(yaw, pitch);
 
         this.setTamed(true);
@@ -42,8 +39,7 @@ public class EntityGraou extends EntityOcelot
     }
 
     @Override
-    protected void r()
-    {
+    protected void r() {
         this.pathfinderGoalWalkToTile = new PathfinderGoalWalkToTile(this, 1.0F);
 
         this.goalSit = new PathfinderGoalSit(this);
@@ -52,37 +48,37 @@ public class EntityGraou extends EntityOcelot
     }
 
     @Override
-    protected void dm() {}
+    protected void dm() {
+    }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {}
+    public void b(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    public boolean c(NBTTagCompound nbttagcompound)
-    {
+    public boolean c(NBTTagCompound nbttagcompound) {
         return false;
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {}
+    public void a(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    public boolean d(NBTTagCompound nbttagcompound)
-    {
+    public boolean d(NBTTagCompound nbttagcompound) {
         return false;
     }
 
     @Override
-    public void f(NBTTagCompound nbttagcompound) {}
+    public void f(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    protected SoundEffect F()
-    {
+    protected SoundEffect F() {
         return SoundEffects.T;
     }
 
-    public PathfinderGoalWalkToTile getPathfinderGoalWalkToTile()
-    {
+    public PathfinderGoalWalkToTile getPathfinderGoalWalkToTile() {
         return this.pathfinderGoalWalkToTile;
     }
 }

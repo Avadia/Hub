@@ -38,12 +38,10 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PaintballDisplayer extends AbstractDisplayer implements Listener
-{
+public class PaintballDisplayer extends AbstractDisplayer implements Listener {
     private final UUID uuid;
 
-    public PaintballDisplayer(Hub hub, Player player)
-    {
+    public PaintballDisplayer(Hub hub, Player player) {
         super(hub, player);
 
         this.uuid = UUID.randomUUID();
@@ -51,24 +49,32 @@ public class PaintballDisplayer extends AbstractDisplayer implements Listener
         hub.getServer().getPluginManager().registerEvents(this, hub);
     }
 
+    @SuppressWarnings("SameParameterValue")
+    private static List<Block> getNearbyBlocks(Location location, int radius) {
+        List<Block> blocks = new ArrayList<>();
+
+        for (int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++)
+            for (int y = location.getBlockY() - radius; y <= location.getBlockY() + radius; y++)
+                for (int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++)
+                    blocks.add(location.getWorld().getBlockAt(x, y, z));
+
+        return blocks;
+    }
+
     @Override
-    public void display()
-    {
-        new BukkitRunnable()
-        {
+    public void display() {
+        new BukkitRunnable() {
             private int times = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 Snowball snowball = PaintballDisplayer.this.player.launchProjectile(Snowball.class);
                 snowball.setVelocity(snowball.getVelocity().multiply(1.5));
                 snowball.setMetadata("paintball-ball", new FixedMetadataValue(PaintballDisplayer.this.hub, PaintballDisplayer.this.uuid.toString()));
 
                 this.times++;
 
-                if (this.times == 30)
-                {
+                if (this.times == 30) {
                     PaintballDisplayer.this.restore();
                     PaintballDisplayer.this.end();
 
@@ -80,14 +86,13 @@ public class PaintballDisplayer extends AbstractDisplayer implements Listener
         }.runTaskTimer(this.hub, 5L, 5L);
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
-    public void onProjectileHit(ProjectileHitEvent event)
-    {
+    public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntity().getType() != EntityType.SNOWBALL || !event.getEntity().hasMetadata("paintball-ball") || !event.getEntity().getMetadata("paintball-ball").get(0).asString().equals(this.uuid.toString()))
             return;
 
-        for (Block block : getNearbyBlocks(event.getEntity().getLocation(), 2))
-        {
+        for (Block block : getNearbyBlocks(event.getEntity().getLocation(), 2)) {
             if (block.getType() == Material.AIR || block.getType() == Material.SIGN || block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
                 continue;
 
@@ -105,29 +110,16 @@ public class PaintballDisplayer extends AbstractDisplayer implements Listener
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with) {}
+    public void handleInteraction(Entity who, Entity with) {
+    }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return false;
     }
 
     @Override
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
-    }
-
-    private static List<Block> getNearbyBlocks(Location location, int radius)
-    {
-        List<Block> blocks = new ArrayList<>();
-
-        for(int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++)
-            for(int y = location.getBlockY() - radius; y <= location.getBlockY() + radius; y++)
-                for(int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++)
-                    blocks.add(location.getWorld().getBlockAt(x, y, z));
-
-        return blocks;
     }
 }

@@ -24,19 +24,16 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class GuiMeow extends AbstractGui
-{
+class GuiMeow extends AbstractGui {
     private final Meow parent;
 
-    GuiMeow(Hub hub, Meow parent)
-    {
+    GuiMeow(Hub hub, Meow parent) {
         super(hub);
         this.parent = parent;
     }
 
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         this.inventory = this.hub.getServer().createInventory(null, 36, "Meow");
 
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
@@ -47,8 +44,7 @@ class GuiMeow extends AbstractGui
     }
 
     @Override
-    public void update(Player player)
-    {
+    public void update(Player player) {
         for (Bonus bonus : this.hub.getInteractionManager().getMeowManager().getBonus())
             this.setSlotData(bonus.getIcon(player), bonus.getSlot(), bonus.isAbleFor(player) ? "bonus_" + bonus.getId() : "taken");
 
@@ -56,10 +52,8 @@ class GuiMeow extends AbstractGui
     }
 
     @Override
-    public void onClick(Player player, ItemStack stack, String action, ClickType clickType)
-    {
-        if (action.startsWith("bonus_"))
-        {
+    public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
+        if (action.startsWith("bonus_")) {
             int bonusId = Integer.parseInt(action.split("_")[1]);
 
             Bonus bonus = this.hub.getInteractionManager().getMeowManager().getBonusById(bonusId);
@@ -74,14 +68,10 @@ class GuiMeow extends AbstractGui
 
             this.hub.getScoreboardManager().update(player);
             this.update(player);
-        }
-        else if (action.equals("taken"))
-        {
+        } else if (action.equals("taken")) {
             player.sendMessage(Meow.TAG + ChatColor.RED + "Vous ne pouvez récupérer ce bonus pour le moment.");
             player.playSound(player.getLocation(), Sound.ENTITY_CAT_HISS, 1.0F, 1.0F);
-        }
-        else if (action.equals("back"))
-        {
+        } else if (action.equals("back")) {
             this.hub.getGuiManager().closeGui(player);
             this.parent.stop(player);
         }

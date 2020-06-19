@@ -3,7 +3,6 @@ package net.samagames.hub.commands.moderating;
 import net.samagames.hub.Hub;
 import net.samagames.hub.commands.AbstractCommand;
 import net.samagames.hub.common.players.PlayerManager;
-import net.samagames.hub.cosmetics.CosmeticManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
@@ -24,16 +23,13 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandPlaylistLock extends AbstractCommand
-{
-    public CommandPlaylistLock(Hub hub)
-    {
+public class CommandPlaylistLock extends AbstractCommand {
+    public CommandPlaylistLock(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
         this.hub.getCosmeticManager().getJukeboxManager().toggleLock();
         this.hub.getServer().broadcastMessage(PlayerManager.MODERATING_TAG + ChatColor.RED + "La playlist du jukebox a été bloquée par un modérateur.");
 

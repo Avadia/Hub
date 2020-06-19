@@ -24,25 +24,19 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandWoot extends AbstractCommand
-{
-    public CommandWoot(Hub hub)
-    {
+public class CommandWoot extends AbstractCommand {
+    public CommandWoot(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
         JukeboxSong current = this.hub.getCosmeticManager().getJukeboxManager().getCurrentSong();
         String tag = JukeboxManager.JUKEBOX_TAG;
 
-        if (current == null)
-        {
+        if (current == null) {
             player.sendMessage(tag + ChatColor.RED + "Aucun son n'est lu actuellement.");
-        }
-        else
-        {
+        } else {
             if (current.getPlayedBy().equals(player.getName()))
                 player.sendMessage(tag + ChatColor.RED + "Vous ne pouvez pas voter sur votre musique.");
             else if (!current.woot(player))

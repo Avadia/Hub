@@ -31,30 +31,26 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiClickMe extends AbstractGui
-{
+public class GuiClickMe extends AbstractGui {
     private final String name;
     private final UUID uuid;
 
-    public GuiClickMe(Hub hub, String name, UUID uuid)
-    {
+    public GuiClickMe(Hub hub, String name, UUID uuid) {
         super(hub);
 
         this.name = name;
         this.uuid = uuid;
     }
 
-    public GuiClickMe(Hub hub, Player who)
-    {
+    public GuiClickMe(Hub hub, Player who) {
         this(hub, SamaGamesAPI.get().getPlayerManager().getPlayerData(who.getUniqueId()).getDisplayName(), who.getUniqueId());
     }
 
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         this.inventory = this.hub.getServer().createInventory(null, 54, "ClickMe de " + this.name);
 
-        this.setSlotData(ChatColor.GOLD + this.name, this.getPlayerHead(), 13, new String[] {
+        this.setSlotData(ChatColor.GOLD + this.name, this.getPlayerHead(), 13, new String[]{
                 ChatColor.GRAY + "Rang : " + RankUtils.getFormattedRank(this.uuid, false),
                 ""
         }, "none");
@@ -72,10 +68,8 @@ public class GuiClickMe extends AbstractGui
     }
 
     @Override
-    public void onClick(Player player, ItemStack stack, String action, ClickType clickType)
-    {
-        switch (action)
-        {
+    public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
+        switch (action) {
             case "friend":
                 new FancyMessage(ChatColor.YELLOW + "Cliquez sur ").then("[Inviter]").color(ChatColor.GREEN).suggest("/friends add " + this.name).then(" pour inviter ce joueur en ami.").color(ChatColor.YELLOW).send(player);
                 this.hub.getGuiManager().closeGui(player);
@@ -101,8 +95,8 @@ public class GuiClickMe extends AbstractGui
         }
     }
 
-    private ItemStack getPlayerHead()
-    {
+    @SuppressWarnings("deprecation")
+    private ItemStack getPlayerHead() {
         ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
         SkullMeta meta = (SkullMeta) head.getItemMeta();
         meta.setOwner(this.name);
@@ -111,16 +105,14 @@ public class GuiClickMe extends AbstractGui
         return head;
     }
 
-    private String getCoinsItemTitle()
-    {
+    private String getCoinsItemTitle() {
         if (SamaGamesAPI.get().getSettingsManager().getSettings(this.uuid).isAllowCoinsOnClick())
             return ChatColor.GOLD + String.valueOf(SamaGamesAPI.get().getPlayerManager().getPlayerData(this.uuid).getCoins()) + " pièces";
         else
             return ChatColor.RED + "Cette information est privée !";
     }
 
-    private String getPowderItemTitle()
-    {
+    private String getPowderItemTitle() {
         if (SamaGamesAPI.get().getSettingsManager().getSettings(this.uuid).isAllowPowdersOnClick())
             return ChatColor.AQUA + String.valueOf(SamaGamesAPI.get().getPlayerManager().getPlayerData(this.uuid).getPowders()) + " poussières d'\u272F";
         else

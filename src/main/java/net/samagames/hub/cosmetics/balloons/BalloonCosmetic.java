@@ -31,18 +31,16 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class BalloonCosmetic extends AbstractCosmetic
-{
-    private Map<UUID, LivingEntity[]> balloons;
-    private Map<UUID, BukkitTask> destroyTasks;
+class BalloonCosmetic extends AbstractCosmetic {
+    private final Map<UUID, LivingEntity[]> balloons;
+    private final Map<UUID, BukkitTask> destroyTasks;
 
-    private EntityType entityType;
-    private int count;
-    private Random random;
-    private String name;
+    private final EntityType entityType;
+    private final int count;
+    private final Random random;
+    private final String name;
 
-    BalloonCosmetic(Hub hub, int storageId, EntityType entityType, String name, int count) throws Exception
-    {
+    BalloonCosmetic(Hub hub, int storageId, EntityType entityType, String name, int count) throws Exception {
         super(hub, "Ballon", storageId);
 
         this.entityType = entityType;
@@ -53,20 +51,17 @@ class BalloonCosmetic extends AbstractCosmetic
         this.name = name;
     }
 
-    BalloonCosmetic(Hub hub, int storageId, EntityType entityType, int count) throws Exception
-    {
+    BalloonCosmetic(Hub hub, int storageId, EntityType entityType, int count) throws Exception {
         this(hub, storageId, entityType, null, count);
     }
 
-    public void spawn(Player player)
-    {
+    public void spawn(Player player) {
         LivingEntity[] livingEntities = new LivingEntity[this.count];
 
-        for (int i = 0; i < this.count; i++)
-        {
-            livingEntities[i] = (LivingEntity)player.getWorld().spawnEntity(player.getLocation().add(random.nextDouble() % 2 - 1, 2.5D, random.nextDouble() % 2 - 1), this.entityType);
+        for (int i = 0; i < this.count; i++) {
+            livingEntities[i] = (LivingEntity) player.getWorld().spawnEntity(player.getLocation().add(random.nextDouble() % 2 - 1, 2.5D, random.nextDouble() % 2 - 1), this.entityType);
             livingEntities[i].addPotionEffect(PotionEffectType.LEVITATION.createEffect(Integer.MAX_VALUE, 2));
-            ((CraftLivingEntity)livingEntities[i]).getHandle().setInvisible(true);
+            ((CraftLivingEntity) livingEntities[i]).getHandle().setInvisible(true);
             EntityUtils.freezeEntity(livingEntities[i]);
             livingEntities[i].setLeashHolder(player);
 
@@ -78,8 +73,7 @@ class BalloonCosmetic extends AbstractCosmetic
         this.balloons.put(player.getUniqueId(), livingEntities);
     }
 
-    public void remove(Player player)
-    {
+    public void remove(Player player) {
         BukkitTask bukkitTask = this.destroyTasks.get(player.getUniqueId());
 
         if (bukkitTask != null)
@@ -96,19 +90,16 @@ class BalloonCosmetic extends AbstractCosmetic
             livingEntity.remove();
     }
 
-    private void autoCheck(Player player)
-    {
+    private void autoCheck(Player player) {
         LivingEntity[] livingEntities = this.balloons.get(player.getUniqueId());
 
         if (livingEntities == null)
             return;
 
-        for (LivingEntity livingEntity : livingEntities)
-        {
-            if (livingEntity.isDead() || !livingEntity.isLeashed())
-            {
+        for (LivingEntity livingEntity : livingEntities) {
+            if (livingEntity.isDead() || !livingEntity.isLeashed()) {
                 this.hub.getCosmeticManager().getBalloonManager().disableCosmetic(player, this, false, false);
-                break ;
+                break;
             }
         }
     }

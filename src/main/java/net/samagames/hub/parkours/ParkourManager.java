@@ -16,7 +16,9 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /*
@@ -35,12 +37,10 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ParkourManager extends AbstractManager
-{
+public class ParkourManager extends AbstractManager {
     private final List<Parkour> parkours;
 
-    public ParkourManager(Hub hub)
-    {
+    public ParkourManager(Hub hub) {
         super(hub);
 
         this.parkours = new ArrayList<>();
@@ -48,19 +48,17 @@ public class ParkourManager extends AbstractManager
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.parkours.forEach(Parkour::onDisable);
     }
 
     @Override
-    public void onLogin(Player player) { /** Not needed **/ }
+    public void onLogin(Player player) { /* Not needed **/}
 
     @Override
-    public void onLogout(Player player) { /** Not needed **/ }
+    public void onLogout(Player player) { /* Not needed **/}
 
-    public Parkour getPlayerParkour(UUID player)
-    {
+    public Parkour getPlayerParkour(UUID player) {
         for (Parkour parkour : this.parkours)
             if (parkour.isParkouring(player))
                 return parkour;
@@ -68,33 +66,27 @@ public class ParkourManager extends AbstractManager
         return null;
     }
 
-    public List<Parkour> getParkours()
-    {
+    public List<Parkour> getParkours() {
         return this.parkours;
     }
 
-    private void reloadConfig()
-    {
+    private void reloadConfig() {
         this.parkours.clear();
         this.loadConfig();
     }
 
-    private void loadConfig()
-    {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void loadConfig() {
         File configuration = new File(this.hub.getDataFolder(), "parkours.json");
 
-        if (!configuration.exists())
-        {
-            try
-            {
+        if (!configuration.exists()) {
+            try {
                 configuration.createNewFile();
 
                 PrintWriter writer = new PrintWriter(configuration);
                 writer.println("{ \"parkours\": [] }");
                 writer.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -107,8 +99,7 @@ public class ParkourManager extends AbstractManager
 
         JsonArray jsonParkours = jsonRoot.getAsJsonArray("parkours");
 
-        for (int i = 0; i < jsonParkours.size(); i++)
-        {
+        for (int i = 0; i < jsonParkours.size(); i++) {
             JsonObject jsonParkour = jsonParkours.get(i).getAsJsonObject();
 
             String name = jsonParkour.get("name").getAsString();
@@ -130,8 +121,7 @@ public class ParkourManager extends AbstractManager
             List<Material> whitelist = new ArrayList<>();
             JsonArray jsonMaterials = jsonParkour.get("whitelist").getAsJsonArray();
 
-            for (int j = 0; j < jsonMaterials.size(); j++)
-            {
+            for (int j = 0; j < jsonMaterials.size(); j++) {
                 String materialName = jsonMaterials.get(j).getAsString();
 
                 if (Material.matchMaterial(materialName) != null)
@@ -147,8 +137,7 @@ public class ParkourManager extends AbstractManager
 
         // -------------------
 
-        if (jsonRoot.has("developpers-parkour"))
-        {
+        if (jsonRoot.has("developpers-parkour")) {
             JsonObject jsonParkour = jsonRoot.getAsJsonObject("developpers-parkour");
 
             Location begin = LocationUtils.str2loc(jsonParkour.get("begin").getAsString());
@@ -164,13 +153,11 @@ public class ParkourManager extends AbstractManager
         }
     }
 
-    private void registerWhitelistBasedParkour(String name, String prefix, String winPrefix, Location begin, Location end, Location fail, int minimalHeight, int lifesOnCheckpoint, List<Location> checkpoints, List<Material> whitelist, int difficulty, int achievementId)
-    {
+    private void registerWhitelistBasedParkour(String name, String prefix, String winPrefix, Location begin, Location end, Location fail, int minimalHeight, int lifesOnCheckpoint, List<Location> checkpoints, List<Material> whitelist, int difficulty, int achievementId) {
         this.registerParkour(new WhitelistBasedParkour(this.hub, name, prefix, winPrefix, begin, end, fail, minimalHeight, lifesOnCheckpoint, checkpoints, whitelist, difficulty, achievementId));
     }
 
-    private void registerParkour(Parkour parkour)
-    {
+    private void registerParkour(Parkour parkour) {
         if (!this.parkours.contains(parkour))
             this.parkours.add(parkour);
 

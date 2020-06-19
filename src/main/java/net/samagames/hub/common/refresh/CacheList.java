@@ -21,51 +21,38 @@ import java.util.concurrent.ConcurrentHashMap;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class CacheList extends ConcurrentHashMap<Integer, JsonHub>
-{
+class CacheList extends ConcurrentHashMap<Integer, JsonHub> {
     private final Map<Integer, Integer> timeouts;
 
-    CacheList()
-    {
+    CacheList() {
         this.timeouts = new ConcurrentHashMap<>();
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
-    public JsonHub put(Integer hubNumber, JsonHub jsonHub)
-    {
-        if (this.containsKey(hubNumber))
-            this.remove(hubNumber);
+    public JsonHub put(Integer hubNumber, JsonHub jsonHub) {
+        this.remove(hubNumber);
 
-        if (this.timeouts.containsKey(hubNumber))
-            this.timeouts.remove(hubNumber);
+        this.timeouts.remove(hubNumber);
 
         this.timeouts.put(hubNumber, 10);
 
         return super.put(hubNumber, jsonHub);
     }
 
-    public void update()
-    {
+    public void update() {
         List<Integer> toRemove = new ArrayList<>();
 
-        for (int hubNumber : this.keySet())
-        {
-            if (!this.timeouts.containsKey(hubNumber))
-            {
+        for (int hubNumber : this.keySet()) {
+            if (!this.timeouts.containsKey(hubNumber)) {
                 toRemove.add(hubNumber);
-            }
-            else
-            {
+            } else {
                 int newValue = this.timeouts.get(hubNumber) - 1;
 
-                if (newValue <= 0)
-                {
-                    this.timeouts.remove(hubNumber);
+                this.timeouts.remove(hubNumber);
+                if (newValue <= 0) {
                     toRemove.add(hubNumber);
-                }
-                else
-                {
-                    this.timeouts.remove(hubNumber);
+                } else {
                     this.timeouts.put(hubNumber, newValue);
                 }
             }

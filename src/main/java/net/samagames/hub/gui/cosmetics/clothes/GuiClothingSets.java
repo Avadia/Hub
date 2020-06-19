@@ -3,8 +3,6 @@ package net.samagames.hub.gui.cosmetics.clothes;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.clothes.ClothRegistry;
 import net.samagames.hub.cosmetics.clothes.ClothingSet;
-import net.samagames.hub.cosmetics.common.AbstractCosmetic;
-import net.samagames.hub.cosmetics.common.AbstractCosmeticManager;
 import net.samagames.hub.gui.AbstractGui;
 import net.samagames.hub.gui.cosmetics.GuiCosmetics;
 import org.bukkit.ChatColor;
@@ -29,25 +27,20 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiClothingSets extends AbstractGui
-{
-    public GuiClothingSets(Hub hub)
-    {
+public class GuiClothingSets extends AbstractGui {
+    public GuiClothingSets(Hub hub) {
         super(hub);
     }
 
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         int lines = 1;
         int slot = 0;
 
-        for (ClothingSet set : ((ClothRegistry) this.hub.getCosmeticManager().getClothManager().getRegistry()).getClothingSets().values())
-        {
+        for (ClothingSet ignored : ((ClothRegistry) this.hub.getCosmeticManager().getClothManager().getRegistry()).getClothingSets().values()) {
             slot++;
 
-            if (slot == 8)
-            {
+            if (slot == 8) {
                 slot = 0;
                 lines++;
             }
@@ -61,20 +54,17 @@ public class GuiClothingSets extends AbstractGui
     }
 
     @Override
-    public void update(Player player)
-    {
+    public void update(Player player) {
         int[] baseSlots = {10, 11, 12, 13, 14, 15, 16};
         int lines = 0;
         int slot = 0;
 
-        for (ClothingSet set : ((ClothRegistry) this.hub.getCosmeticManager().getClothManager().getRegistry()).getClothingSets().values())
-        {
+        for (ClothingSet set : ((ClothRegistry) this.hub.getCosmeticManager().getClothManager().getRegistry()).getClothingSets().values()) {
             this.setSlotData(set.getIcon(player), (baseSlots[slot] + (lines * 9)), "set_" + set.getStorageId());
 
             slot++;
 
-            if (slot == 7)
-            {
+            if (slot == 7) {
                 slot = 0;
                 lines++;
             }
@@ -85,19 +75,13 @@ public class GuiClothingSets extends AbstractGui
     }
 
     @Override
-    public void onClick(Player player, ItemStack stack, String action, ClickType clickType)
-    {
-        if (action.startsWith("set_"))
-        {
+    public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
+        if (action.startsWith("set_")) {
             int setStorageId = Integer.parseInt(action.split("_")[1]);
             this.hub.getGuiManager().openGui(player, new GuiClothingSet(this.hub, ((ClothRegistry) this.hub.getCosmeticManager().getClothManager().getRegistry()).getClothingSetByStorageId(setStorageId)));
-        }
-        else if (action.equals("delete"))
-        {
+        } else if (action.equals("delete")) {
             this.hub.getCosmeticManager().getClothManager().disableCosmetics(player, false, false);
-        }
-        else if (action.equals("back"))
-        {
+        } else if (action.equals("back")) {
             this.hub.getGuiManager().openGui(player, new GuiCosmetics(this.hub));
         }
     }

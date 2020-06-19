@@ -16,7 +16,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitTask;
 import redis.clients.jedis.Jedis;
 
 import java.util.*;
@@ -39,8 +38,7 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlayerManager extends AbstractManager
-{
+public class PlayerManager extends AbstractManager {
     public static final String SETTINGS_TAG = ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Paramêtres" + ChatColor.DARK_AQUA + "] " + ChatColor.RESET;
     public static final String MODERATING_TAG = ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Modération" + ChatColor.DARK_AQUA + "] " + ChatColor.RESET;
     public static final String SHOPPING_TAG = ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Boutique" + ChatColor.DARK_AQUA + "] " + ChatColor.RESET;
@@ -59,8 +57,7 @@ public class PlayerManager extends AbstractManager
 
     private boolean canBuild;
 
-    public PlayerManager(Hub hub)
-    {
+    public PlayerManager(Hub hub) {
         super(hub);
 
         this.selections = new HashMap<>();
@@ -73,15 +70,13 @@ public class PlayerManager extends AbstractManager
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.selections.clear();
         this.hiders.clear();
     }
 
     @Override
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         this.log(Level.INFO, "Handling login from '" + player.getUniqueId() + "'...");
 
         this.hub.getScheduledExecutorService().execute(() ->
@@ -99,8 +94,7 @@ public class PlayerManager extends AbstractManager
                 Jedis jedis = SamaGamesAPI.get().getBungeeResource();
                 String key = "lastgame:" + player.getUniqueId().toString();
 
-                if (jedis != null && jedis.exists(key))
-                {
+                if (jedis != null && jedis.exists(key)) {
                     String lastGame = jedis.get(key);
                     jedis.del(key);
 
@@ -108,9 +102,7 @@ public class PlayerManager extends AbstractManager
                         player.teleport(this.hub.getGameManager().getGameByIdentifier(lastGame).getLobbySpawn());
                     else
                         player.teleport(this.spawn);
-                }
-                else
-                {
+                } else {
                     player.teleport(this.spawn);
                 }
 
@@ -121,24 +113,19 @@ public class PlayerManager extends AbstractManager
 
                 this.staticInventory.setInventoryToPlayer(player);
 
-                if (RestrictedVersion.isLoggedInPost19(player))
-                {
-                    try
-                    {
+                if (RestrictedVersion.isLoggedInPost19(player)) {
+                    try {
                         IPermissionsEntity permissionsEntity = SamaGamesAPI.get().getPermissionsManager().getPlayer(player.getUniqueId());
 
-                        if (permissionsEntity.hasPermission("network.vipplus") && SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isElytraActivated())
-                        {
+                        if (permissionsEntity.hasPermission("network.vipplus") && SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isElytraActivated()) {
                             ItemStack elytra = new ItemStack(Material.ELYTRA);
                             ItemMeta meta = elytra.getItemMeta();
-                            meta.spigot().setUnbreakable(true);
+                            meta.setUnbreakable(true);
                             elytra.setItemMeta(meta);
 
                             player.getInventory().setChestplate(elytra);
                         }
-                    }
-                    catch (NullPointerException ignored)
-                    {
+                    } catch (NullPointerException ignored) {
                         player.sendMessage(ChatColor.RED + "Une erreur a été détectée lors du chargement de votre joueur, vous devrez peut-être vous reconnecter.");
                     }
                 }
@@ -173,8 +160,7 @@ public class PlayerManager extends AbstractManager
     }
 
     @Override
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         this.log(Level.INFO, "Handling logout from '" + player.getUniqueId() + "'...");
 
         this.hub.getScheduledExecutorService().execute(() ->
@@ -183,73 +169,60 @@ public class PlayerManager extends AbstractManager
 
             this.hub.getTaskManager().getPlayersAwayFromKeyboardTask().removePlayer(player.getUniqueId());
 
-            if (this.selections.containsKey(player.getUniqueId()))
-                this.selections.remove(player.getUniqueId());
+            this.selections.remove(player.getUniqueId());
         });
     }
 
-    public void addHider(Player hider)
-    {
+    public void addHider(Player hider) {
         this.hiders.add(hider.getUniqueId());
 
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
                 this.hub.getServer().getOnlinePlayers().stream().filter(player -> !SamaGamesAPI.get().getPermissionsManager().hasPermission(player, "hub.announce") && !SamaGamesAPI.get().getFriendsManager().areFriends(hider.getUniqueId(), player.getUniqueId())).forEach(player ->
-                        this.hub.getServer().getScheduler().runTask(this.hub, () -> hider.hidePlayer(player))));
+                        this.hub.getServer().getScheduler().runTask(this.hub, () -> hider.hidePlayer(this.hub, player))));
     }
 
-    public void removeHider(Player player)
-    {
-        if (this.hiders.contains(player.getUniqueId()))
-            this.hiders.remove(player.getUniqueId());
+    public void removeHider(Player player) {
+        this.hiders.remove(player.getUniqueId());
 
-        this.hub.getServer().getScheduler().runTask(this.hub, () -> this.hub.getServer().getOnlinePlayers().forEach(player::showPlayer));
+        this.hub.getServer().getScheduler().runTask(this.hub, () -> this.hub.getServer().getOnlinePlayers().forEach(player1 -> player.showPlayer(this.hub, player1)));
     }
 
-    private void updateHiders(Player newConnected)
-    {
+    private void updateHiders(Player newConnected) {
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
         {
-            List<UUID> hidersUUIDList = new ArrayList<>();
-            hidersUUIDList.addAll(this.hiders);
+            List<UUID> hidersUUIDList = new ArrayList<>(this.hiders);
 
-            for (UUID hiderUUID : hidersUUIDList)
-            {
+            for (UUID hiderUUID : hidersUUIDList) {
                 Player hider = this.hub.getServer().getPlayer(hiderUUID);
 
                 if (hider != null && !hider.equals(newConnected))
                     if (!SamaGamesAPI.get().getPermissionsManager().hasPermission(newConnected, "hub.announce") && !SamaGamesAPI.get().getFriendsManager().areFriends(newConnected.getUniqueId(), hiderUUID))
-                        this.hub.getServer().getScheduler().runTask(this.hub, () -> hider.hidePlayer(newConnected));
+                        this.hub.getServer().getScheduler().runTask(this.hub, () -> hider.hidePlayer(this.hub, newConnected));
             }
         });
     }
 
-    public void setSelection(Player player, Location selection)
-    {
+    public void setSelection(Player player, Location selection) {
         this.selections.put(player.getUniqueId(), selection);
     }
 
-    public void setBuild(boolean canBuild)
-    {
+    public void setBuild(boolean canBuild) {
         this.canBuild = canBuild;
     }
 
-    public Location getSpawn()
-    {
+    public Location getSpawn() {
         return this.spawn;
     }
 
-    public StaticInventory getStaticInventory()
-    {
+    public StaticInventory getStaticInventory() {
         return this.staticInventory;
     }
 
-    public Location getSelection(Player player)
-    {
-        return this.selections.containsKey(player.getUniqueId()) ? this.selections.get(player.getUniqueId()) : null;
+    public Location getSelection(Player player) {
+        return this.selections.getOrDefault(player.getUniqueId(), null);
     }
 
-    public boolean isBusy(Player player)
-    {
+    public boolean isBusy(Player player) {
         if (this.hub.getGuiManager().getPlayerGui(player.getUniqueId()) != null)
             return true;
         else if (this.hub.getParkourManager().getPlayerParkour(player.getUniqueId()) != null)
@@ -258,19 +231,14 @@ public class PlayerManager extends AbstractManager
             return true;
         else if (this.hub.getCosmeticManager().getGadgetManager().hasGadget(player))
             return true;
-        else if (this.hub.getCosmeticManager().getGadgetManager().isInteracting(player))
-            return true;
-
-        return false;
+        else return this.hub.getCosmeticManager().getGadgetManager().isInteracting(player);
     }
 
-    public boolean canBuild()
-    {
+    public boolean canBuild() {
         return this.canBuild;
     }
 
-    private void checkAchievements(Player player)
-    {
+    private void checkAchievements(Player player) {
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () ->
         {
             SamaGamesAPI.get().getAchievementManager().getAchievementByID(1).unlock(player.getUniqueId());

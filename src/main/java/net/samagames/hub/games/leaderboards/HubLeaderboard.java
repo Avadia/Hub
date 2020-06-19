@@ -32,22 +32,19 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class HubLeaderboard
-{
+public class HubLeaderboard {
     protected Hub hub;
+    protected Location sign;
+    protected List<HubLeaderBoardStand> stands;
     private GamesNames game;
     private String gameName;
     private String displayName;
     private String statName;
-    protected Location sign;
-    protected List<HubLeaderBoardStand> stands;
 
-    HubLeaderboard()
-    {
+    HubLeaderboard() {
     }
 
-    public HubLeaderboard(Hub hub, GamesNames game, String gameName, String displayName, String statName, Location sign, List<HubLeaderBoardStand> stands)
-    {
+    public HubLeaderboard(Hub hub, GamesNames game, String gameName, String displayName, String statName, Location sign, List<HubLeaderBoardStand> stands) {
         this.hub = hub;
         this.game = game;
         this.gameName = gameName;
@@ -57,17 +54,16 @@ public class HubLeaderboard
         this.stands = stands;
     }
 
-    public void refresh()
-    {
+    @SuppressWarnings("deprecation")
+    public void refresh() {
         final Leaderboard leaderboard = SamaGamesAPI.get().getStatsManager().getLeaderboard(this.getGame(), this.getStatName());
         if (leaderboard == null)
-            return ;
+            return;
         this.hub.getServer().getScheduler().runTask(this.hub, () ->
         {
             Block block = this.sign.getBlock();
-            if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
-            {
-                Sign sign = (Sign)block.getState();
+            if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+                Sign sign = (Sign) block.getState();
                 sign.setLine(0, "*-*-*-*-*");
                 sign.setLine(1, this.getGameName());
                 sign.setLine(2, this.getDisplayName());
@@ -75,12 +71,10 @@ public class HubLeaderboard
                 sign.update();
             }
             int i;
-            for (i = 0; i < 3 && i < this.stands.size(); i++)
-            {
+            for (i = 0; i < 3 && i < this.stands.size(); i++) {
                 Leaderboard.PlayerStatData stat = i == 0 ? leaderboard.getFirst() : i == 1 ? leaderboard.getSecond() : leaderboard.getThird();
                 Block block2 = this.stands.get(i).sign.getBlock();
-                if (block2.getType() == Material.SIGN_POST || block2.getType() == Material.WALL_SIGN)
-                {
+                if (block2.getType() == Material.SIGN_POST || block2.getType() == Material.WALL_SIGN) {
                     Sign sign = (Sign) block2.getState();
                     sign.setLine(0, "*-*-*-*-*");
                     sign.setLine(1, stat == null ? "" : stat.getName());
@@ -88,11 +82,10 @@ public class HubLeaderboard
                     sign.setLine(3, "*-*-*-*-*");
                     sign.update();
                 }
-                ArmorStand armorStand = (ArmorStand)this.stands.get(i).hologram.getWorld().getNearbyEntities(this.stands.get(i).hologram, 0.3D, 2D, 0.3D).stream().filter(entity -> entity instanceof ArmorStand).findFirst().orElse(null);
-                if (armorStand != null)
-                {
+                ArmorStand armorStand = (ArmorStand) this.stands.get(i).hologram.getWorld().getNearbyEntities(this.stands.get(i).hologram, 0.3D, 2D, 0.3D).stream().filter(entity -> entity instanceof ArmorStand).findFirst().orElse(null);
+                if (armorStand != null) {
                     armorStand.setCustomNameVisible(stat != null);
-                    armorStand.setCustomName(stat == null ? "" : (i == 0 ? ChatColor.AQUA + "1er": i == 1 ? ChatColor.GOLD + "2e" : ChatColor.GRAY + "3e") + " - " + stat.getName());
+                    armorStand.setCustomName(stat == null ? "" : (i == 0 ? ChatColor.AQUA + "1er" : i == 1 ? ChatColor.GOLD + "2e" : ChatColor.GRAY + "3e") + " - " + stat.getName());
                     ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (byte) SkullType.PLAYER.ordinal());
                     SkullMeta meta = (SkullMeta) skull.getItemMeta();
                     meta.setOwner(stat == null ? "Aurelien_Sama" : stat.getName());
@@ -103,33 +96,27 @@ public class HubLeaderboard
         });
     }
 
-    protected String getDisplayName()
-    {
+    protected String getDisplayName() {
         return this.displayName;
     }
 
-    protected GamesNames getGame()
-    {
+    protected GamesNames getGame() {
         return this.game;
     }
 
-    protected String getStatName()
-    {
+    protected String getStatName() {
         return this.statName;
     }
 
-    protected String getGameName()
-    {
+    protected String getGameName() {
         return this.gameName;
     }
 
-    public static class HubLeaderBoardStand
-    {
-        private Location sign;
-        private Location hologram;
+    public static class HubLeaderBoardStand {
+        private final Location sign;
+        private final Location hologram;
 
-        public HubLeaderBoardStand(Location sign, Location hologram)
-        {
+        public HubLeaderBoardStand(Location sign, Location hologram) {
             this.sign = sign;
             this.hologram = hologram;
         }

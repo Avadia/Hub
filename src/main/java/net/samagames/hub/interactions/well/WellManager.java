@@ -39,20 +39,18 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class WellManager extends AbstractInteractionManager<Well> implements Listener
-{
+public class WellManager extends AbstractInteractionManager<Well> implements Listener {
+    @SuppressWarnings("rawtypes")
     private final ScheduledFuture craftingCheckTask;
 
-    public WellManager(Hub hub)
-    {
+    public WellManager(Hub hub) {
         super(hub, "well");
 
         this.hub.getServer().getPluginManager().registerEvents(this, this.hub);
 
         this.craftingCheckTask = this.hub.getScheduledExecutorService().scheduleAtFixedRate(() ->
         {
-            for (Player player : this.hub.getServer().getOnlinePlayers())
-            {
+            for (Player player : this.hub.getServer().getOnlinePlayers()) {
                 this.checkCrafts(player, false);
 
                 if (this.hub.getGuiManager().getPlayerGui(player) != null && this.hub.getGuiManager().getPlayerGui(player) instanceof GuiWell)
@@ -61,17 +59,19 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         }, 1, 1, TimeUnit.MINUTES);
     }
 
+    private static Location normalize(Location location) {
+        return new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
+
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         super.onDisable();
 
         this.craftingCheckTask.cancel(true);
     }
 
     @Override
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         super.onLogin(player);
 
         this.checkCrafts(player, true);
@@ -79,33 +79,27 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
     }
 
     @Override
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         super.onLogout(player);
 
         this.interactions.forEach(well -> well.onLogout(player));
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
-        if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.CAULDRON)
-        {
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.CAULDRON) {
             Optional<Well> optional = this.interactions.stream().filter(well -> normalize(well.getCauldronLocation()).equals(normalize(event.getClickedBlock().getLocation()))).findAny();
 
-            if (optional.isPresent())
-                optional.get().play(event.getPlayer());
+            optional.ifPresent(well -> well.play(event.getPlayer()));
         }
     }
 
     @Override
-    public void loadConfiguration(JsonArray rootJson)
-    {
+    public void loadConfiguration(JsonArray rootJson) {
         if (rootJson.size() == 0)
             return;
 
-        for (int i = 0; i < rootJson.size(); i++)
-        {
+        for (int i = 0; i < rootJson.size(); i++) {
             JsonObject wellJson = rootJson.get(i).getAsJsonObject();
 
             Location cauldronLocation = LocationUtils.str2loc(wellJson.get("cauldron").getAsString());
@@ -118,19 +112,16 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         }
     }
 
-    public void startPearlCrafting(Player player, int[] numbers)
-    {
+    public void startPearlCrafting(Player player, int[] numbers) {
         int[] expectedNumbers = this.generateRandomNumbers();
         int pearlStars = 1;
         int craftingTime;
 
-        if (Arrays.equals(numbers, new int[] {24, 6, 20, 14})) // 24 June 2014
+        if (Arrays.equals(numbers, new int[]{24, 6, 20, 14})) // 24 June 2014
         {
             pearlStars = 5;
             craftingTime = 1;
-        }
-        else
-        {
+        } else {
             int differenceSum = 0;
 
             for (int i = 0; i < numbers.length; i++)
@@ -179,8 +170,7 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         player.sendMessage(Well.TAG + ChatColor.GREEN + "Votre perle est en cours de création. Elle sera prête dans " + ChatColor.GOLD + (craftingTime / 60 >= 1 ? (craftingTime / 60) + " heure" + (craftingTime / 60 > 1 ? "s" : "") : craftingTime + " minute" + (craftingTime > 1 ? "s" : "")) + ChatColor.GREEN + ". Vous pouvez continuer de jouer pendant ce temps, vous serez informé quand elle sera prête.");
     }
 
-    public void finalizePearlCrafting(Player player, UUID craftingPearlUUID)
-    {
+    public void finalizePearlCrafting(Player player, UUID craftingPearlUUID) {
         Jedis jedis = SamaGamesAPI.get().getBungeeResource();
 
         if (jedis == null)
@@ -191,8 +181,7 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         if (jedis.exists("crafting-pearls:" + player.getUniqueId().toString() + ":" + craftingPearlUUID.toString()))
             craftingPearl = new Gson().fromJson(jedis.get("crafting-pearls:" + player.getUniqueId().toString() + ":" + craftingPearlUUID.toString()), CraftingPearl.class);
 
-        if (craftingPearl == null)
-        {
+        if (craftingPearl == null) {
             jedis.close();
             return;
         }
@@ -210,8 +199,7 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         this.hub.getInteractionManager().getGraouManager().update(player);
     }
 
-    public void addPearlToPlayer(Player player, Pearl pearl)
-    {
+    public void addPearlToPlayer(Player player, Pearl pearl) {
         Jedis jedis = SamaGamesAPI.get().getBungeeResource();
 
         if (jedis == null)
@@ -223,8 +211,7 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         jedis.close();
     }
 
-    private void checkCrafts(Player player, boolean silent)
-    {
+    private void checkCrafts(Player player, boolean silent) {
         this.getPlayerCraftingPearls(player.getUniqueId()).stream().filter(craftingPearl -> craftingPearl.getCreation() < System.currentTimeMillis()).forEach(craftingPearl ->
         {
             this.finalizePearlCrafting(player, craftingPearl.getUUID());
@@ -234,8 +221,7 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         });
     }
 
-    public int[] generateRandomNumbers()
-    {
+    public int[] generateRandomNumbers() {
         int[] parts = new int[4];
         int n = 10;
         int sum = 0;
@@ -245,17 +231,15 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         for (int i = 0; i < 4; i++)
             parts[i] = random.nextInt(100);
 
-        for (int i = 0; i < 4; i++)
-        {
-            parts[i] = (int) Math.floor(parts[i] * n / 100 + 10);
+        for (int i = 0; i < 4; i++) {
+            parts[i] = (int) Math.floor(parts[i] * n / 100.0 + 10);
             sum += parts[i];
         }
 
         int diff = 64 - sum;
         int i = 0;
 
-        while (diff != 0)
-        {
+        while (diff != 0) {
             parts[i] += diff > 0 ? 1 : -1;
             diff += diff > 0 ? -1 : 1;
             i = (i + 1) % 4;
@@ -264,8 +248,7 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         return parts;
     }
 
-    public List<CraftingPearl> getPlayerCraftingPearls(UUID player)
-    {
+    public List<CraftingPearl> getPlayerCraftingPearls(UUID player) {
         List<CraftingPearl> craftingPearls = new ArrayList<>();
         Jedis jedis = SamaGamesAPI.get().getBungeeResource();
 
@@ -278,10 +261,5 @@ public class WellManager extends AbstractInteractionManager<Well> implements Lis
         jedis.close();
 
         return craftingPearls;
-    }
-
-    private static Location normalize(Location location)
-    {
-        return new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 }

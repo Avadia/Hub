@@ -6,7 +6,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.craftbukkit.v1_12_R1.boss.CraftBossBar;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -28,14 +27,21 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class AdvertisingTask extends AbstractTask
-{
+class AdvertisingTask extends AbstractTask {
     private static final List<String> LINES;
+
+    static {
+        LINES = new ArrayList<>();
+        LINES.add(ChatColor.YELLOW + "Toutes les informations sur " + ChatColor.RED + "www.samagames.net" + ChatColor.YELLOW + " !");
+        LINES.add(ChatColor.YELLOW + "SamaGames est sur Twitter : " + ChatColor.AQUA + "@SamaGames_MC" + ChatColor.YELLOW + " !");
+        LINES.add(ChatColor.YELLOW + "SamaGames est sur YouTube : " + ChatColor.RED + "@SamaGames" + ChatColor.YELLOW + " !");
+        LINES.add(ChatColor.YELLOW + "Venez discuter sur TeamSpeak : " + ChatColor.GREEN + "ts.samagames.net" + ChatColor.YELLOW + " !");
+    }
+
     private final BossBar bossBar;
     private int i;
 
-    AdvertisingTask(Hub hub)
-    {
+    AdvertisingTask(Hub hub) {
         super(hub);
 
         this.bossBar = BossBarAPI.getBar(ChatColor.YELLOW + "SamaGames", BarColor.RED, BarStyle.SOLID, 0.0D).getValue();
@@ -49,8 +55,7 @@ class AdvertisingTask extends AbstractTask
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.bossBar.setTitle(LINES.get(this.i));
 
         this.i++;
@@ -59,22 +64,11 @@ class AdvertisingTask extends AbstractTask
             this.i = 0;
     }
 
-    public void addPlayer(Player player)
-    {
+    public void addPlayer(Player player) {
         this.bossBar.addPlayer(player);
     }
 
-    public void removePlayer(Player player)
-    {
+    public void removePlayer(Player player) {
         this.bossBar.removePlayer(player);
-    }
-
-    static
-    {
-        LINES = new ArrayList<>();
-        LINES.add(ChatColor.YELLOW + "Toutes les informations sur " + ChatColor.RED + "www.samagames.net" + ChatColor.YELLOW + " !");
-        LINES.add(ChatColor.YELLOW + "SamaGames est sur Twitter : " + ChatColor.AQUA + "@SamaGames_MC" + ChatColor.YELLOW + " !");
-        LINES.add(ChatColor.YELLOW + "SamaGames est sur YouTube : " + ChatColor.RED + "@SamaGames" + ChatColor.YELLOW + " !");
-        LINES.add(ChatColor.YELLOW + "Venez discuter sur TeamSpeak : " + ChatColor.GREEN + "ts.samagames.net" + ChatColor.YELLOW + " !");
     }
 }

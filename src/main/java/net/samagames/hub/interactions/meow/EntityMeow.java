@@ -1,6 +1,8 @@
 package net.samagames.hub.interactions.meow;
 
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.EntityOcelot;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.World;
 
 import java.util.UUID;
 
@@ -20,18 +22,15 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class EntityMeow extends EntityOcelot
-{
+class EntityMeow extends EntityOcelot {
     private static final UUID OWNER_UUID = UUID.fromString("29b2b527-1b59-45df-b7b0-d5ab20d8731a");
 
-    EntityMeow(World world)
-    {
+    EntityMeow(World world) {
         super(world);
         this.setCatType(2);
     }
 
-    public void postInit(float yaw, float pitch)
-    {
+    public void postInit(float yaw, float pitch) {
         super.setYawPitch(yaw, pitch);
 
         this.setTamed(true);
@@ -41,26 +40,28 @@ class EntityMeow extends EntityOcelot
     }
 
     @Override
-    protected void dm() {}
+    protected void dm() {
+    }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {}
+    public void b(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    public boolean c(NBTTagCompound nbttagcompound)
-    {
+    public boolean c(NBTTagCompound nbttagcompound) {
         return false;
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {}
+    public void a(NBTTagCompound nbttagcompound) {
+    }
 
     @Override
-    public boolean d(NBTTagCompound nbttagcompound)
-    {
+    public boolean d(NBTTagCompound nbttagcompound) {
         return false;
     }
 
     @Override
-    public void f(NBTTagCompound nbttagcompound) {}
+    public void f(NBTTagCompound nbttagcompound) {
+    }
 }

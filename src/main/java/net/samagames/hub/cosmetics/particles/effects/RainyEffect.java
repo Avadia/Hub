@@ -1,11 +1,11 @@
 package net.samagames.hub.cosmetics.particles.effects;
 
-import java.util.Random;
-
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.EffectType;
-import de.slikey.effectlib.util.ParticleEffect;
+import org.bukkit.Particle;
+
+import java.util.Random;
 
 /*
  * This file is part of Hub.
@@ -23,12 +23,10 @@ import de.slikey.effectlib.util.ParticleEffect;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class RainyEffect extends Effect
-{
+public class RainyEffect extends Effect {
     private final Random random = new Random();
 
-    public RainyEffect(EffectManager effectManager)
-    {
+    public RainyEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
         period = 2;
@@ -37,15 +35,14 @@ public class RainyEffect extends Effect
     }
 
     @Override
-    public void onRun()
-    {
+    public void onRun() {
         // Cloud
         for (int i = 0; i < 20; i++)
-            display(ParticleEffect.CLOUD, getEntity().getLocation().add(random.nextDouble() - 0.5, 2.75 + random.nextDouble() / 4, random.nextDouble() - 0.5));
+            display(Particle.CLOUD, getEntity().getLocation().add(random.nextDouble() - 0.5, 2.75 + random.nextDouble() / 4, random.nextDouble() - 0.5));
 
         // Water drops
         if (random.nextBoolean())
-            display(ParticleEffect.DRIP_WATER, getEntity().getLocation().add(random.nextDouble() * 0.8 - 0.4, 2.75 + random.nextDouble() / 4, random.nextDouble() * 0.8 - 0.4), 7, 0);
+            display(Particle.DRIP_WATER, getEntity().getLocation().add(random.nextDouble() * 0.8 - 0.4, 2.75 + random.nextDouble() / 4, random.nextDouble() * 0.8 - 0.4), 7, 0);
     }
 
 }

@@ -25,8 +25,7 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PerchedCatDisplayer extends AbstractDisplayer
-{
+public class PerchedCatDisplayer extends AbstractDisplayer {
     private static final String TAG = ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Chat perché" + ChatColor.DARK_AQUA + "] " + ChatColor.RESET;
 
     private UUID playerTargeted;
@@ -37,8 +36,7 @@ public class PerchedCatDisplayer extends AbstractDisplayer
     private boolean playerWasFlying;
     private boolean targetWasFlying;
 
-    public PerchedCatDisplayer(Hub hub, Player player)
-    {
+    public PerchedCatDisplayer(Hub hub, Player player) {
         super(hub, player);
 
         this.playerTargeted = null;
@@ -48,8 +46,7 @@ public class PerchedCatDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void display()
-    {
+    public void display() {
         this.player.playSound(this.player.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
         this.player.sendMessage(TAG + ChatColor.YELLOW + "Pour commencer à jouer, tapez un joueur !");
 
@@ -57,8 +54,7 @@ public class PerchedCatDisplayer extends AbstractDisplayer
 
         this.waitingTask = this.hub.getServer().getScheduler().runTaskLaterAsynchronously(this.hub, () ->
         {
-            if (this.waitingFirstInteraction)
-            {
+            if (this.waitingFirstInteraction) {
                 this.player.playSound(this.player.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
                 this.player.sendMessage(TAG + ChatColor.RED + "Vous n'avez pas provoqué de joueur pendant 10 secondes, le gadget s'annule !");
                 this.end();
@@ -69,12 +65,9 @@ public class PerchedCatDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public void handleInteraction(Entity who, Entity with)
-    {
-        if (who instanceof Player && with instanceof Player)
-        {
-            if (this.waitingFirstInteraction && who.getUniqueId().equals(this.player.getUniqueId()))
-            {
+    public void handleInteraction(Entity who, Entity with) {
+        if (who instanceof Player && with instanceof Player) {
+            if (this.waitingFirstInteraction && who.getUniqueId().equals(this.player.getUniqueId())) {
                 this.playerTargeted = with.getUniqueId();
                 this.interactWith((Player) with);
 
@@ -100,8 +93,7 @@ public class PerchedCatDisplayer extends AbstractDisplayer
                     this.player.sendMessage(TAG + ChatColor.GOLD + this.player.getName() + ChatColor.YELLOW + " remporte le duel contre " + ChatColor.GOLD + with.getName() + ChatColor.YELLOW + " !");
                     with.sendMessage(TAG + ChatColor.GOLD + this.player.getName() + ChatColor.YELLOW + " remporte le duel contre " + ChatColor.GOLD + with.getName() + ChatColor.YELLOW + " !");
 
-                    if (this.hub.getServer().getPlayer(this.player.getUniqueId()) != null)
-                    {
+                    if (this.hub.getServer().getPlayer(this.player.getUniqueId()) != null) {
                         this.player.playSound(this.player.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
                         this.player.setAllowFlight(this.playerWasFlying);
                     }
@@ -112,16 +104,13 @@ public class PerchedCatDisplayer extends AbstractDisplayer
                     this.waitingSecondInteraction = false;
                     this.end();
                 }, 20L * 60);
-            }
-            else if (this.waitingSecondInteraction && who.getUniqueId().equals(this.playerTargeted))
-            {
+            } else if (this.waitingSecondInteraction && who.getUniqueId().equals(this.playerTargeted)) {
                 this.waitingInteractionTask.cancel();
 
                 this.player.sendMessage(TAG + ChatColor.GOLD + who.getName() + ChatColor.YELLOW + " remporte le duel contre " + ChatColor.GOLD + this.player.getName() + ChatColor.YELLOW + " !");
                 who.sendMessage(TAG + ChatColor.GOLD + who.getName() + ChatColor.YELLOW + " remporte le duel contre " + ChatColor.GOLD + this.player.getName() + ChatColor.YELLOW + " !");
 
-                if (this.hub.getServer().getPlayer(who.getUniqueId()) != null)
-                {
+                if (this.hub.getServer().getPlayer(who.getUniqueId()) != null) {
                     ((Player) who).playSound(who.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
                     ((Player) who).setAllowFlight(this.targetWasFlying);
                 }
@@ -136,14 +125,12 @@ public class PerchedCatDisplayer extends AbstractDisplayer
     }
 
     @Override
-    public boolean isInteractionsEnabled()
-    {
+    public boolean isInteractionsEnabled() {
         return true;
     }
 
     @Override
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return true;
     }
 }

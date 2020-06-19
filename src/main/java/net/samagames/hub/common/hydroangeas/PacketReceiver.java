@@ -23,29 +23,27 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PacketReceiver
-{
+public class PacketReceiver {
     private final Hub plugin;
+    @SuppressWarnings("rawtypes")
     private final List<PacketCallBack> callbacks;
 
-    PacketReceiver(Hub plugin)
-    {
+    PacketReceiver(Hub plugin) {
         this.plugin = plugin;
         this.callbacks = new ArrayList<>();
     }
 
-    public void registerCallBack(PacketCallBack callBack)
-    {
+    @SuppressWarnings("rawtypes")
+    public void registerCallBack(PacketCallBack callBack) {
         this.callbacks.add(callBack);
     }
 
-    public void clearCallbacks()
-    {
+    public void clearCallbacks() {
         this.callbacks.clear();
     }
 
-    public void callPacket(Packet packet)
-    {
+    @SuppressWarnings("unchecked")
+    public void callPacket(Packet packet) {
         this.callbacks.stream().filter(callBack -> callBack.getPacketClass().getName().equals(packet.getClass().getName())).forEach(callBack -> this.plugin.getScheduledExecutorService().execute(() -> callBack.call(packet)));
     }
 }

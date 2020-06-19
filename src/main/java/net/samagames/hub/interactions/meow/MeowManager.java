@@ -15,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 
 /*
@@ -34,13 +33,11 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class MeowManager extends AbstractInteractionManager<Meow> implements Listener
-{
+public class MeowManager extends AbstractInteractionManager<Meow> implements Listener {
     private final List<Bonus> bonus;
-    private List<UUID> lock;
+    private final List<UUID> lock;
 
-    public MeowManager(Hub hub)
-    {
+    public MeowManager(Hub hub) {
         super(hub, "meow");
 
         this.lock = new ArrayList<>();
@@ -50,7 +47,7 @@ public class MeowManager extends AbstractInteractionManager<Meow> implements Lis
 
         this.bonus = new ArrayList<>();
 
-        this.bonus.add(new Bonus(0, 12, ChatColor.GOLD + "Bonus mensuel : " + ChatColor.GREEN + "VIP", new String[] {
+        this.bonus.add(new Bonus(0, 12, ChatColor.GOLD + "Bonus mensuel : " + ChatColor.GREEN + "VIP", new String[]{
                 ChatColor.GRAY + "Afin de vous remercier pour",
                 ChatColor.GRAY + "l'achat de votre grade,",
                 ChatColor.GRAY + "acceptez ce modeste présent.",
@@ -67,7 +64,7 @@ public class MeowManager extends AbstractInteractionManager<Meow> implements Lis
                 this.hub.getInteractionManager().getWellManager().addPearlToPlayer(player, new Pearl(UUID.randomUUID(), 4, c.getTime().getTime()));
         }));
 
-        this.bonus.add(new Bonus(1, 14, ChatColor.GOLD + "Bonus mensuel : " + ChatColor.AQUA + "VIP" + ChatColor.LIGHT_PURPLE + "+", new String[] {
+        this.bonus.add(new Bonus(1, 14, ChatColor.GOLD + "Bonus mensuel : " + ChatColor.AQUA + "VIP" + ChatColor.LIGHT_PURPLE + "+", new String[]{
                 ChatColor.GRAY + "Afin de vous remercier pour",
                 ChatColor.GRAY + "l'achat de votre grade,",
                 ChatColor.GRAY + "acceptez ce modeste présent.",
@@ -89,34 +86,28 @@ public class MeowManager extends AbstractInteractionManager<Meow> implements Lis
     }
 
     @Override
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         super.onLogin(player);
 
         this.interactions.forEach(meow -> meow.onLogin(player));
     }
 
     @Override
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         super.onLogout(player);
 
         this.interactions.forEach(meow -> meow.onLogout(player));
 
-        if (this.lock.contains(player.getUniqueId()))
-            this.lock.remove(player.getUniqueId());
+        this.lock.remove(player.getUniqueId());
     }
 
-    public void update(Player player)
-    {
+    public void update(Player player) {
         this.interactions.forEach(meow -> meow.update(player));
     }
 
     @EventHandler
-    public void onPlayerInteractEntity(PlayerInteractEntityEvent event)
-    {
-        if (event.getRightClicked().getType() == EntityType.OCELOT)
-        {
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        if (event.getRightClicked().getType() == EntityType.OCELOT) {
             if (this.lock.contains(event.getPlayer().getUniqueId()))
                 return;
 
@@ -124,10 +115,8 @@ public class MeowManager extends AbstractInteractionManager<Meow> implements Lis
             this.lock.add(event.getPlayer().getUniqueId());
             this.hub.getServer().getScheduler().runTaskLater(this.hub, () -> this.lock.remove(event.getPlayer().getUniqueId()), 10L);
 
-            for (Meow meow : this.interactions)
-            {
-                if (meow.getMeowEntity().getBukkitEntity().getUniqueId().equals(event.getRightClicked().getUniqueId()))
-                {
+            for (Meow meow : this.interactions) {
+                if (meow.getMeowEntity().getBukkitEntity().getUniqueId().equals(event.getRightClicked().getUniqueId())) {
                     meow.play(event.getPlayer());
                     break;
                 }
@@ -136,10 +125,8 @@ public class MeowManager extends AbstractInteractionManager<Meow> implements Lis
     }
 
     @Override
-    public void loadConfiguration(JsonArray rootJson)
-    {
-        for (int i = 0; i < rootJson.size(); i++)
-        {
+    public void loadConfiguration(JsonArray rootJson) {
+        for (int i = 0; i < rootJson.size(); i++) {
             Location location = LocationUtils.str2loc(rootJson.get(i).getAsString());
             Meow meow = new Meow(this.hub, location);
 
@@ -148,8 +135,7 @@ public class MeowManager extends AbstractInteractionManager<Meow> implements Lis
         }
     }
 
-    public Bonus getBonusById(int id)
-    {
+    public Bonus getBonusById(int id) {
         for (Bonus bonus : this.bonus)
             if (bonus.getId() == id)
                 return bonus;
@@ -157,8 +143,7 @@ public class MeowManager extends AbstractInteractionManager<Meow> implements Lis
         return null;
     }
 
-    public List<Bonus> getBonus()
-    {
+    public List<Bonus> getBonus() {
         return this.bonus;
     }
 }

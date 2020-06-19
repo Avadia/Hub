@@ -24,24 +24,18 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class CommandSlow extends AbstractCommand
-{
-    public CommandSlow(Hub hub)
-    {
+public class CommandSlow extends AbstractCommand {
+    public CommandSlow(Hub hub) {
         super(hub);
     }
 
     @Override
-    public boolean doAction(Player player, Command command, String s, String[] args)
-    {
-        if (args.length == 1)
-        {
-            if (StringUtils.isNumeric(args[0]))
-            {
+    public boolean doAction(Player player, Command command, String s, String[] args) {
+        if (args.length == 1) {
+            if (StringUtils.isNumeric(args[0])) {
                 int slow = Integer.parseInt(args[0]);
 
-                if (slow > 300 || slow < 0)
-                {
+                if (slow > 300 || slow < 0) {
                     player.sendMessage(PlayerManager.MODERATING_TAG + ChatColor.RED + "Espacement incorrect ! (Trop grand ou négatif)");
                     return true;
                 }
@@ -52,14 +46,10 @@ public class CommandSlow extends AbstractCommand
                     this.hub.getServer().broadcastMessage(PlayerManager.MODERATING_TAG + ChatColor.GREEN + "Le chat n'est plus ralenti.");
                 else
                     this.hub.getServer().broadcastMessage(PlayerManager.MODERATING_TAG + ChatColor.YELLOW + "Un modérateur a ralenti le chat. Ecart minimum entre deux messages : " + ChatColor.AQUA + slow + " secondes" + ChatColor.YELLOW + ".");
-            }
-            else
-            {
+            } else {
                 player.sendMessage(PlayerManager.MODERATING_TAG + ChatColor.RED + "Veuillez entrer un nombre correct !");
             }
-        }
-        else
-        {
+        } else {
             player.sendMessage(PlayerManager.MODERATING_TAG + ChatColor.GREEN + "Ralentissement actuel du chat : " + ChatColor.GOLD + this.hub.getChatManager().getActualSlowDuration());
         }
 

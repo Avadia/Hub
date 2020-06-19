@@ -30,8 +30,7 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class ShopIcon
-{
+public abstract class ShopIcon {
     protected final Hub hub;
     protected final int storageId;
     protected final int slot;
@@ -39,8 +38,7 @@ public abstract class ShopIcon
     protected final IItemDescription itemDescription;
     protected final ItemStack icon;
 
-    ShopIcon(Hub hub, String categoryName, int storageId, int slot, int[] resetIds) throws Exception
-    {
+    ShopIcon(Hub hub, String categoryName, int storageId, int slot, int[] resetIds) throws Exception {
         this.hub = hub;
         this.storageId = storageId;
         this.slot = slot;
@@ -51,8 +49,7 @@ public abstract class ShopIcon
         this.itemDescription = SamaGamesAPI.get().getShopsManager().getItemDescription(storageId);
         this.icon = PersistanceUtils.makeStack(hub, this.itemDescription);
 
-        if (categoryName != null)
-        {
+        if (categoryName != null) {
             ItemMeta meta = this.icon.getItemMeta();
             List<String> lore = (meta.getLore() != null) ? meta.getLore() : new ArrayList<>();
 
@@ -67,55 +64,43 @@ public abstract class ShopIcon
     }
 
     public abstract void execute(Player player, ClickType clickType);
+
     public abstract ItemStack getFormattedIcon(Player player);
 
-    public void resetCurrents(Player player)
-    {
-        try
-        {
+    public void resetCurrents(Player player) {
+        try {
             for (int resetId : this.resetIds)
                 if (SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(resetId) != null)
                     SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).setSelectedItem(resetId, false);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public int getStorageId()
-    {
+    public int getStorageId() {
         return this.storageId;
     }
 
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return this.icon;
     }
 
-    public int getSlot()
-    {
+    public int getSlot() {
         return this.slot;
     }
 
-    public boolean isOwned(Player player)
-    {
+    public boolean isOwned(Player player) {
         return this.isOwned(player, this.storageId);
     }
 
-    public boolean isOwned(Player player, int storageId)
-    {
+    public boolean isOwned(Player player, int storageId) {
         return SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).getTransactionsByID(storageId) != null;
     }
 
-    public boolean isActive(Player player)
-    {
-        try
-        {
+    public boolean isActive(Player player) {
+        try {
             return this.isOwned(player) && SamaGamesAPI.get().getShopsManager().getPlayer(player.getUniqueId()).isSelectedItem(this.storageId);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

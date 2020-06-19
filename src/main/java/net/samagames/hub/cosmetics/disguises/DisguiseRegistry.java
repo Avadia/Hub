@@ -20,16 +20,13 @@ import net.samagames.hub.cosmetics.common.AbstractCosmeticRegistry;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class DisguiseRegistry extends AbstractCosmeticRegistry<DisguiseCosmetic>
-{
-    DisguiseRegistry(Hub hub)
-    {
+class DisguiseRegistry extends AbstractCosmeticRegistry<DisguiseCosmetic> {
+    DisguiseRegistry(Hub hub) {
         super(hub);
     }
 
     @Override
-    public void register() throws Exception
-    {
+    public void register() throws Exception {
         DisguiseCosmetic zombieDisguise = new DisguiseCosmetic(this.hub, 19, DisguiseType.ZOMBIE);
         DisguiseCosmetic giantDisguise = new DisguiseCosmetic(this.hub, 20, DisguiseType.GIANT);
         DisguiseCosmetic zombiePigmanDisguise = new DisguiseCosmetic(this.hub, 21, DisguiseType.PIG_ZOMBIE);

@@ -22,65 +22,55 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class RotatingLeaderboard extends HubLeaderboard
-{
-    private List<RotatingLeaderboardFrame> frames;
+public class RotatingLeaderboard extends HubLeaderboard {
     private static int currentFrame = 0;
+    private final List<RotatingLeaderboardFrame> frames;
     private int currentFrameSave;
 
-    public RotatingLeaderboard(Hub hub, Location sign, List<HubLeaderBoardStand> stands, List<RotatingLeaderboardFrame> frames)
-    {
+    public RotatingLeaderboard(Hub hub, Location sign, List<HubLeaderBoardStand> stands, List<RotatingLeaderboardFrame> frames) {
         this.hub = hub;
         this.sign = sign;
         this.stands = stands;
         this.frames = frames;
     }
 
-    public static void increment()
-    {
+    public static void increment() {
         RotatingLeaderboard.currentFrame++;
     }
 
     @Override
-    public void refresh()
-    {
+    public void refresh() {
         this.currentFrameSave = RotatingLeaderboard.currentFrame;
         super.refresh();
     }
 
     @Override
-    protected GamesNames getGame()
-    {
+    protected GamesNames getGame() {
         return this.frames.get(this.currentFrameSave % this.frames.size()).game;
     }
 
     @Override
-    protected String getDisplayName()
-    {
+    protected String getDisplayName() {
         return this.frames.get(this.currentFrameSave % this.frames.size()).displayName;
     }
 
     @Override
-    protected String getStatName()
-    {
+    protected String getStatName() {
         return this.frames.get(this.currentFrameSave % this.frames.size()).statName;
     }
 
     @Override
-    protected String getGameName()
-    {
+    protected String getGameName() {
         return this.frames.get(this.currentFrameSave % this.frames.size()).gameName;
     }
 
-    public static class RotatingLeaderboardFrame
-    {
-        private GamesNames game;
-        private String gameName;
-        private String displayName;
-        private String statName;
+    public static class RotatingLeaderboardFrame {
+        private final GamesNames game;
+        private final String gameName;
+        private final String displayName;
+        private final String statName;
 
-        public RotatingLeaderboardFrame(GamesNames game, String gameName, String displayName, String statName)
-        {
+        public RotatingLeaderboardFrame(GamesNames game, String gameName, String displayName, String statName) {
             this.game = game;
             this.gameName = gameName;
             this.displayName = displayName;

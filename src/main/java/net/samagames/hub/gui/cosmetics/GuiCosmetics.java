@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /*
  * This file is part of Hub.
@@ -29,13 +31,11 @@ import java.util.*;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiCosmetics extends AbstractGui
-{
+public class GuiCosmetics extends AbstractGui {
     private final List<Integer> slots;
     private int slot;
 
-    public GuiCosmetics(Hub hub)
-    {
+    public GuiCosmetics(Hub hub) {
         super(hub);
 
         this.slots = Arrays.asList(2, 2, 3, 3, 3, 4, 4);
@@ -45,8 +45,7 @@ public class GuiCosmetics extends AbstractGui
     }
 
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         this.inventory = this.hub.getServer().createInventory(null, 54, "Caverne aux trésors");
 
         this.randomIcon(0, ChatColor.DARK_RED + "❤" + ChatColor.RED + " Ensembles " + ChatColor.DARK_RED + "❤", Material.LEATHER_CHESTPLATE, new String[]{
@@ -59,9 +58,13 @@ public class GuiCosmetics extends AbstractGui
         }, DyeColor.YELLOW, "particles");
 
         this.randomIcon(2, ChatColor.DARK_GREEN + "▲" + ChatColor.GREEN + " Montures " + ChatColor.DARK_GREEN + "▲", Material.SADDLE, new String[]{
-                ChatColor.GRAY + "Un fidèle compagnon qui vous suit",
-                ChatColor.GRAY + "où que vous soyez !"
+                ChatColor.GOLD + "Prochainement..."
         }, DyeColor.GREEN, "pets");
+
+//        this.randomIcon(2, ChatColor.DARK_GREEN + "▲" + ChatColor.GREEN + " Montures " + ChatColor.DARK_GREEN + "▲", Material.SADDLE, new String[]{
+//                ChatColor.GRAY + "Un fidèle compagnon qui vous suit",
+//                ChatColor.GRAY + "où que vous soyez !"
+//        }, DyeColor.GREEN, "pets");
 
         this.randomIcon(4, ChatColor.GRAY + "◢" + ChatColor.WHITE + " Jukebox " + ChatColor.GRAY + "◣", Material.JUKEBOX, new String[]{
                 ChatColor.GRAY + "Devenez un véritable SamaDJ !"
@@ -88,10 +91,8 @@ public class GuiCosmetics extends AbstractGui
     }
 
     @Override
-    public void onClick(Player player, ItemStack stack, String action, ClickType clickType)
-    {
-        switch (action)
-        {
+    public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
+        switch (action) {
             case "clothes":
                 this.hub.getGuiManager().openGui(player, new GuiClothingSets(this.hub));
                 break;
@@ -100,9 +101,9 @@ public class GuiCosmetics extends AbstractGui
                 this.hub.getGuiManager().openGui(player, new GuiCosmeticsCategory<>(this.hub, "Particules", this.hub.getCosmeticManager().getParticleManager(), true));
                 break;
 
-            case "pets":
-                this.hub.getGuiManager().openGui(player, new GuiCosmeticsCategory<>(this.hub, "Montures", this.hub.getCosmeticManager().getPetManager(), true));
-                break;
+//            case "pets":
+//                this.hub.getGuiManager().openGui(player, new GuiCosmeticsCategory<>(this.hub, "Montures", this.hub.getCosmeticManager().getPetManager(), true));
+//                break;
 
             case "jukebox":
                 this.hub.getGuiManager().openGui(player, new GuiCosmeticsCategory<>(this.hub, "Jukebox", this.hub.getCosmeticManager().getJukeboxManager(), false));
@@ -127,13 +128,11 @@ public class GuiCosmetics extends AbstractGui
     }
 
     @Override
-    public void onClose(Player player)
-    {
+    public void onClose(Player player) {
         player.playSound(player.getLocation(), Sound.BLOCK_CHEST_CLOSE, 1.0F, 1.0F);
     }
 
-    private void randomIcon(int base, String displayName, Material material, String[] description, DyeColor color, String action)
-    {
+    private void randomIcon(int base, String displayName, Material material, String[] description, DyeColor color, String action) {
         int selected = base + this.slots.get(this.slot) * 9;
 
         this.setSlotData(displayName, material, selected, description, action);
@@ -142,12 +141,11 @@ public class GuiCosmetics extends AbstractGui
         this.slot++;
     }
 
-    private void drawLineOfGlass(int baseSlot, DyeColor color, String action)
-    {
+    @SuppressWarnings("deprecation")
+    private void drawLineOfGlass(int baseSlot, DyeColor color, String action) {
         int slot = baseSlot - 9;
 
-        while (slot >= 0)
-        {
+        while (slot >= 0) {
             if (this.inventory.getItem(slot) == null)
                 this.setSlotData(ChatColor.GRAY + "", new ItemStack(Material.STAINED_GLASS_PANE, 1, color.getWoolData()), slot, null, action);
 

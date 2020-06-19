@@ -21,35 +21,29 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class EventBus implements EntryPoints
-{
-    private List<AbstractManager> managers;
+public class EventBus implements EntryPoints {
+    private final List<AbstractManager> managers;
 
-    public EventBus()
-    {
+    public EventBus() {
         this.managers = new ArrayList<>();
     }
 
-    public void registerManager(AbstractManager manager)
-    {
+    public void registerManager(AbstractManager manager) {
         this.managers.add(manager);
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.managers.forEach(AbstractManager::onDisable);
     }
 
     @Override
-    public void onLogin(Player player)
-    {
+    public void onLogin(Player player) {
         this.managers.forEach(manager -> manager.onLogin(player));
     }
 
     @Override
-    public void onLogout(Player player)
-    {
+    public void onLogout(Player player) {
         this.managers.forEach(manager -> manager.onLogout(player));
     }
 }

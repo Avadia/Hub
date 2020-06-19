@@ -32,14 +32,12 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class NPCManager extends AbstractManager
-{
+public class NPCManager extends AbstractManager {
     private static final UUID AURELIEN_SAMA_UUID = UUID.fromString("c59220b1-662f-4aa8-b9d9-72660eb97c10");
 
     private final List<CustomNPC> npcs;
 
-    public NPCManager(Hub hub)
-    {
+    public NPCManager(Hub hub) {
         super(hub, "npcs.json");
 
         this.npcs = new ArrayList<>();
@@ -49,9 +47,9 @@ public class NPCManager extends AbstractManager
         if (jsonRoot == null)
             return;
 
-        CustomNPC welcomeTutorialNPC = SamaGamesAPI.get().getNPCManager().createNPC(LocationUtils.str2loc(jsonRoot.get("welcome-tutorial").getAsString()), AURELIEN_SAMA_UUID, new String[] {
-            ChatColor.GOLD + "" + ChatColor.BOLD + "Tutoriel de Bienvenue",
-            ChatColor.YELLOW + "" + ChatColor.BOLD + "CLIC DROIT"
+        CustomNPC welcomeTutorialNPC = SamaGamesAPI.get().getNPCManager().createNPC(LocationUtils.str2loc(jsonRoot.get("welcome-tutorial").getAsString()), AURELIEN_SAMA_UUID, new String[]{
+                ChatColor.GOLD + "" + ChatColor.BOLD + "Tutoriel de Bienvenue",
+                ChatColor.YELLOW + "" + ChatColor.BOLD + "CLIC DROIT"
         }).setCallback(new WelcomeTutorialNPCAction(hub));
 
         welcomeTutorialNPC.getBukkitEntity().getInventory().setItemInMainHand(new ItemStack(Material.MAP, 1));
@@ -61,15 +59,14 @@ public class NPCManager extends AbstractManager
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         this.npcs.forEach(npc -> SamaGamesAPI.get().getNPCManager().removeNPC(npc.getName()));
         this.npcs.clear();
     }
 
     @Override
-    public void onLogin(Player player) { /** Not needed **/ }
+    public void onLogin(Player player) { /* Not needed **/}
 
     @Override
-    public void onLogout(Player player) { /** Not needed **/ }
+    public void onLogout(Player player) { /* Not needed **/}
 }
