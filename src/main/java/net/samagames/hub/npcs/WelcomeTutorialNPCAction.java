@@ -64,7 +64,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
           Location: On the wheel of the Dimensions sign
          */
         this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), -20.5D, 132.0D, -55.1D, -10F, 22.5F), ChatColor.GOLD + "Salut l'aventurier !", Arrays.asList(
-                Pair.of("Bienvenue sur SamaGames !", 72L),
+                Pair.of("Bienvenue sur Avadia !", 72L),
                 Pair.of("Laissez-moi donc vous guider...", 43L)
         ), Material.GREEN_RECORD.getId()));
 
@@ -72,9 +72,9 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
           Chapter II
           Location: On the 'S' under the golden apple
          */
-        this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), 36.5D, 133.0D, -4.5D, 89.2F, 26.3F), ChatColor.GOLD + "Kékesé SamaGames ?", Arrays.asList(
+        this.tutorial.addChapter(new CoveredTutorialChapter(new Location(hub.getWorld(), 36.5D, 133.0D, -4.5D, 89.2F, 26.3F), ChatColor.GOLD + "Kékesé Avadia ?", Arrays.asList(
                 Pair.of("Ceci est un très bon début ;)", 75L),
-                Pair.of("SamaGames est un serveur mini-jeux ;", 50L),
+                Pair.of("Avadia est un serveur mini-jeux ;", 50L),
                 Pair.of("mais nous savons que jouer seul est ennuyant...", 40L),
                 Pair.of("Alors n'oubliez pas d'inviter vos amis !", 42L)
         ), Material.RECORD_3.getId()));
@@ -141,7 +141,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
                 Pair.of("Oh que non cher ami...", 43L),
                 Pair.of("Ce hub regorge de secrets perdus...", 42L),
                 Pair.of("A vous de voyager et de les trouver !", 46L),
-                Pair.of("Bon jeu sur SamaGames !", 60L)
+                Pair.of("Bon jeu sur Avadia !", 60L)
         ), Material.RECORD_9.getId()));
 
         this.tutorial.onTutorialEnds((player, interrupted) ->

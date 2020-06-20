@@ -47,15 +47,17 @@ public class NPCManager extends AbstractManager {
         if (jsonRoot == null)
             return;
 
-        CustomNPC welcomeTutorialNPC = SamaGamesAPI.get().getNPCManager().createNPC(LocationUtils.str2loc(jsonRoot.get("welcome-tutorial").getAsString()), AURELIEN_SAMA_UUID, new String[]{
-                ChatColor.GOLD + "" + ChatColor.BOLD + "Tutoriel de Bienvenue",
-                ChatColor.YELLOW + "" + ChatColor.BOLD + "CLIC DROIT"
-        }).setCallback(new WelcomeTutorialNPCAction(hub));
+        if (jsonRoot.has("welcome-tutorial")) {
+            CustomNPC welcomeTutorialNPC = SamaGamesAPI.get().getNPCManager().createNPC(LocationUtils.str2loc(jsonRoot.get("welcome-tutorial").getAsString()), AURELIEN_SAMA_UUID, new String[]{
+                    ChatColor.GOLD + "" + ChatColor.BOLD + "Tutoriel de Bienvenue",
+                    ChatColor.YELLOW + "" + ChatColor.BOLD + "CLIC DROIT"
+            }).setCallback(new WelcomeTutorialNPCAction(hub));
 
-        welcomeTutorialNPC.getBukkitEntity().getInventory().setItemInMainHand(new ItemStack(Material.MAP, 1));
+            welcomeTutorialNPC.getBukkitEntity().getInventory().setItemInMainHand(new ItemStack(Material.MAP, 1));
 
-        this.npcs.add(welcomeTutorialNPC);
-        this.log(Level.INFO, "Registered 'Welcome tutorial' NPC!");
+            this.npcs.add(welcomeTutorialNPC);
+            this.log(Level.INFO, "Registered 'Welcome tutorial' NPC!");
+        }
     }
 
     @Override

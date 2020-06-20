@@ -1,11 +1,11 @@
 name: Hub
 main: net.samagames.hub.Hub
-version: 2.0
+version: 5.0.0
 
 author: BlueSlime
 website: http://blueslime.fr
 
-depend: [SamaGamesAPI, ProtocolLib, LibsDisguises]
+depend: [SamaGamesAPI, ProtocolLib, LibsDisguises, EffectLib]
 
 commands:
   # Player commands ----------------------------

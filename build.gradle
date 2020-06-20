@@ -34,7 +34,7 @@ dependencies {
         transitive = false
     }
 
-    compile group: 'de.slikey', name: 'EffectLib', version: '6.2'
+    compile group: 'de.slikey', name: 'EffectLib', version: '6.3'
     compile(group: 'LibsDisguises', name: 'LibsDisguises', version: '10.0.12-SNAPSHOT', changing: true) {
         transitive = false
     }
