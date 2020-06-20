@@ -43,12 +43,14 @@ public class HostGameManager extends AbstractManager {
         if (config == null)
             return;
 
-        JsonArray locations = config.get("locations").getAsJsonArray();
+        if (config.has("locations")) {
+            JsonArray locations = config.get("locations").getAsJsonArray();
 
-        for (JsonElement location : locations) {
-            Location loc = LocationUtils.str2loc(location.getAsString());
-            hub.getLogger().info("Add new location for host game: " + loc);
-            this.positions.add(loc);
+            for (JsonElement location : locations) {
+                Location loc = LocationUtils.str2loc(location.getAsString());
+                hub.getLogger().info("Add new location for host game: " + loc);
+                this.positions.add(loc);
+            }
         }
 
         this.available = new boolean[this.positions.size()];
