@@ -39,5 +39,5 @@ dependencies {
         transitive = false
     }
     compile group: 'redis.clients', name: 'jedis', version: '3.3.0'
-    compile group: 'us.myles', name: 'viaversion', version: '3.0.0-SNAPSHOT'
+    compile group: 'us.myles', name: 'viaversion', version: '3.0.2-SNAPSHOT'
 }
