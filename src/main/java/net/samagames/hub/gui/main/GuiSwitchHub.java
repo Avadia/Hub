@@ -73,7 +73,7 @@ public class GuiSwitchHub extends AbstractGui {
                 break;
             }
 
-            this.setSlotData(this.getHubItem(hub), baseSlots[slot] + (9 * line), "Hub_" + hub.getHubNumber());
+            this.setSlotData(this.getHubItem(hub), baseSlots[slot] + (9 * line), "hub_" + hub.getHubNumber());
             slot++;
 
             if (slot == baseSlots.length) {
@@ -94,7 +94,7 @@ public class GuiSwitchHub extends AbstractGui {
     @SuppressWarnings("UnstableApiUsage")
     @Override
     public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
-        if (action.startsWith("Hub_")) {
+        if (action.startsWith("hub_")) {
             if (action.split("_")[1].equals(SamaGamesAPI.get().getServerName().split("_")[1])) {
                 player.sendMessage(ChatColor.RED + "Vous ne pouvez pas aller sur votre hub actuel !");
                 return;

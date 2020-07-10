@@ -55,13 +55,13 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerLogin(PlayerJoinEvent event) {
         this.hub.getEventBus().onLogin(event.getPlayer());
-        new ServerStatus(SamaGamesAPI.get().getServerName(), "Hub", "lobby", Status.IN_GAME, this.hub.getServer().getOnlinePlayers().size(), this.hub.getServer().getMaxPlayers()).sendToHydro();
+        new ServerStatus(SamaGamesAPI.get().getServerName(), "hub", "lobby", Status.IN_GAME, this.hub.getServer().getOnlinePlayers().size(), this.hub.getServer().getMaxPlayers()).sendToHydro();
     }
 
     @EventHandler
     public void onPlayerLogout(PlayerQuitEvent event) {
         this.hub.getEventBus().onLogout(event.getPlayer());
-        new ServerStatus(SamaGamesAPI.get().getServerName(), "Hub", "lobby", Status.IN_GAME, this.hub.getServer().getOnlinePlayers().size(), this.hub.getServer().getMaxPlayers()).sendToHydro();
+        new ServerStatus(SamaGamesAPI.get().getServerName(), "hub", "lobby", Status.IN_GAME, this.hub.getServer().getOnlinePlayers().size(), this.hub.getServer().getMaxPlayers()).sendToHydro();
     }
 
     @EventHandler

@@ -152,7 +152,7 @@ public class Hub extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new PlayerProtectionListener(this), this);
         this.getServer().getPluginManager().registerEvents(new WorldEditionListener(this), this);
 
-        this.hydroangeasSynchronization = this.getScheduledExecutorService().scheduleAtFixedRate(() -> new ServerStatus(SamaGamesAPI.get().getServerName(), "Hub", "lobby", Status.IN_GAME, this.getServer().getOnlinePlayers().size(), this.getServer().getMaxPlayers()).sendToHydro(), 0, 1, TimeUnit.MINUTES);
+        this.hydroangeasSynchronization = this.getScheduledExecutorService().scheduleAtFixedRate(() -> new ServerStatus(SamaGamesAPI.get().getServerName(), "hub", "lobby", Status.IN_GAME, this.getServer().getOnlinePlayers().size(), this.getServer().getMaxPlayers()).sendToHydro(), 0, 1, TimeUnit.MINUTES);
 
         SamaGamesAPI.get().getPubSub().subscribe("cheat", new SamaritanListener(this));
         //SamaGamesAPI.get().getPubSub().subscribe("", new InteractionListener(this));

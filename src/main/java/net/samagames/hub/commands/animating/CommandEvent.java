@@ -148,7 +148,7 @@ public class CommandEvent extends AbstractCommand {
                     player.sendMessage(ChatUtils.getCenteredText(ChatColor.WHITE + "• Étape 4 : Confirmation •"));
                     player.sendMessage("");
 
-                    player.sendMessage(ChatColor.WHITE + "- Jeu : " + ChatColor.GRAY + (gameCodeName.equals("hub") ? "Hub" : this.hub.getGameManager().getGameByIdentifier(gameCodeName).getName()));
+                    player.sendMessage(ChatColor.WHITE + "- Jeu : " + ChatColor.GRAY + (gameCodeName.equals("hub") ? "hub" : this.hub.getGameManager().getGameByIdentifier(gameCodeName).getName()));
                     player.sendMessage(ChatColor.WHITE + "- Carte : " + ChatColor.GRAY + map);
 
                     int[] prices = REWARDS[rewardsId];
@@ -188,9 +188,9 @@ public class CommandEvent extends AbstractCommand {
 
                     if (gameCodeName.equals("hub")) {
                         new FancyMessage("[\u25B6]").color(ChatColor.GREEN)
-                                .command("/event create " + gameCodeName + " Hub")
+                                .command("/event create " + gameCodeName + " hub")
                                 .tooltip(ChatColor.GOLD + "» Clic pour sélectionner")
-                                .then(" Hub").color(ChatColor.GRAY)
+                                .then(" hub").color(ChatColor.GRAY)
                                 .send(player);
                     } else {
                         for (String map : this.hub.getGameManager().getGameByIdentifier(gameCodeName).getSigns().keySet()) {
@@ -208,7 +208,7 @@ public class CommandEvent extends AbstractCommand {
                     new FancyMessage("[\u25B6]").color(ChatColor.GREEN)
                             .command("/event create hub")
                             .tooltip(ChatColor.GOLD + "» Clic pour sélectionner")
-                            .then(" Hub (Votre serveur actuel)").color(ChatColor.GRAY)
+                            .then(" hub (Votre serveur actuel)").color(ChatColor.GRAY)
                             .send(player);
 
                     player.sendMessage("");

@@ -48,7 +48,7 @@ public class EventListener implements IPacketsReceiver {
 
             FancyMessage message = new FancyMessage("[Evénement] ").color(ChatColor.DARK_PURPLE).style(ChatColor.BOLD)
                     .then("Une animation a débuté " + (gameCodeName.equals("hub") ? "sur le " : "en ")).color(ChatColor.LIGHT_PURPLE)
-                    .then(gameCodeName.equals("hub") ? "Hub " + template : this.hub.getGameManager().getGameByIdentifier(gameCodeName).getName()).color(ChatColor.DARK_PURPLE).style(ChatColor.BOLD)
+                    .then(gameCodeName.equals("hub") ? "hub " + template : this.hub.getGameManager().getGameByIdentifier(gameCodeName).getName()).color(ChatColor.DARK_PURPLE).style(ChatColor.BOLD)
                     .then(". Récompense" + (coins > 0 && pearls > 0 ? "s" : "") + " : ").color(ChatColor.LIGHT_PURPLE);
 
             if (coins > 0)
