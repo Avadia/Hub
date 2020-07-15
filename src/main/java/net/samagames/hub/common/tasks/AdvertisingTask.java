@@ -1,5 +1,6 @@
 package net.samagames.hub.common.tasks;
 
+import fr.farmvivi.api.commons.Servers;
 import net.samagames.hub.Hub;
 import net.samagames.tools.bossbar.BossBarAPI;
 import org.bukkit.ChatColor;
@@ -32,10 +33,16 @@ class AdvertisingTask extends AbstractTask {
 
     static {
         LINES = new ArrayList<>();
-        LINES.add(ChatColor.YELLOW + "Toutes les informations sur " + ChatColor.RED + "www.samagames.net" + ChatColor.YELLOW + " !");
-        LINES.add(ChatColor.YELLOW + "SamaGames est sur Twitter : " + ChatColor.AQUA + "@SamaGames_MC" + ChatColor.YELLOW + " !");
-        LINES.add(ChatColor.YELLOW + "SamaGames est sur YouTube : " + ChatColor.RED + "@SamaGames" + ChatColor.YELLOW + " !");
-        LINES.add(ChatColor.YELLOW + "Venez discuter sur TeamSpeak : " + ChatColor.GREEN + "ts.samagames.net" + ChatColor.YELLOW + " !");
+        if (!Servers.DEFAULT.getWebsite().equals(""))
+            LINES.add(ChatColor.YELLOW + "Toutes les informations sur " + ChatColor.RED + Servers.DEFAULT.getWebsite() + ChatColor.YELLOW + " !");
+        if (!Servers.DEFAULT.getTwitter().equals(""))
+            LINES.add(ChatColor.YELLOW + Servers.DEFAULT.getDisplayName() + " est sur Twitter : " + ChatColor.AQUA + "@" + Servers.DEFAULT.getTwitter() + ChatColor.YELLOW + " !");
+        if (!Servers.DEFAULT.getYoutube().equals(""))
+            LINES.add(ChatColor.YELLOW + Servers.DEFAULT.getDisplayName() + " est sur YouTube : " + ChatColor.RED + "@" + Servers.DEFAULT.getYoutube() + ChatColor.YELLOW + " !");
+        if (!Servers.DEFAULT.getTeamspeak().equals(""))
+            LINES.add(ChatColor.YELLOW + "Venez discuter sur TeamSpeak : " + ChatColor.GREEN + Servers.DEFAULT.getTeamspeak() + ChatColor.YELLOW + " !");
+        if (!Servers.DEFAULT.getDiscord().equals(""))
+            LINES.add(ChatColor.YELLOW + "Venez discuter sur Discord : " + ChatColor.BLUE + Servers.DEFAULT.getDiscord() + ChatColor.YELLOW + " !");
     }
 
     private final BossBar bossBar;
@@ -44,7 +51,7 @@ class AdvertisingTask extends AbstractTask {
     AdvertisingTask(Hub hub) {
         super(hub);
 
-        this.bossBar = BossBarAPI.getBar(ChatColor.YELLOW + "SamaGames", BarColor.RED, BarStyle.SOLID, 0.0D).getValue();
+        this.bossBar = BossBarAPI.getBar(ChatColor.YELLOW + Servers.DEFAULT.getDisplayName(), BarColor.RED, BarStyle.SOLID, 0.0D).getValue();
         this.bossBar.setProgress(0.0D);
 
         this.hub.getServer().getOnlinePlayers().forEach(this.bossBar::addPlayer);

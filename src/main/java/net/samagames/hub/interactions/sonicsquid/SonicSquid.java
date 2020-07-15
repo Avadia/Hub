@@ -86,12 +86,13 @@ class SonicSquid extends AbstractInteraction implements Listener {
         if (!this.hasPlayer((Player) event.getEntity()))
             return;
 
-        event.getDismounted().addPassenger(event.getEntity());
+        //noinspection deprecation
+        event.getDismounted().setPassenger(event.getEntity());
     }
 
     @Override
     public void play(Player player) {
-        if (!this.squids.containsKey(player.getUniqueId()) && player.getGameMode() != GameMode.SPECTATOR) {
+        if (!hasPlayer(player) && player.getGameMode() != GameMode.SPECTATOR) {
             WorldServer world = ((CraftWorld) player.getWorld()).getHandle();
             EntitySonicSquid sonicSquidEntity = new EntitySonicSquid(world, player);
             world.addEntity(sonicSquidEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
@@ -104,7 +105,7 @@ class SonicSquid extends AbstractInteraction implements Listener {
 
     @Override
     public void stop(Player player) {
-        if (this.squids.containsKey(player.getUniqueId())) {
+        if (hasPlayer(player)) {
             this.squids.get(player.getUniqueId()).die();
             this.squids.remove(player.getUniqueId());
         }

@@ -369,7 +369,7 @@ public class CommandEvent extends AbstractCommand {
 
     public void showHelp(Player player) {
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-        player.sendMessage(ChatUtils.getCenteredText(ChatColor.WHITE + "♦ " + ChatColor.BOLD + "SamaGames - Aide - Evénement" + ChatColor.WHITE + " ♦"));
+        player.sendMessage(ChatUtils.getCenteredText(ChatColor.WHITE + "♦ " + ChatColor.BOLD + "Aide - Evénement" + ChatColor.WHITE + " ♦"));
         player.sendMessage("");
 
         this.showHelpSubCommand(player, "create", "Créer un événement pas à pas");

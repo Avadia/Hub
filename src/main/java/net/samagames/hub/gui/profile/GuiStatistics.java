@@ -4,7 +4,6 @@ import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.stats.IPlayerStats;
 import net.samagames.hub.Hub;
 import net.samagames.hub.gui.AbstractGui;
-import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -143,17 +142,12 @@ class GuiStatistics extends AbstractGui {
                 Pair.of("Morts", playerStats.getChunkWarsStatistics()::getDeaths)
         ));
 
-        this.setSlotData(ChatColor.YELLOW + "Voir votre profil en ligne", new ItemStack(Material.NETHER_STAR, 1), this.inventory.getSize() - 6, null, "website");
-        this.setSlotData(getBackIcon(), this.inventory.getSize() - 4, "back");
+        this.setSlotData(getBackIcon(), this.inventory.getSize() - 5, "back");
     }
 
     @Override
     public void onClick(Player player, ItemStack stack, String action, ClickType clickType) {
         switch (action) {
-            case "website":
-                new FancyMessage(ChatColor.YELLOW + "Cliquez sur ").then("[Accéder]").color(ChatColor.GOLD).style(ChatColor.BOLD).link("https://www.samagames.net/stats/" + player.getName() + ".html").then(" pour accéder à vos statistiques en ligne.").color(ChatColor.YELLOW).send(player);
-                break;
-
             case "back":
                 this.hub.getGuiManager().openGui(player, new GuiProfile(this.hub));
                 break;
