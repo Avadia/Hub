@@ -1,5 +1,6 @@
 package net.samagames.hub.gui.main;
 
+import fr.farmvivi.api.commons.Servers;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.hub.Hub;
 import net.samagames.hub.games.AbstractGame;
@@ -99,11 +100,9 @@ public class GuiMain extends AbstractGui {
 
     private static String[] getInformationLore() {
         return new String[]{
-                ChatColor.DARK_GRAY + "Site internet : " + ChatColor.GRAY + "https://www.samagames.net",
-                ChatColor.DARK_GRAY + "Forum : " + ChatColor.GRAY + "https://www.samagames.net/forum/",
-                ChatColor.DARK_GRAY + "Boutique : " + ChatColor.GRAY + "http://shop.samagames.net/",
-                "",
-                ChatColor.DARK_GRAY + "TeamSpeak : " + ChatColor.GRAY + "ts.samagames.net"
+                ChatColor.DARK_GRAY + "Site internet : " + ChatColor.GRAY + "https://" + Servers.DEFAULT.getWebsite(),
+                ChatColor.DARK_GRAY + "Forum : " + ChatColor.GRAY + "https://" + Servers.DEFAULT.getWebsite() + "/forum/",
+                ChatColor.DARK_GRAY + "Boutique : " + ChatColor.GRAY + "http://" + Servers.DEFAULT.getWebsite().replaceFirst("www", "shop")
         };
     }
 

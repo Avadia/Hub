@@ -1,5 +1,6 @@
 package net.samagames.hub.scoreboards;
 
+import fr.farmvivi.api.commons.Servers;
 import net.samagames.hub.Hub;
 import net.samagames.hub.common.managers.AbstractManager;
 import org.bukkit.ChatColor;
@@ -94,7 +95,7 @@ public class ScoreboardManager extends AbstractManager {
     }
 
     private String colorIpAt() {
-        String ip = "mc.samagames.net";
+        String ip = Servers.DEFAULT.getIp();
 
         if (this.cooldown > 0) {
             this.cooldown--;
