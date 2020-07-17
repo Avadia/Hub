@@ -1,6 +1,7 @@
 package net.samagames.hub.interactions.yodels;
 
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.hub.interactions.AbstractInteraction;
 import net.samagames.tools.ProximityUtils;
@@ -91,7 +92,13 @@ class Yodel extends AbstractInteraction {
         runnerList.put(player.getUniqueId(), runner);
         runner.start();
 
-        this.hub.getServer().getScheduler().runTask(this.hub, () -> SamaGamesAPI.get().getAchievementManager().getAchievementByID(58).unlock(player.getUniqueId()));
+        this.hub.getServer().getScheduler().runTask(this.hub, () -> {
+            try {
+                SamaGamesAPI.get().getAchievementManager().getAchievementByID(58).unlock(player.getUniqueId());
+            } catch (AchivementNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override

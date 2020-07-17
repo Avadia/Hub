@@ -1,6 +1,7 @@
 package net.samagames.hub.common.players;
 
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.hub.gui.cosmetics.GuiCosmetics;
 import net.samagames.hub.gui.main.GuiMain;
@@ -111,7 +112,13 @@ public class StaticInventory {
             ((CraftPlayer) player).getHandle().velocityChanged = true;
             player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDERDRAGON_FLAP, 2F, 2F);
 
-            this.hub.getServer().getScheduler().runTask(this.hub, () -> SamaGamesAPI.get().getAchievementManager().getAchievementByID(5).unlock(player.getUniqueId()));
+            this.hub.getServer().getScheduler().runTask(this.hub, () -> {
+                try {
+                    SamaGamesAPI.get().getAchievementManager().getAchievementByID(5).unlock(player.getUniqueId());
+                } catch (AchivementNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 

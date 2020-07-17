@@ -1,6 +1,7 @@
 package net.samagames.hub.common.tasks;
 
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.hub.common.managers.AbstractManager;
 import net.samagames.tools.ProximityUtils;
@@ -51,32 +52,68 @@ public class TaskManager extends AbstractManager {
         ArmorStand secretChamberDetectionEntity = hub.getWorld().spawn(new Location(hub.getWorld(), 88.5, 20.0D, 44.5D), ArmorStand.class);
         this.prepareProximityDetection(secretChamberDetectionEntity, "secret_chamber_proximity");
         this.secretChamberProximityTask = ProximityUtils.onNearbyOf(hub, secretChamberDetectionEntity, 5.0D, 5.0D, 5.0D, Player.class, player ->
-                this.hub.getServer().getScheduler().runTask(hub, () -> SamaGamesAPI.get().getAchievementManager().getAchievementByID(7).unlock(player.getUniqueId())));
+                this.hub.getServer().getScheduler().runTask(hub, () -> {
+                    try {
+                        SamaGamesAPI.get().getAchievementManager().getAchievementByID(7).unlock(player.getUniqueId());
+                    } catch (AchivementNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }));
 
         ArmorStand pantheonDetectionEntity = hub.getWorld().spawn(new Location(hub.getWorld(), -174.5D, 82.0D, 27.5D), ArmorStand.class);
         this.prepareProximityDetection(pantheonDetectionEntity, "pantheon_proximity");
         this.pantheonProximityTask = ProximityUtils.onNearbyOf(hub, pantheonDetectionEntity, 3.0D, 5.0D, 3.0D, Player.class, player ->
-                this.hub.getServer().getScheduler().runTask(hub, () -> SamaGamesAPI.get().getAchievementManager().getAchievementByID(10).unlock(player.getUniqueId())));
+                this.hub.getServer().getScheduler().runTask(hub, () -> {
+                    try {
+                        SamaGamesAPI.get().getAchievementManager().getAchievementByID(10).unlock(player.getUniqueId());
+                    } catch (AchivementNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }));
 
         ArmorStand confessionalDetectionEntity = hub.getWorld().spawn(new Location(hub.getWorld(), -159.5, 69.0D, 42.5D), ArmorStand.class);
         this.prepareProximityDetection(confessionalDetectionEntity, "confessional_proximity");
         this.confessionalProximityTask = ProximityUtils.onNearbyOf(hub, confessionalDetectionEntity, 0.5D, 1.0D, 0.5D, Player.class, player ->
-                this.hub.getServer().getScheduler().runTask(hub, () -> SamaGamesAPI.get().getAchievementManager().getAchievementByID(11).unlock(player.getUniqueId())));
+                this.hub.getServer().getScheduler().runTask(hub, () -> {
+                    try {
+                        SamaGamesAPI.get().getAchievementManager().getAchievementByID(11).unlock(player.getUniqueId());
+                    } catch (AchivementNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }));
 
         ArmorStand bathDetectionEntity = hub.getWorld().spawn(new Location(hub.getWorld(), -148.5, 70.0D, 26.5D), ArmorStand.class);
         this.prepareProximityDetection(bathDetectionEntity, "bath_proximity");
         this.bathProximityTask = ProximityUtils.onNearbyOf(hub, bathDetectionEntity, 5.0D, 3.0D, 5.0D, Player.class, player ->
-                this.hub.getServer().getScheduler().runTask(hub, () -> SamaGamesAPI.get().getAchievementManager().getAchievementByID(12).unlock(player.getUniqueId())));
+                this.hub.getServer().getScheduler().runTask(hub, () -> {
+                    try {
+                        SamaGamesAPI.get().getAchievementManager().getAchievementByID(12).unlock(player.getUniqueId());
+                    } catch (AchivementNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }));
 
         ArmorStand serverRoomDetectionEntity = hub.getWorld().spawn(new Location(hub.getWorld(), -142.5, 40.0D, 78.5D), ArmorStand.class);
         this.prepareProximityDetection(serverRoomDetectionEntity, "server_room_proximity");
         this.serverRoomProximityTask = ProximityUtils.onNearbyOf(hub, serverRoomDetectionEntity, 1.5D, 1.5D, 1.5D, Player.class, player ->
-                this.hub.getServer().getScheduler().runTask(hub, () -> SamaGamesAPI.get().getAchievementManager().getAchievementByID(51).unlock(player.getUniqueId())));
+                this.hub.getServer().getScheduler().runTask(hub, () -> {
+                    try {
+                        SamaGamesAPI.get().getAchievementManager().getAchievementByID(51).unlock(player.getUniqueId());
+                    } catch (AchivementNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }));
 
         ArmorStand webDeveloperArtDetectionEntity = hub.getWorld().spawn(new Location(hub.getWorld(), -178.5, 28.0D, 40.5D), ArmorStand.class);
         this.prepareProximityDetection(webDeveloperArtDetectionEntity, "web_dev_art_proximity");
         this.webDeveloperArtProximityTask = ProximityUtils.onNearbyOf(hub, webDeveloperArtDetectionEntity, 3.0D, 3.0D, 3.0D, Player.class, player ->
-                this.hub.getServer().getScheduler().runTask(hub, () -> SamaGamesAPI.get().getAchievementManager().getAchievementByID(54).unlock(player.getUniqueId())));
+                this.hub.getServer().getScheduler().runTask(hub, () -> {
+                    try {
+                        SamaGamesAPI.get().getAchievementManager().getAchievementByID(54).unlock(player.getUniqueId());
+                    } catch (AchivementNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }));
     }
 
     @Override

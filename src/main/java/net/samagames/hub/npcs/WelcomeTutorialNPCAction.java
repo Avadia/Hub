@@ -1,6 +1,7 @@
 package net.samagames.hub.npcs;
 
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.tools.npc.NPCInteractCallback;
 import org.apache.commons.lang3.tuple.Pair;
@@ -148,9 +149,13 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
         {
             hub.getServer().getScheduler().runTask(hub, () ->
             {
-                if (!interrupted)
-                    SamaGamesAPI.get().getAchievementManager().getAchievementByID(2).unlock(player.getUniqueId());
-                else
+                if (!interrupted) {
+                    try {
+                        SamaGamesAPI.get().getAchievementManager().getAchievementByID(2).unlock(player.getUniqueId());
+                    } catch (AchivementNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else
                     player.teleport(hub.getPlayerManager().getSpawn());
 
                 if (player.hasPermission("hub.fly"))

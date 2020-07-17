@@ -2,6 +2,7 @@ package net.samagames.hub.interactions.meow;
 
 import net.minecraft.server.v1_12_R1.WorldServer;
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.gadgets.GadgetManager;
 import net.samagames.hub.interactions.AbstractInteraction;
@@ -116,8 +117,12 @@ class Meow extends AbstractInteraction {
         this.hub.getGuiManager().openGui(player, new GuiMeow(this.hub, this));
         player.playSound(player.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
 
-        if (!SamaGamesAPI.get().getAchievementManager().isUnlocked(player.getUniqueId(), 19))
-            SamaGamesAPI.get().getAchievementManager().getAchievementByID(19).unlock(player.getUniqueId());
+        try {
+            if (!SamaGamesAPI.get().getAchievementManager().isUnlocked(player.getUniqueId(), 19))
+                SamaGamesAPI.get().getAchievementManager().getAchievementByID(19).unlock(player.getUniqueId());
+        } catch (AchivementNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

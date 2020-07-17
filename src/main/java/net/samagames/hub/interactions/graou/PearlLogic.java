@@ -1,6 +1,7 @@
 package net.samagames.hub.interactions.graou;
 
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.api.games.pearls.Pearl;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.common.AbstractCosmetic;
@@ -104,7 +105,11 @@ class PearlLogic {
             cosmeticSelected.unlock(player);
         }
 
-        SamaGamesAPI.get().getAchievementManager().getAchievementByID(50).unlock(player.getUniqueId());
+        try {
+            SamaGamesAPI.get().getAchievementManager().getAchievementByID(50).unlock(player.getUniqueId());
+        } catch (AchivementNotFoundException e) {
+            e.printStackTrace();
+        }
 
         this.hub.getInteractionManager().getGraouManager().deletePlayerPearl(player.getUniqueId(), pearl.getUUID());
         this.hub.getScoreboardManager().update(player);

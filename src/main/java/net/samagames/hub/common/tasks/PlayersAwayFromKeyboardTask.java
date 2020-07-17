@@ -1,6 +1,7 @@
 package net.samagames.hub.common.tasks;
 
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.hub.Hub;
 
 import java.util.Map;
@@ -46,7 +47,11 @@ public class PlayersAwayFromKeyboardTask extends AbstractTask {
 
             if (timer == 72000) // 1 hour
             {
-                SamaGamesAPI.get().getAchievementManager().getAchievementByID(53).unlock(uuid);
+                try {
+                    SamaGamesAPI.get().getAchievementManager().getAchievementByID(53).unlock(uuid);
+                } catch (AchivementNotFoundException e) {
+                    e.printStackTrace();
+                }
                 this.removePlayer(uuid);
             } else {
                 this.timers.put(uuid, timer);

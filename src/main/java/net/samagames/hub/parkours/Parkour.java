@@ -1,6 +1,7 @@
 package net.samagames.hub.parkours;
 
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.api.permissions.IPermissionsEntity;
 import net.samagames.hub.Hub;
 import net.samagames.hub.common.players.PlayerManager;
@@ -254,8 +255,13 @@ public class Parkour {
 
         this.removePlayer(player);
 
-        if (this.achievementId != -1)
-            SamaGamesAPI.get().getAchievementManager().getAchievementByID(this.achievementId).unlock(player.getUniqueId());
+        if (this.achievementId != -1) {
+            try {
+                SamaGamesAPI.get().getAchievementManager().getAchievementByID(this.achievementId).unlock(player.getUniqueId());
+            } catch (AchivementNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
         this.restoreFly(player);
     }

@@ -7,6 +7,7 @@ import net.samagames.api.achievements.Achievement;
 import net.samagames.api.achievements.AchievementCategory;
 import net.samagames.api.achievements.AchievementProgress;
 import net.samagames.api.achievements.IncrementationAchievement;
+import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.hub.gui.AbstractGui;
 import net.samagames.hub.gui.profile.GuiProfile;
@@ -105,7 +106,13 @@ public class GuiAchievements extends AbstractGui {
                 if (!remaining.contains(achievementId))
                     continue;
 
-                Achievement achievement = SamaGamesAPI.get().getAchievementManager().getAchievementByID(achievementId);
+                Achievement achievement;
+                try {
+                    achievement = SamaGamesAPI.get().getAchievementManager().getAchievementByID(achievementId);
+                } catch (AchivementNotFoundException e) {
+                    e.printStackTrace();
+                    return;
+                }
 
                 /*
                  * We are creating a string who contains the description of the achievement
@@ -125,7 +132,12 @@ public class GuiAchievements extends AbstractGui {
                     if (testAchievementId == achievementId)
                         continue;
 
-                    Achievement remainingAchievement = SamaGamesAPI.get().getAchievementManager().getAchievementByID(testAchievementId);
+                    Achievement remainingAchievement = null;
+                    try {
+                        remainingAchievement = SamaGamesAPI.get().getAchievementManager().getAchievementByID(testAchievementId);
+                    } catch (AchivementNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
                     /*
                      * A family can only contains incrementation achievements
@@ -190,8 +202,20 @@ public class GuiAchievements extends AbstractGui {
                      */
                     family.sort((o1, o2) ->
                     {
-                        String o1Concatenated = Arrays.toString(SamaGamesAPI.get().getAchievementManager().getAchievementByID(o1).getDescription());
-                        String o2Concatenated = Arrays.toString(SamaGamesAPI.get().getAchievementManager().getAchievementByID(o2).getDescription());
+                        String o1Concatenated;
+                        try {
+                            o1Concatenated = Arrays.toString(SamaGamesAPI.get().getAchievementManager().getAchievementByID(o1).getDescription());
+                        } catch (AchivementNotFoundException e) {
+                            e.printStackTrace();
+                            return 0;
+                        }
+                        String o2Concatenated;
+                        try {
+                            o2Concatenated = Arrays.toString(SamaGamesAPI.get().getAchievementManager().getAchievementByID(o2).getDescription());
+                        } catch (AchivementNotFoundException e) {
+                            e.printStackTrace();
+                            return 0;
+                        }
 
                         if (Integer.parseInt(o1Concatenated.replaceAll("[\\D]", "")) < Integer.parseInt(o2Concatenated.replaceAll("[\\D]", "")))
                             return -1;
@@ -336,7 +360,13 @@ public class GuiAchievements extends AbstractGui {
 
         if (this.category != null && CACHE.containsRow(this.category.getID())) {
             for (Triple<Integer, Integer, Boolean> achievementPair : CACHE.get(this.category.getID(), this.page)) {
-                Achievement achievement = SamaGamesAPI.get().getAchievementManager().getAchievementByID(achievementPair.getMiddle());
+                Achievement achievement;
+                try {
+                    achievement = SamaGamesAPI.get().getAchievementManager().getAchievementByID(achievementPair.getMiddle());
+                } catch (AchivementNotFoundException e) {
+                    e.printStackTrace();
+                    return;
+                }
 
                 boolean unlocked = achievement.isUnlocked(player.getUniqueId());
 
@@ -394,7 +424,11 @@ public class GuiAchievements extends AbstractGui {
     public void onClick(Player player, ItemStack stack, String action) {
         if (action.startsWith("category_")) {
             int id = Integer.parseInt(action.substring(9));
-            this.hub.getGuiManager().openGui(player, new GuiAchievements(this.hub, SamaGamesAPI.get().getAchievementManager().getAchievementCategoryByID(id), 0));
+            try {
+                this.hub.getGuiManager().openGui(player, new GuiAchievements(this.hub, SamaGamesAPI.get().getAchievementManager().getAchievementCategoryByID(id), 0));
+            } catch (AchivementNotFoundException e) {
+                e.printStackTrace();
+            }
         } else if (action.equals("page_back")) {
             this.hub.getGuiManager().openGui(player, new GuiAchievements(this.hub, this.category, this.page - 1));
         } else if (action.equals("page_next")) {
