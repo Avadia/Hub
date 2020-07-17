@@ -112,8 +112,6 @@ public class PlayerManager extends AbstractManager {
 
                 player.getInventory().clear();
 
-                this.staticInventory.setInventoryToPlayer(player);
-
                 if (RestrictedVersion.isLoggedInPost19(player)) {
                     try {
                         IPermissionsEntity permissionsEntity = SamaGamesAPI.get().getPermissionsManager().getPlayer(player.getUniqueId());
@@ -130,6 +128,8 @@ public class PlayerManager extends AbstractManager {
                         player.sendMessage(ChatColor.RED + "Une erreur a été détectée lors du chargement de votre joueur, vous devrez peut-être vous reconnecter.");
                     }
                 }
+
+                this.staticInventory.setInventoryToPlayer(player);
 
                 this.updateHiders(player);
 
