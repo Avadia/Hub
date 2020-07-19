@@ -5,7 +5,6 @@ import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.hub.interactions.AbstractInteraction;
 import net.samagames.hub.utils.RestrictedVersion;
-import net.samagames.tools.LocationUtils;
 import net.samagames.tools.ProximityUtils;
 import net.samagames.tools.Titles;
 import org.bukkit.ChatColor;
@@ -51,13 +50,11 @@ class Bumper extends AbstractInteraction implements Listener {
     private final List<UUID> flyingPlayers;
     private final double power;
 
-    Bumper(Hub hub, String location) {
+    Bumper(Hub hub, Location location, double power) {
         super(hub);
 
-        String[] args = location.split(", ");
-
-        this.bumperLocation = LocationUtils.str2loc(location);
-        this.power = Double.parseDouble(args[6]);
+        this.bumperLocation = location;
+        this.power = power;
         this.flyTasks = new HashMap<>();
         this.disclaimerCooldowns = new HashMap<>();
         this.flyingPlayers = new ArrayList<>();

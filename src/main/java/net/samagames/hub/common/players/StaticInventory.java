@@ -135,7 +135,7 @@ public class StaticInventory {
         }
 
         if (RestrictedVersion.isLoggedInPost19(player)) {
-            if (SamaGamesAPI.get().getPermissionsManager().hasPermission(player, "network.vipplus") && SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isElytraActivated()) {
+            if (SamaGamesAPI.get().getPermissionsManager().hasPermission(player, "network.vipplus")) {
                 ItemStack itemStack;
 
                 if (player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.ELYTRA) {
@@ -151,6 +151,6 @@ public class StaticInventory {
             }
         }
 
-        player.getInventory().setHeldItemSlot(0);
+        player.updateInventory();
     }
 }

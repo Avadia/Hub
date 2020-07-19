@@ -16,6 +16,7 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.lang.model.type.NullType;
@@ -161,7 +162,12 @@ public class GadgetManager extends AbstractCosmeticManager<GadgetCosmetic> {
         IPermissionsEntity permissionsEntity = SamaGamesAPI.get().getPermissionsManager().getPlayer(displayer.getPlayer().getUniqueId());
 
         if (permissionsEntity.hasPermission("network.vipplus") && SamaGamesAPI.get().getSettingsManager().getSettings(displayer.getPlayer().getUniqueId()).isElytraActivated()) {
-            displayer.getPlayer().getInventory().setChestplate(new ItemStack(Material.ELYTRA));
+            ItemStack elytra = new ItemStack(Material.ELYTRA);
+            ItemMeta meta = elytra.getItemMeta();
+            meta.setUnbreakable(true);
+            elytra.setItemMeta(meta);
+
+            displayer.getPlayer().getInventory().setChestplate(elytra);
             this.hub.getPlayerManager().getStaticInventory().setInventoryToPlayer(displayer.getPlayer());
         }
     }

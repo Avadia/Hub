@@ -11,16 +11,17 @@ import net.samagames.tools.InventoryUtils;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.PlayerUtils;
 import net.samagames.tools.chat.ActionBarAPI;
-import net.samagames.tools.chat.fanciful.FancyMessage;
 import net.samagames.tools.teamspeak.TeamSpeakAPI;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import redis.clients.jedis.Jedis;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /*
@@ -142,21 +143,21 @@ public class PlayerManager extends AbstractManager {
                 this.checkAchievements(player);
             });
 
-            this.hub.getScheduledExecutorService().schedule(() ->
-            {
-                if (!player.isOnline())
-                    return;
-
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_HARP, 1.0F, 1.0F);
-                player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-
-                new FancyMessage("Hey ! Venez tester notre nouveau jeu ChunkWars ! ").color(ChatColor.YELLOW)
-                        .then("[Cliquez ici]").color(ChatColor.GREEN).style(ChatColor.BOLD).command("/join chunkwars chunkwars_solo")
-                        .formattedTooltip(new FancyMessage("Clic pour rejoindre la file d'attente.").color(ChatColor.YELLOW))
-                        .send(player);
-
-                player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-            }, 10, TimeUnit.SECONDS);
+//            this.hub.getScheduledExecutorService().schedule(() ->
+//            {
+//                if (!player.isOnline())
+//                    return;
+//
+//                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_HARP, 1.0F, 1.0F);
+//                player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+//
+//                new FancyMessage("Hey ! Venez tester notre nouveau jeu ChunkWars ! ").color(ChatColor.YELLOW)
+//                        .then("[Cliquez ici]").color(ChatColor.GREEN).style(ChatColor.BOLD).command("/join chunkwars chunkwars_solo")
+//                        .formattedTooltip(new FancyMessage("Clic pour rejoindre la file d'attente.").color(ChatColor.YELLOW))
+//                        .send(player);
+//
+//                player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+//            }, 10, TimeUnit.SECONDS);
         });
     }
 

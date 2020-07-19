@@ -149,12 +149,11 @@ public class Parkour {
 
     public void checkpoint(Player player, Location location) {
         List<Location> playerCheckpoints = new ArrayList<>(this.playersCheckpoints.get(player.getUniqueId()));
-        Location checkpointFormatted = new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
-        if (playerCheckpoints.contains(checkpointFormatted))
+        if (playerCheckpoints.contains(location))
             return;
 
-        playerCheckpoints.add(checkpointFormatted);
+        playerCheckpoints.add(location);
 
         this.playersCheckpoints.put(player.getUniqueId(), playerCheckpoints);
         this.tries.put(player.getUniqueId(), this.tries.get(player.getUniqueId()) + this.lifesOnCheckpoint);
@@ -307,7 +306,12 @@ public class Parkour {
         IPermissionsEntity permissionsEntity = SamaGamesAPI.get().getPermissionsManager().getPlayer(player.getUniqueId());
 
         if (permissionsEntity.hasPermission("network.vipplus") && SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isElytraActivated()) {
-            player.getInventory().setChestplate(new ItemStack(Material.ELYTRA));
+            ItemStack elytra = new ItemStack(Material.ELYTRA);
+            ItemMeta meta = elytra.getItemMeta();
+            meta.setUnbreakable(true);
+            elytra.setItemMeta(meta);
+
+            player.getInventory().setChestplate(elytra);
             this.hub.getPlayerManager().getStaticInventory().setInventoryToPlayer(player);
         }
 

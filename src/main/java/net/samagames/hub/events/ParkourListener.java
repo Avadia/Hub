@@ -2,7 +2,9 @@ package net.samagames.hub.events;
 
 import net.samagames.hub.Hub;
 import net.samagames.hub.parkours.Parkour;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -45,8 +47,13 @@ public class ParkourListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.GOLD_PLATE) || event.getClickedBlock().getType().equals(Material.IRON_PLATE)) {
                 Parkour parkour = this.hub.getParkourManager().getPlayerParkour(event.getPlayer().getUniqueId());
 
-                if (parkour != null)
-                    parkour.checkpoint(event.getPlayer(), event.getClickedBlock().getLocation());
+                if (parkour != null) {
+                    Location location = event.getClickedBlock().getLocation();
+                    location.getWorld().getNearbyEntities(location, 1.0D, 3.0D, 1.0D).forEach(entity -> {
+                        if (entity.getType().equals(EntityType.ARMOR_STAND) && entity.isCustomNameVisible() && entity.getCustomName().contains("Checkpoint"))
+                            parkour.checkpoint(event.getPlayer(), entity.getLocation().clone().add(0.0D, 1.0D, 0.0D));
+                    });
+                }
             }
         }
     }

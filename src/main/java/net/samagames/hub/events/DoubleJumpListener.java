@@ -71,7 +71,7 @@ public class DoubleJumpListener implements Listener {
         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERDRAGON_FLAP, 1.0F, 1.0F);
 
         for (int i = 0; i < 20; i++)
-            ParticleEffect.CLOUD.display(0.5F, 0.15F, 0.5F, 0.25F, 20, event.getPlayer().getLocation().subtract(0.0F, 0.20F, 0.0F));
+            ParticleEffect.CLOUD.display(0.5F, 0.15F, 0.5F, 0.25F, 20, event.getPlayer().getLocation().subtract(0.0F, 0.20F, 0.0F), 160.0);
 
         event.getPlayer().setAllowFlight(false);
     }

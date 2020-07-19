@@ -1,9 +1,11 @@
 package net.samagames.hub.interactions.bumper;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.samagames.hub.Hub;
 import net.samagames.hub.interactions.AbstractInteractionManager;
+import net.samagames.tools.LocationUtils;
+import org.bukkit.Location;
 
 import java.util.logging.Level;
 
@@ -30,20 +32,19 @@ public class BumperManager extends AbstractInteractionManager<Bumper> {
 
     @Override
     public void loadConfiguration(JsonArray rootJson) {
+        if (rootJson.size() == 0)
+            return;
+
         for (int i = 0; i < rootJson.size(); i++) {
-            JsonElement jsonBumber = rootJson.get(i);
+            JsonObject bumperJson = rootJson.get(i).getAsJsonObject();
 
-            Bumper bumper = null;
+            Location bumperLocation = LocationUtils.str2loc(bumperJson.get("location").getAsString());
+            double power = bumperJson.get("power").getAsDouble();
 
-            try {
-                bumper = new Bumper(this.hub, jsonBumber.getAsString());
-            } catch (Exception ignored) {
-            }
+            Bumper bumper = new Bumper(this.hub, bumperLocation, power);
 
-            if (bumper != null) {
-                this.interactions.add(bumper);
-                this.log(Level.INFO, "Registered bumper at '" + jsonBumber.getAsString());
-            }
+            this.interactions.add(bumper);
+            this.log(Level.INFO, "Registered bumper at '" + LocationUtils.loc2str(bumperLocation));
         }
     }
 }

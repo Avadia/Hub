@@ -92,11 +92,12 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        ItemStack item = event.getItem();
-
-        if (item == null)
+        if (event.getItem() == null)
             return;
+
+        Player player = event.getPlayer();
+        ItemStack item = event.getItem().clone();
+        item.setType(event.getMaterial());
 
         this.hub.getServer().getScheduler().runTaskAsynchronously(this.hub, () -> this.hub.getPlayerManager().getStaticInventory().doInteraction(player, item));
     }
@@ -228,7 +229,7 @@ public class PlayerListener implements Listener {
     private boolean checkElytra(Player player) {
         IPermissionsEntity permissionsEntity = SamaGamesAPI.get().getPermissionsManager().getPlayer(player.getUniqueId());
 
-        if (!permissionsEntity.hasPermission("network.vipplus") || !SamaGamesAPI.get().getSettingsManager().getSettings(player.getUniqueId()).isElytraActivated()) {
+        if (!permissionsEntity.hasPermission("network.vipplus")) {
             player.getInventory().setChestplate(null);
             this.hub.getPlayerManager().getStaticInventory().setInventoryToPlayer(player);
             return false;
