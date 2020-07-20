@@ -7,7 +7,7 @@ import net.samagames.api.achievements.Achievement;
 import net.samagames.api.achievements.AchievementCategory;
 import net.samagames.api.achievements.AchievementProgress;
 import net.samagames.api.achievements.IncrementationAchievement;
-import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
+import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.hub.gui.AbstractGui;
 import net.samagames.hub.gui.profile.GuiProfile;
@@ -109,7 +109,7 @@ public class GuiAchievements extends AbstractGui {
                 Achievement achievement;
                 try {
                     achievement = SamaGamesAPI.get().getAchievementManager().getAchievementByID(achievementId);
-                } catch (AchivementNotFoundException e) {
+                } catch (DataNotFoundException e) {
                     e.printStackTrace();
                     return;
                 }
@@ -135,7 +135,7 @@ public class GuiAchievements extends AbstractGui {
                     Achievement remainingAchievement = null;
                     try {
                         remainingAchievement = SamaGamesAPI.get().getAchievementManager().getAchievementByID(testAchievementId);
-                    } catch (AchivementNotFoundException e) {
+                    } catch (DataNotFoundException e) {
                         e.printStackTrace();
                     }
 
@@ -205,14 +205,14 @@ public class GuiAchievements extends AbstractGui {
                         String o1Concatenated;
                         try {
                             o1Concatenated = Arrays.toString(SamaGamesAPI.get().getAchievementManager().getAchievementByID(o1).getDescription());
-                        } catch (AchivementNotFoundException e) {
+                        } catch (DataNotFoundException e) {
                             e.printStackTrace();
                             return 0;
                         }
                         String o2Concatenated;
                         try {
                             o2Concatenated = Arrays.toString(SamaGamesAPI.get().getAchievementManager().getAchievementByID(o2).getDescription());
-                        } catch (AchivementNotFoundException e) {
+                        } catch (DataNotFoundException e) {
                             e.printStackTrace();
                             return 0;
                         }
@@ -363,7 +363,7 @@ public class GuiAchievements extends AbstractGui {
                 Achievement achievement;
                 try {
                     achievement = SamaGamesAPI.get().getAchievementManager().getAchievementByID(achievementPair.getMiddle());
-                } catch (AchivementNotFoundException e) {
+                } catch (DataNotFoundException e) {
                     e.printStackTrace();
                     return;
                 }
@@ -426,7 +426,7 @@ public class GuiAchievements extends AbstractGui {
             int id = Integer.parseInt(action.substring(9));
             try {
                 this.hub.getGuiManager().openGui(player, new GuiAchievements(this.hub, SamaGamesAPI.get().getAchievementManager().getAchievementCategoryByID(id), 0));
-            } catch (AchivementNotFoundException e) {
+            } catch (DataNotFoundException e) {
                 e.printStackTrace();
             }
         } else if (action.equals("page_back")) {

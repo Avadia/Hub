@@ -122,7 +122,7 @@ public class PlayerListener implements Listener {
                     gameSign.click(event.getPlayer());
                 }
             } else if (material == Material.SKULL) {
-                Optional<AbstractGame> optional = this.hub.getGameManager().getGames().values().stream().filter(game -> game.getWebsiteDescriptionSkull().getBlock().getLocation().equals(event.getClickedBlock().getLocation())).findAny();
+                Optional<AbstractGame> optional = this.hub.getGameManager().getGames().values().stream().filter(game -> game.getWebsiteDescriptionSkull() != null && game.getWebsiteDescriptionSkull().getBlock().getLocation().equals(event.getClickedBlock().getLocation())).findFirst();
 
                 if (optional.isPresent() && optional.get().getWebsiteDescriptionURL() != null)
                     optional.get().showRulesWarning(event.getPlayer());

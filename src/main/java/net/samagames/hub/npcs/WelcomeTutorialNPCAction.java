@@ -1,7 +1,7 @@
 package net.samagames.hub.npcs;
 
 import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
+import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.tools.npc.NPCInteractCallback;
 import org.apache.commons.lang3.tuple.Pair;
@@ -152,7 +152,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
                 if (!interrupted) {
                     try {
                         SamaGamesAPI.get().getAchievementManager().getAchievementByID(2).unlock(player.getUniqueId());
-                    } catch (AchivementNotFoundException e) {
+                    } catch (DataNotFoundException e) {
                         e.printStackTrace();
                     }
                 } else

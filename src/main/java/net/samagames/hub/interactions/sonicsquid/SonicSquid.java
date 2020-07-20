@@ -86,7 +86,7 @@ class SonicSquid extends AbstractInteraction implements Listener {
         if (!this.hasPlayer((Player) event.getEntity()))
             return;
 
-        event.getDismounted().addPassenger(event.getEntity());
+        stop((Player) event.getEntity());
     }
 
     @Override

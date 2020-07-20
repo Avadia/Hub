@@ -1,7 +1,7 @@
 package net.samagames.hub.common.players;
 
 import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
+import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.api.permissions.IPermissionsEntity;
 import net.samagames.hub.Hub;
 import net.samagames.hub.common.managers.AbstractManager;
@@ -245,14 +245,14 @@ public class PlayerManager extends AbstractManager {
         {
             try {
                 SamaGamesAPI.get().getAchievementManager().getAchievementByID(1).unlock(player.getUniqueId());
-            } catch (AchivementNotFoundException e) {
+            } catch (DataNotFoundException e) {
                 e.printStackTrace();
             }
 
             if (SamaGamesAPI.get().getPermissionsManager().hasPermission(player, "network.vip")) {
                 try {
                     SamaGamesAPI.get().getAchievementManager().getAchievementByID(3).unlock(player.getUniqueId());
-                } catch (AchivementNotFoundException e) {
+                } catch (DataNotFoundException e) {
                     e.printStackTrace();
                 }
             }
@@ -260,7 +260,7 @@ public class PlayerManager extends AbstractManager {
             if (SamaGamesAPI.get().getPermissionsManager().hasPermission(player, "network.vipplus")) {
                 try {
                     SamaGamesAPI.get().getAchievementManager().getAchievementByID(4).unlock(player.getUniqueId());
-                } catch (AchivementNotFoundException e) {
+                } catch (DataNotFoundException e) {
                     e.printStackTrace();
                 }
             }
@@ -268,7 +268,7 @@ public class PlayerManager extends AbstractManager {
             if (SamaGamesAPI.get().getPermissionsManager().hasPermission(player, "network.staff")) {
                 try {
                     SamaGamesAPI.get().getAchievementManager().getAchievementByID(52).unlock(player.getUniqueId());
-                } catch (AchivementNotFoundException e) {
+                } catch (DataNotFoundException e) {
                     e.printStackTrace();
                 }
             }
@@ -276,7 +276,7 @@ public class PlayerManager extends AbstractManager {
             try {
                 if (!SamaGamesAPI.get().getAchievementManager().isUnlocked(player.getUniqueId(), 53))
                     this.hub.getTaskManager().getPlayersAwayFromKeyboardTask().registerPlayer(player.getUniqueId());
-            } catch (AchivementNotFoundException e) {
+            } catch (DataNotFoundException e) {
                 e.printStackTrace();
             }
 
@@ -289,7 +289,7 @@ public class PlayerManager extends AbstractManager {
             if (TeamSpeakAPI.isLinked(player.getUniqueId())) {
                 try {
                     SamaGamesAPI.get().getAchievementManager().getAchievementByID(18).unlock(player.getUniqueId());
-                } catch (AchivementNotFoundException e) {
+                } catch (DataNotFoundException e) {
                     e.printStackTrace();
                 }
             }

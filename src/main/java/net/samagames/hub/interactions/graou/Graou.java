@@ -3,7 +3,7 @@ package net.samagames.hub.interactions.graou;
 import net.minecraft.server.v1_12_R1.PathEntity;
 import net.minecraft.server.v1_12_R1.WorldServer;
 import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
+import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.api.games.pearls.Pearl;
 import net.samagames.hub.Hub;
 import net.samagames.hub.interactions.AbstractInteraction;
@@ -125,7 +125,7 @@ class Graou extends AbstractInteraction {
         try {
             if (!SamaGamesAPI.get().getAchievementManager().isUnlocked(player.getUniqueId(), 20))
                 SamaGamesAPI.get().getAchievementManager().getAchievementByID(20).unlock(player.getUniqueId());
-        } catch (AchivementNotFoundException e) {
+        } catch (DataNotFoundException e) {
             e.printStackTrace();
         }
     }

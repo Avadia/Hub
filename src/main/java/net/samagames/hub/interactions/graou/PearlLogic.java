@@ -1,7 +1,7 @@
 package net.samagames.hub.interactions.graou;
 
 import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
+import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.api.games.pearls.Pearl;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.common.AbstractCosmetic;
@@ -107,7 +107,7 @@ class PearlLogic {
 
         try {
             SamaGamesAPI.get().getAchievementManager().getAchievementByID(50).unlock(player.getUniqueId());
-        } catch (AchivementNotFoundException e) {
+        } catch (DataNotFoundException e) {
             e.printStackTrace();
         }
 

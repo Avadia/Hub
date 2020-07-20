@@ -3,7 +3,7 @@ package net.samagames.hub.cosmetics.jukebox;
 import com.xxmicloxx.NoteBlockAPI.Song;
 import com.xxmicloxx.NoteBlockAPI.SongPlayer;
 import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
+import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.api.settings.IPlayerSettings;
 import net.samagames.hub.Hub;
 import net.samagames.hub.common.players.PlayerManager;
@@ -229,13 +229,13 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
                             if (woots > 0) {
                                 try {
                                     SamaGamesAPI.get().getAchievementManager().getAchievementByID(40).unlock(playerUUID);
-                                } catch (AchivementNotFoundException e) {
+                                } catch (DataNotFoundException e) {
                                     e.printStackTrace();
                                 }
                                 Arrays.asList(41, 42, 43, 44).forEach(id -> {
                                     try {
                                         SamaGamesAPI.get().getAchievementManager().incrementAchievement(playerUUID, id, woots);
-                                    } catch (AchivementNotFoundException e) {
+                                    } catch (DataNotFoundException e) {
                                         e.printStackTrace();
                                     }
                                 });
@@ -244,7 +244,7 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
                             Arrays.asList(55, 56, 57).forEach(id -> {
                                 try {
                                     SamaGamesAPI.get().getAchievementManager().incrementAchievement(playerUUID, id, (int) Math.ceil(this.currentPlaylist.getDisk().getSeconds() / 60.0));
-                                } catch (AchivementNotFoundException e) {
+                                } catch (DataNotFoundException e) {
                                     e.printStackTrace();
                                 }
                             });

@@ -1,7 +1,7 @@
 package net.samagames.hub.interactions.bumper;
 
 import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
+import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.hub.interactions.AbstractInteraction;
 import net.samagames.hub.utils.RestrictedVersion;
@@ -100,7 +100,7 @@ class Bumper extends AbstractInteraction implements Listener {
         this.hub.getServer().getScheduler().runTask(this.hub, () -> {
             try {
                 SamaGamesAPI.get().getAchievementManager().getAchievementByID(6).unlock(player.getUniqueId());
-            } catch (AchivementNotFoundException e) {
+            } catch (DataNotFoundException e) {
                 e.printStackTrace();
             }
         });

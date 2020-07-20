@@ -1,7 +1,7 @@
 package net.samagames.hub.common.tasks;
 
 import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
+import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.hub.Hub;
 import net.samagames.hub.common.managers.AbstractManager;
 import net.samagames.tools.ProximityUtils;
@@ -55,7 +55,7 @@ public class TaskManager extends AbstractManager {
                 this.hub.getServer().getScheduler().runTask(hub, () -> {
                     try {
                         SamaGamesAPI.get().getAchievementManager().getAchievementByID(7).unlock(player.getUniqueId());
-                    } catch (AchivementNotFoundException e) {
+                    } catch (DataNotFoundException e) {
                         e.printStackTrace();
                     }
                 }));
@@ -66,7 +66,7 @@ public class TaskManager extends AbstractManager {
                 this.hub.getServer().getScheduler().runTask(hub, () -> {
                     try {
                         SamaGamesAPI.get().getAchievementManager().getAchievementByID(10).unlock(player.getUniqueId());
-                    } catch (AchivementNotFoundException e) {
+                    } catch (DataNotFoundException e) {
                         e.printStackTrace();
                     }
                 }));
@@ -77,7 +77,7 @@ public class TaskManager extends AbstractManager {
                 this.hub.getServer().getScheduler().runTask(hub, () -> {
                     try {
                         SamaGamesAPI.get().getAchievementManager().getAchievementByID(11).unlock(player.getUniqueId());
-                    } catch (AchivementNotFoundException e) {
+                    } catch (DataNotFoundException e) {
                         e.printStackTrace();
                     }
                 }));
@@ -88,7 +88,7 @@ public class TaskManager extends AbstractManager {
                 this.hub.getServer().getScheduler().runTask(hub, () -> {
                     try {
                         SamaGamesAPI.get().getAchievementManager().getAchievementByID(12).unlock(player.getUniqueId());
-                    } catch (AchivementNotFoundException e) {
+                    } catch (DataNotFoundException e) {
                         e.printStackTrace();
                     }
                 }));
@@ -99,7 +99,7 @@ public class TaskManager extends AbstractManager {
                 this.hub.getServer().getScheduler().runTask(hub, () -> {
                     try {
                         SamaGamesAPI.get().getAchievementManager().getAchievementByID(51).unlock(player.getUniqueId());
-                    } catch (AchivementNotFoundException e) {
+                    } catch (DataNotFoundException e) {
                         e.printStackTrace();
                     }
                 }));
@@ -110,7 +110,7 @@ public class TaskManager extends AbstractManager {
                 this.hub.getServer().getScheduler().runTask(hub, () -> {
                     try {
                         SamaGamesAPI.get().getAchievementManager().getAchievementByID(54).unlock(player.getUniqueId());
-                    } catch (AchivementNotFoundException e) {
+                    } catch (DataNotFoundException e) {
                         e.printStackTrace();
                     }
                 }));

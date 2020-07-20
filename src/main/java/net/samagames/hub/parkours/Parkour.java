@@ -1,7 +1,7 @@
 package net.samagames.hub.parkours;
 
 import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.achievements.exceptions.AchivementNotFoundException;
+import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.api.permissions.IPermissionsEntity;
 import net.samagames.hub.Hub;
 import net.samagames.hub.common.players.PlayerManager;
@@ -257,7 +257,7 @@ public class Parkour {
         if (this.achievementId != -1) {
             try {
                 SamaGamesAPI.get().getAchievementManager().getAchievementByID(this.achievementId).unlock(player.getUniqueId());
-            } catch (AchivementNotFoundException e) {
+            } catch (DataNotFoundException e) {
                 e.printStackTrace();
             }
         }

@@ -59,35 +59,35 @@ class EntitySonicSquid extends EntitySquid {
 
     @Override
     public void n() {
-        EntityLiving entityliving = (EntityLiving) this.bG();
+        this.bG().forEach(entityliving -> {
+            if (entityliving == null) {
+                for (Entity e : this.passengers) {
+                    if (e instanceof EntityHuman) {
+                        entityliving = e;
+                        break;
+                    }
+                }
 
-        if (entityliving == null) {
-            for (Entity e : this.passengers) {
-                if (e instanceof EntityHuman) {
-                    entityliving = (EntityLiving) e;
-                    break;
+                if (entityliving == null) {
+                    this.die();
+                    return;
                 }
             }
-
-            if (entityliving == null) {
-                this.die();
-                return;
-            }
-        }
 
         /*Location location = new Location(entityliving.getBukkitEntity().getWorld(), 0, 0, 0, entityliving.yaw, 0);
          this.getBukkitEntity().setVelocity(location.getDirection().multiply(1.025F).normalize());
          this.getBukkitEntity().setVelocity(((Player) entityliving.getBukkitEntity()).getEyeLocation().getDirection().multiply(1.025F));**/
 
-        this.setYawPitch(entityliving.yaw, 0.0F);
-        this.motX = -Math.sin(entityliving.yaw * Math.PI / 180) * 0.7F;
+            this.setYawPitch(entityliving.yaw, 0.0F);
+            this.motX = -Math.sin(entityliving.yaw * Math.PI / 180) * 0.7F;
 
-        this.motY = 0;
-        this.motZ = Math.cos(entityliving.yaw * Math.PI / 180) * 0.7F;
-        this.velocityChanged = true;
-        this.yaw = entityliving.yaw;
-        this.positionChanged = true;
-        this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
+            this.motY = 0;
+            this.motZ = Math.cos(entityliving.yaw * Math.PI / 180) * 0.7F;
+            this.velocityChanged = true;
+            this.yaw = entityliving.yaw;
+            this.positionChanged = true;
+            this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
+        });
     }
 
     @Override
