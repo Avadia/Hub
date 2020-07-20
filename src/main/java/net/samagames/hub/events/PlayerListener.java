@@ -10,10 +10,10 @@ import net.samagames.hub.games.signs.GameSign;
 import net.samagames.hub.gui.profile.GuiClickMe;
 import net.samagames.hub.utils.RestrictedVersion;
 import net.samagames.hub.utils.ServerStatus;
+import net.samagames.tools.GlowEffect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -164,7 +164,7 @@ public class PlayerListener implements Listener {
             ItemMeta meta = stack.getItemMeta();
             meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Ventilateur" + ChatColor.RESET + "" + ChatColor.GRAY + " (Clic-droit)");
             stack.setItemMeta(meta);
-            stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
+            GlowEffect.addGlow(stack);
             ((Player) event.getEntity()).getInventory().setItem(3, stack);
         } else {
             ((Player) event.getEntity()).getInventory().setItem(3, new ItemStack(Material.AIR));
