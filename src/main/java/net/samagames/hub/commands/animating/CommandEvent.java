@@ -109,6 +109,7 @@ public class CommandEvent extends AbstractCommand {
                         gameServiceManagerField.setAccessible(true);
 
                         Timestamp now = new Timestamp(new Date().getTime());
+                        now.setNanos(0);
 
                         GameServiceManager gameServiceManager = (GameServiceManager) gameServiceManagerField.get(this.hub.getServer().getPluginManager().getPlugin("SamaGamesAPI"));
                         gameServiceManager.createEvent(new EventBean(0, player.getUniqueId(), template, REWARDS[rewardsId][0], REWARDS[rewardsId][1], now));
