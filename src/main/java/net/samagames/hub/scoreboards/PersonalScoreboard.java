@@ -1,5 +1,6 @@
 package net.samagames.hub.scoreboards;
 
+import fr.farmvivi.api.commons.Servers;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.player.AbstractPlayerData;
 import net.samagames.hub.Hub;
@@ -41,7 +42,7 @@ class PersonalScoreboard {
         this.hub = hub;
         this.player = player.getUniqueId();
 
-        this.objectiveSign = new ObjectiveSign(SamaGamesAPI.get().getServerName().toLowerCase(), "Avadia");
+        this.objectiveSign = new ObjectiveSign(SamaGamesAPI.get().getServerName().toLowerCase(), Servers.DEFAULT.getName());
 
         this.reloadData();
         this.objectiveSign.addReceiver(player);
@@ -61,7 +62,7 @@ class PersonalScoreboard {
     }
 
     public void setLines(String ip) {
-        this.objectiveSign.setDisplayName(ChatColor.GOLD + "\u2726" + ChatColor.RED + ChatColor.BOLD + " Avadia " + ChatColor.RESET + ChatColor.GOLD + "\u2726");
+        this.objectiveSign.setDisplayName(ChatColor.GOLD + "\u2726" + ChatColor.RED + ChatColor.BOLD + " " + Servers.DEFAULT.getName() + " " + ChatColor.RESET + ChatColor.GOLD + "\u2726");
 
         this.objectiveSign.setLine(0, ChatColor.BLUE + "");
 

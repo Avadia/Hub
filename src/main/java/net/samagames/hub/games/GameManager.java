@@ -48,7 +48,7 @@ public class GameManager extends AbstractManager {
         this.registerGame(new BackEndGame(hub, "beta_vip", "VIP", LocationUtils.str2loc(hub.getConfig().getString("vip-zone")), null, false));
 
         this.registerGame(new UppervoidGame(hub));
-        //this.registerGame(new QuakeGame(hub));
+        this.registerGame(new QuakeGame(hub));
         this.registerGame(new DimensionsGame(hub));
         this.registerGame(new ChunkWarsGame(hub));
         this.registerGame(new BuildingJumpGame(hub));
@@ -80,6 +80,7 @@ public class GameManager extends AbstractManager {
         this.registerGame(new BackEndGame(hub, "bowling", "Bowling", this.hub.getPlayerManager().getSpawn(), null, true));
         this.registerGame(new BackEndGame(hub, "burnthatchicken", "BurnThatChicken", this.hub.getPlayerManager().getSpawn(), null, false));
         this.registerGame(new BackEndGame(hub, "plagiat", "Plagiat", this.hub.getPlayerManager().getSpawn(), null, false));
+        this.registerGame(new BackEndGame(hub, "werewolf", "Werewolf", this.hub.getPlayerManager().getSpawn(), null, false));
 
         // -----
 
