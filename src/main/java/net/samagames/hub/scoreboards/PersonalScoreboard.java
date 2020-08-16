@@ -42,7 +42,7 @@ class PersonalScoreboard {
         this.hub = hub;
         this.player = player.getUniqueId();
 
-        this.objectiveSign = new ObjectiveSign(SamaGamesAPI.get().getServerName().toLowerCase(), Servers.DEFAULT.getName());
+        this.objectiveSign = new ObjectiveSign(SamaGamesAPI.get().getServerName().toLowerCase(), Servers.DEFAULT.getDisplayName());
 
         this.reloadData();
         this.objectiveSign.addReceiver(player);
