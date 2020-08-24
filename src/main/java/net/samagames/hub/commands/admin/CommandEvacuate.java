@@ -51,12 +51,12 @@ public class CommandEvacuate extends AbstractCommand {
         if (this.lock)
             return true;
 
-        this.lock = true;
-
         if (args.length != 1) {
             sender.sendMessage(ChatColor.RED + "Usage: /evacuate <destination>");
             return true;
         }
+
+        this.lock = true;
 
         this.hub.getServer().getScheduler().runTaskTimerAsynchronously(this.hub, () ->
         {
