@@ -117,7 +117,7 @@ public class SignManager extends AbstractManager {
                     continue;
                 }
 
-                gameObject.addSignForMap(map.replace("_", " "), color, template, restrictedVersion, (Sign) block.getState());
+                gameObject.addSignForMap(map, color, template, restrictedVersion, (Sign) block.getState());
 
                 this.log(Level.INFO, "Registered sign zone for the game '" + game + "' and the map '" + map + "'!");
             }

@@ -53,7 +53,7 @@ public class GameSign {
 
     public GameSign(Hub hub, AbstractGame game, String map, ChatColor color, String template, RestrictedVersion restrictedVersion, Sign sign) {
         this.game = game;
-        this.map = map;
+        this.map = map.replaceAll("_", " ");
         this.color = color;
         this.template = template;
         this.restrictedVersion = restrictedVersion;

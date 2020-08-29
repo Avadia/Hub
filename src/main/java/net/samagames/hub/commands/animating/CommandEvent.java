@@ -150,7 +150,7 @@ public class CommandEvent extends AbstractCommand {
                     player.sendMessage("");
 
                     player.sendMessage(ChatColor.WHITE + "- Jeu : " + ChatColor.GRAY + (gameCodeName.equals("hub") ? "hub" : this.hub.getGameManager().getGameByIdentifier(gameCodeName).getName()));
-                    player.sendMessage(ChatColor.WHITE + "- Carte : " + ChatColor.GRAY + map);
+                    player.sendMessage(ChatColor.WHITE + "- Carte : " + ChatColor.GRAY + map.replaceAll("_", " "));
 
                     int[] prices = REWARDS[rewardsId];
                     String pricesLine = "";
@@ -196,9 +196,9 @@ public class CommandEvent extends AbstractCommand {
                     } else {
                         for (String map : this.hub.getGameManager().getGameByIdentifier(gameCodeName).getSigns().keySet()) {
                             new FancyMessage("[\u25B6]").color(ChatColor.GREEN)
-                                    .command("/event create " + gameCodeName + " " + map.replaceAll(" ", "_"))
+                                    .command("/event create " + gameCodeName + " " + map)
                                     .tooltip(ChatColor.GOLD + "» Clic pour sélectionner")
-                                    .then(" " + map).color(ChatColor.GRAY)
+                                    .then(" " + map.replaceAll("_", " ")).color(ChatColor.GRAY)
                                     .send(player);
                         }
                     }
