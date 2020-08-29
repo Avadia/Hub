@@ -196,7 +196,7 @@ public class CommandEvent extends AbstractCommand {
                     } else {
                         for (String map : this.hub.getGameManager().getGameByIdentifier(gameCodeName).getSigns().keySet()) {
                             new FancyMessage("[\u25B6]").color(ChatColor.GREEN)
-                                    .command("/event create " + gameCodeName + " " + map)
+                                    .command("/event create " + gameCodeName + " " + map.replaceAll(" ", "_"))
                                     .tooltip(ChatColor.GOLD + "» Clic pour sélectionner")
                                     .then(" " + map).color(ChatColor.GRAY)
                                     .send(player);
