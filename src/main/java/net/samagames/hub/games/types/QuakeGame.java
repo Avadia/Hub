@@ -1,6 +1,5 @@
 package net.samagames.hub.games.types;
 
-import net.samagames.api.games.GamesNames;
 import net.samagames.api.stats.IPlayerStats;
 import net.samagames.hub.Hub;
 import net.samagames.hub.games.AbstractGame;
@@ -12,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -128,7 +126,7 @@ public class QuakeGame extends AbstractGame {
 
     @Override
     public Location getLobbySpawn() {
-        return new Location(this.hub.getWorld(), 31D, 102.0D, -31D, -90.0F, 0.0F);
+        return new Location(this.hub.getWorld(), 32.5D, 101.0D, -31.5D, -90.0F, 0.0F);
     }
 
     @Override
@@ -138,26 +136,27 @@ public class QuakeGame extends AbstractGame {
 
     @Override
     public List<HubLeaderboard> getLeaderBoards() {
-        List<HubLeaderboard> leaderBoards = new ArrayList<>();
-
-        List<HubLeaderboard.HubLeaderBoardStand> leaderBoardStands1 = new ArrayList<>();
-        leaderBoardStands1.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 37, 102, -24), new Location(this.hub.getWorld(), 38.5, 104, -23.5)));
-        leaderBoardStands1.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 36, 102, -24), new Location(this.hub.getWorld(), 36.5, 104, -24.5)));
-        leaderBoardStands1.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 37, 102, -22), new Location(this.hub.getWorld(), 38.5, 104, -21.5)));
-        leaderBoards.add(new HubLeaderboard(this.hub, GamesNames.QUAKE, "Quake", "Victoires", "wins", new Location(this.hub.getWorld(), 37, 103, -24), leaderBoardStands1));
-
-        List<HubLeaderboard.HubLeaderBoardStand> leaderBoardStands2 = new ArrayList<>();
-        leaderBoardStands2.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 37, 102, -16), new Location(this.hub.getWorld(), 38.5, 104, -15.5)));
-        leaderBoardStands2.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 37, 102, -18), new Location(this.hub.getWorld(), 38.5, 104, -17.5)));
-        leaderBoardStands2.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 36, 102, -16), new Location(this.hub.getWorld(), 36.5, 104, -14.5)));
-        leaderBoards.add(new HubLeaderboard(this.hub, GamesNames.QUAKE, "Quake", "Meurtres", "kills", new Location(this.hub.getWorld(), 37, 103, -16), leaderBoardStands2));
-
-        return leaderBoards;
+//        List<HubLeaderboard> leaderBoards = new ArrayList<>();
+//
+//        List<HubLeaderboard.HubLeaderBoardStand> leaderBoardStands1 = new ArrayList<>();
+//        leaderBoardStands1.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 37, 102, -24), new Location(this.hub.getWorld(), 38.5, 104, -23.5)));
+//        leaderBoardStands1.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 36, 102, -24), new Location(this.hub.getWorld(), 36.5, 104, -24.5)));
+//        leaderBoardStands1.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 37, 102, -22), new Location(this.hub.getWorld(), 38.5, 104, -21.5)));
+//        leaderBoards.add(new HubLeaderboard(this.hub, GamesNames.QUAKE, "Quake", "Victoires", "wins", new Location(this.hub.getWorld(), 37, 103, -24), leaderBoardStands1));
+//
+//        List<HubLeaderboard.HubLeaderBoardStand> leaderBoardStands2 = new ArrayList<>();
+//        leaderBoardStands2.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 37, 102, -16), new Location(this.hub.getWorld(), 38.5, 104, -15.5)));
+//        leaderBoardStands2.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 37, 102, -18), new Location(this.hub.getWorld(), 38.5, 104, -17.5)));
+//        leaderBoardStands2.add(new HubLeaderboard.HubLeaderBoardStand(new Location(this.hub.getWorld(), 36, 102, -16), new Location(this.hub.getWorld(), 36.5, 104, -14.5)));
+//        leaderBoards.add(new HubLeaderboard(this.hub, GamesNames.QUAKE, "Quake", "Meurtres", "kills", new Location(this.hub.getWorld(), 37, 103, -16), leaderBoardStands2));
+//
+//        return leaderBoards;
+        return null;
     }
 
     @Override
     public State getState() {
-        return State.LOCKED;
+        return State.OPENED;
     }
 
     @Override

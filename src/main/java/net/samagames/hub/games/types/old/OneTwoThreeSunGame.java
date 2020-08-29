@@ -1,4 +1,4 @@
-package net.samagames.hub.games.types;
+package net.samagames.hub.games.types.old;
 
 import net.samagames.api.stats.IPlayerStats;
 import net.samagames.hub.Hub;
@@ -101,7 +101,7 @@ public class OneTwoThreeSunGame extends AbstractGame {
 
     @Override
     public State getState() {
-        return State.NEW;
+        return State.LOCKED;
     }
 
     @Override

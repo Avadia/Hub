@@ -1,4 +1,4 @@
-package net.samagames.hub.games.types;
+package net.samagames.hub.games.types.old;
 
 import net.samagames.api.games.GamesNames;
 import net.samagames.api.stats.IPlayerStats;
@@ -153,7 +153,7 @@ public class UHCZoneGame extends AbstractGame {
 
     @Override
     public State getState() {
-        return State.POPULAR;
+        return State.LOCKED;
     }
 
     @Override

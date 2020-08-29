@@ -27,19 +27,19 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class BuildingJumpGame extends AbstractGame {
-    public BuildingJumpGame(Hub hub) {
+public class HangoverGamesGame extends AbstractGame {
+    public HangoverGamesGame(Hub hub) {
         super(hub);
     }
 
     @Override
     public String getCodeName() {
-        return "buildingjump";
+        return "hangovergames";
     }
 
     @Override
     public String getName() {
-        return "Building Jump";
+        return "HangoverGames";
     }
 
     @Override
@@ -49,22 +49,22 @@ public class BuildingJumpGame extends AbstractGame {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(Material.PRISMARINE_SHARD, 1);
+        return new ItemStack(Material.POTION, 1);
     }
 
     @Override
     public String[] getDescription() {
         return new String[]{
-
+                "Buvez le plus d'alcool pour gagner !",
+                "⚠ À ne pas reproduire IRL."
         };
     }
 
     @Override
     public String[] getDevelopers() {
         return new String[]{
-                "AmauryPi",
-                "Reelwens",
-                "Aurelien_Sama"
+                "zyuiop",
+                "BlueSlime"
         };
     }
 
@@ -75,7 +75,7 @@ public class BuildingJumpGame extends AbstractGame {
 
     @Override
     public int getSlotInMainMenu() {
-        return 31;
+        return 23;
     }
 
     @Override
@@ -85,12 +85,12 @@ public class BuildingJumpGame extends AbstractGame {
 
     @Override
     public Location getLobbySpawn() {
-        return new Location(this.hub.getWorld(), -42.5, 105.0D, -31.5D, 130.0F, 0.0F);
+        return new Location(this.hub.getWorld(), -49.5D, 105.0D, -32.0D, 90.0F, 0.0F);
     }
 
     @Override
     public Location getWebsiteDescriptionSkull() {
-        return new Location(this.hub.getWorld(), -44.0, 106.0D, -43.0D, 0.0F, 0.0F);
+        return null;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class BuildingJumpGame extends AbstractGame {
 
     @Override
     public State getState() {
-        return State.NEW;
+        return State.OPENED;
     }
 
     @Override

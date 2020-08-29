@@ -50,37 +50,37 @@ public class GameManager extends AbstractManager {
         this.registerGame(new UppervoidGame(hub));
         this.registerGame(new QuakeGame(hub));
         this.registerGame(new DimensionsGame(hub));
-        this.registerGame(new ChunkWarsGame(hub));
-        this.registerGame(new BuildingJumpGame(hub));
+//        this.registerGame(new ChunkWarsGame(hub));
+//        this.registerGame(new BuildingJumpGame(hub));
 
         // -----
 
-        UHCZoneGame uhcZoneGame = new UHCZoneGame(hub);
-
-        this.registerGame(uhcZoneGame);
-        this.registerGame(new BackEndGame(hub, "uhc", "UHC", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getUHCOriginalStatistics().getPlayedGames() == 0));
-        this.registerGame(new BackEndGame(hub, "uhcrun", "UHCRun", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getUHCRunStatistics().getPlayedGames() == 0));
-        this.registerGame(new BackEndGame(hub, "doublerunner", "DoubleRunner", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getDoubleRunnerStatistics().getPlayedGames() == 0));
-        this.registerGame(new BackEndGame(hub, "uhcrandom", "UHCRandom", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getUHCRandomStatistics().getPlayedGames() == 0));
-        this.registerGame(new BackEndGame(hub, "randomrun", "RandomRun", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getRandomRunStatistics().getPlayedGames() == 0));
-        this.registerGame(new BackEndGame(hub, "ultraflagkeeper", "Run4Flag", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getUltraFlagKeeperStatistics().getPlayedGames() == 0));
+//        UHCZoneGame uhcZoneGame = new UHCZoneGame(hub);
+//
+//        this.registerGame(uhcZoneGame);
+//        this.registerGame(new BackEndGame(hub, "uhc", "UHC", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getUHCOriginalStatistics().getPlayedGames() == 0));
+//        this.registerGame(new BackEndGame(hub, "uhcrun", "UHCRun", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getUHCRunStatistics().getPlayedGames() == 0));
+//        this.registerGame(new BackEndGame(hub, "doublerunner", "DoubleRunner", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getDoubleRunnerStatistics().getPlayedGames() == 0));
+//        this.registerGame(new BackEndGame(hub, "uhcrandom", "UHCRandom", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getUHCRandomStatistics().getPlayedGames() == 0));
+//        this.registerGame(new BackEndGame(hub, "randomrun", "RandomRun", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getRandomRunStatistics().getPlayedGames() == 0));
+//        this.registerGame(new BackEndGame(hub, "ultraflagkeeper", "Run4Flag", uhcZoneGame.getLobbySpawn(), null, false, playerStats -> playerStats.getUltraFlagKeeperStatistics().getPlayedGames() == 0));
 
         // -----
 
-        this.registerGame(new OneTwoThreeSunGame(hub));
+//        this.registerGame(new OneTwoThreeSunGame(hub));
 
-        this.registerGame(new BackEndGame(hub, "witherparty", "WitherParty", this.hub.getPlayerManager().getSpawn(), null, false));
-        this.registerGame(new BackEndGame(hub, "hangovergames", "HangoverGames", this.hub.getPlayerManager().getSpawn(), null, false));
-        this.registerGame(new BackEndGame(hub, "pacman", "PacMan", this.hub.getPlayerManager().getSpawn(), null, false));
-        this.registerGame(new BackEndGame(hub, "flyring", "FlyRing", this.hub.getPlayerManager().getSpawn(), null, false));
-        this.registerGame(new BackEndGame(hub, "casino", "Casino", this.hub.getPlayerManager().getSpawn(), null, false));
-        this.registerGame(new BackEndGame(hub, "agarmc", "AgarMC", this.hub.getPlayerManager().getSpawn(), null, true));
-        this.registerGame(new BackEndGame(hub, "timberman", "TimberMan", this.hub.getPlayerManager().getSpawn(), null, false));
-        this.registerGame(new BackEndGame(hub, "bomberman", "BomberMan", this.hub.getPlayerManager().getSpawn(), null, true));
-        this.registerGame(new BackEndGame(hub, "bowling", "Bowling", this.hub.getPlayerManager().getSpawn(), null, true));
-        this.registerGame(new BackEndGame(hub, "burnthatchicken", "BurnThatChicken", this.hub.getPlayerManager().getSpawn(), null, false));
-        this.registerGame(new BackEndGame(hub, "plagiat", "Plagiat", this.hub.getPlayerManager().getSpawn(), null, false));
-        this.registerGame(new BackEndGame(hub, "werewolf", "LoupGarou", this.hub.getPlayerManager().getSpawn(), null, false));
+//        this.registerGame(new BackEndGame(hub, "witherparty", "WitherParty", this.hub.getPlayerManager().getSpawn(), null, false));
+        this.registerGame(new HangoverGamesGame(hub));
+//        this.registerGame(new BackEndGame(hub, "pacman", "PacMan", this.hub.getPlayerManager().getSpawn(), null, false));
+//        this.registerGame(new BackEndGame(hub, "flyring", "FlyRing", this.hub.getPlayerManager().getSpawn(), null, false));
+//        this.registerGame(new BackEndGame(hub, "casino", "Casino", this.hub.getPlayerManager().getSpawn(), null, false));
+//        this.registerGame(new BackEndGame(hub, "agarmc", "AgarMC", this.hub.getPlayerManager().getSpawn(), null, true));
+//        this.registerGame(new BackEndGame(hub, "timberman", "TimberMan", this.hub.getPlayerManager().getSpawn(), null, false));
+//        this.registerGame(new BackEndGame(hub, "bomberman", "BomberMan", this.hub.getPlayerManager().getSpawn(), null, true));
+//        this.registerGame(new BackEndGame(hub, "bowling", "Bowling", this.hub.getPlayerManager().getSpawn(), null, true));
+//        this.registerGame(new BackEndGame(hub, "burnthatchicken", "BurnThatChicken", this.hub.getPlayerManager().getSpawn(), null, false));
+//        this.registerGame(new BackEndGame(hub, "plagiat", "Plagiat", this.hub.getPlayerManager().getSpawn(), null, false));
+        this.registerGame(new WerewolfGame(hub));
 
         // -----
 
