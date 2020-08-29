@@ -38,11 +38,15 @@ public class CommandSign extends AbstractCommand {
     @Override
     public boolean doAction(Player player, Command command, String s, String[] args) {
         if (args.length < 1) {
-            player.sendMessage(ChatColor.RED + "Usage: /sign <add|maintenance|reload|list> <...>");
+            player.sendMessage(ChatColor.RED + "Usage: /sign <title|add|maintenance|reload|list> <...>");
             return true;
         }
 
         switch (args[0]) {
+            case "title":
+                this.titleSign(player, args);
+                break;
+
             case "add":
                 this.addSign(player, args);
                 break;
@@ -69,6 +73,30 @@ public class CommandSign extends AbstractCommand {
         }
 
         return true;
+    }
+
+    private void titleSign(Player player, String[] args) {
+        if (args.length < 2) {
+            player.sendMessage(ChatColor.RED + "Usage: /sign title <game code name>");
+            return;
+        }
+
+        if (this.hub.getPlayerManager().getSelection(player) == null) {
+            player.sendMessage(ChatColor.RED + "Vous devez sélectionner une zone pour l'ajouter.");
+            return;
+        }
+
+        Location selection = this.hub.getPlayerManager().getSelection(player);
+
+        String game = args[1];
+
+        if (!(selection.getBlock().getState() instanceof Sign)) {
+            player.sendMessage(ChatColor.RED + "Le bloc sélectionné n'est pas un panneau !");
+            return;
+        }
+
+        Sign sign = (Sign) selection.getBlock().getState();
+        this.hub.getSignManager().setSignForGame(game, sign);
     }
 
     private void addSign(Player player, String[] args) {

@@ -83,11 +83,18 @@ public class SignManager extends AbstractManager {
 
             String game = signZoneObject.get("game").getAsString();
 
+            AbstractGame gameObject = this.hub.getGameManager().getGameByIdentifier(game);
+
+            if (gameObject == null) {
+                this.log(Level.SEVERE, "Wanted to register a game sign withing an unknown game!");
+                continue;
+            }
+
             JsonArray maps = signZoneObject.get("maps").getAsJsonArray();
 
             for (int j = 0; j < maps.size(); j++) {
                 JsonObject mapObject = maps.get(j).getAsJsonObject();
-                String map = mapObject.get("map").getAsString();
+                String map = mapObject.get("map").getAsString().replaceAll(" ", "_");
                 String template = mapObject.get("template").getAsString();
                 ChatColor color = ChatColor.valueOf(mapObject.get("color").getAsString());
                 Location sign = LocationUtils.str2loc(mapObject.get("sign").getAsString());
@@ -103,13 +110,6 @@ public class SignManager extends AbstractManager {
                     }
                 }
 
-                AbstractGame gameObject = this.hub.getGameManager().getGameByIdentifier(game);
-
-                if (gameObject == null) {
-                    this.log(Level.SEVERE, "Wanted to register a game sign withing an unknown game!");
-                    continue;
-                }
-
                 Block block = this.hub.getWorld().getBlockAt(sign);
 
                 if (!(block.getState() instanceof Sign)) {
@@ -121,9 +121,54 @@ public class SignManager extends AbstractManager {
 
                 this.log(Level.INFO, "Registered sign zone for the game '" + game + "' and the map '" + map + "'!");
             }
+
+            if (signZoneObject.has("title")) {
+                Location sign = LocationUtils.str2loc(signZoneObject.get("title").getAsString());
+
+                Block block = this.hub.getWorld().getBlockAt(sign);
+
+                if (!(block.getState() instanceof Sign)) {
+                    this.log(Level.SEVERE, "Sign block for game '" + game + "' is not a sign in the world!");
+                    continue;
+                }
+
+                gameObject.setSignForGame((Sign) block.getState());
+
+                this.log(Level.INFO, "Registered sign zone for the game '" + game + "'!");
+            }
         }
 
         this.log(Level.INFO, "Reloaded game sign list.");
+    }
+
+    public void setSignForGame(String game, Sign sign) {
+        JsonObject root = this.jsonConfig.load();
+        JsonArray signZonesArray = root.getAsJsonArray("zones");
+
+        for (int i = 0; i < signZonesArray.size(); i++) {
+            JsonObject signZoneObject = signZonesArray.get(i).getAsJsonObject();
+
+            if (signZoneObject.get("game").getAsString().equals(game)) {
+                signZoneObject.addProperty("title", LocationUtils.loc2str(sign.getLocation()));
+
+                this.jsonConfig.save(root);
+                this.reloadList();
+
+                return;
+            }
+        }
+
+        JsonObject signZoneObject = new JsonObject();
+        signZoneObject.addProperty("game", game);
+
+        signZoneObject.add("maps", new JsonObject().getAsJsonArray());
+
+        signZoneObject.addProperty("title", LocationUtils.loc2str(sign.getLocation()));
+
+        signZonesArray.add(signZoneObject);
+
+        this.jsonConfig.save(root);
+        this.reloadList();
     }
 
     public void setSignForMap(String game, String map, ChatColor color, String template, Sign sign) {

@@ -84,6 +84,22 @@ public abstract class AbstractGame {
 
     public abstract boolean isGroup();
 
+    public void setSignForGame(Sign sign) {
+        sign.setLine(0, "");
+        String[] lines = getName().split(" ");
+        if (lines.length == 1) {
+            sign.setLine(1, ChatColor.BOLD + lines[0]);
+            sign.setLine(2, "");
+        } else if (lines.length == 2) {
+            sign.setLine(1, ChatColor.BOLD + lines[0]);
+            sign.setLine(2, ChatColor.BOLD + lines[1]);
+        } else {
+            sign.setLine(1, ChatColor.BOLD + getName());
+            sign.setLine(2, "");
+        }
+        sign.setLine(3, "");
+    }
+
     public void addSignForMap(String map, ChatColor color, String template, RestrictedVersion restrictedVersion, Sign sign) {
         GameSign gameSign = new GameSign(this.hub, this, map, color, template, restrictedVersion, sign);
 
