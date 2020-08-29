@@ -6,6 +6,7 @@ import net.samagames.hub.Hub;
 import net.samagames.hub.games.leaderboards.HubLeaderboard;
 import net.samagames.hub.games.shops.ShopCategory;
 import net.samagames.hub.games.signs.GameSign;
+import net.samagames.hub.games.signs.TitleSign;
 import net.samagames.hub.utils.RestrictedVersion;
 import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
@@ -39,6 +40,7 @@ import java.util.Map;
 public abstract class AbstractGame {
     protected final Hub hub;
     private final Map<String, List<GameSign>> signs;
+    private TitleSign titleSign;
 
     public AbstractGame(Hub hub) {
         this.hub = hub;
@@ -85,20 +87,9 @@ public abstract class AbstractGame {
     public abstract boolean isGroup();
 
     public void setSignForGame(Sign sign) {
-        sign.setLine(0, "-*--*-");
-        String[] lines = getName().split(" ");
-        if (lines.length == 1) {
-            sign.setLine(1, lines[0]);
-            sign.setLine(2, "");
-        } else if (lines.length == 2) {
-            sign.setLine(1, lines[0]);
-            sign.setLine(2, lines[1]);
-        } else {
-            sign.setLine(1, getName());
-            sign.setLine(2, "");
-        }
-        sign.setLine(3, "-*--*-");
-        hub.getServer().getScheduler().runTaskTimerAsynchronously(hub, sign::update, 20L, 20L);
+        if (this.titleSign != null)
+            this.titleSign.onDelete();
+        this.titleSign = new TitleSign(this.hub, this, sign);
     }
 
     public void addSignForMap(String map, ChatColor color, String template, RestrictedVersion restrictedVersion, Sign sign) {
