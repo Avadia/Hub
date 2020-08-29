@@ -3,7 +3,6 @@ package net.samagames.hub.games.signs;
 import net.minecraft.server.v1_12_R1.*;
 import net.samagames.hub.Hub;
 import net.samagames.hub.games.AbstractGame;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -46,18 +45,9 @@ public class TitleSign {
 
     public void update() {
         this.sign.setLine(0, "");
-        String[] lines = this.game.getName().split(" ");
-        if (lines.length == 1) {
-            this.sign.setLine(1, lines[0]);
-            this.sign.setLine(2, "");
-        } else if (lines.length == 2) {
-            this.sign.setLine(1, lines[0]);
-            this.sign.setLine(2, lines[1]);
-        } else {
-            this.sign.setLine(1, this.game.getName());
-            this.sign.setLine(2, "");
-        }
-        this.sign.setLine(3, "" + ChatColor.YELLOW + this.game.getOnlinePlayers() + " " + ChatColor.DARK_GRAY + "en jeu");
+        this.sign.setLine(1, this.game.getName());
+        this.sign.setLine(2, "");
+        this.sign.setLine(3, this.game.getOnlinePlayers() + " en jeu");
 
         this.updateSign();
     }
