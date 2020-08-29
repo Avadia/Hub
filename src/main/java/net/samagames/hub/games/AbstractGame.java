@@ -98,6 +98,7 @@ public abstract class AbstractGame {
             sign.setLine(2, "");
         }
         sign.setLine(3, "");
+        sign.update();
     }
 
     public void addSignForMap(String map, ChatColor color, String template, RestrictedVersion restrictedVersion, Sign sign) {
