@@ -40,7 +40,7 @@ class JukeboxRegistry extends AbstractCosmeticRegistry<JukeboxDiskCosmetic> {
         if (songsFiles != null && songsFiles.length != 0) {
             for (File songFile : songsFiles) {
                 Song song = NBSDecoder.parse(songFile);
-                this.registerElement(new JukeboxDiskCosmetic(this.hub, Integer.parseInt(song.getDescription()), song, Math.round(song.getLength()) + 1));
+                this.registerElement(new JukeboxDiskCosmetic(this.hub, Integer.parseInt(songFile.getName().split(" - ")[0]), song, Math.round(song.getLength()) + 1));
                 this.hub.getLogger().info("Added song " + song.getTitle() + " by " + song.getAuthor() + " description " + song.getDescription() + " duration " + song.getLength() + " speed " + song.getSpeed());
             }
         }
