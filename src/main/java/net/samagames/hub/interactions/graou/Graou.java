@@ -8,7 +8,6 @@ import net.samagames.api.games.pearls.Pearl;
 import net.samagames.hub.Hub;
 import net.samagames.hub.interactions.AbstractInteraction;
 import net.samagames.hub.interactions.graou.entity.EntityGraou;
-import net.samagames.tools.chat.ActionBarAPI;
 import net.samagames.tools.holograms.Hologram;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -120,9 +119,7 @@ class Graou extends AbstractInteraction {
 
     @Override
     public void play(Player player) {
-        //TODO Graou
-        ActionBarAPI.sendMessage(player, ChatColor.GOLD + "Prochainement...");
-        //this.hub.getGuiManager().openGui(player, new GuiGraou(this.hub, this));
+        this.hub.getGuiManager().openGui(player, new GuiGraou(this.hub, this));
         player.playSound(player.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
 
         try {
