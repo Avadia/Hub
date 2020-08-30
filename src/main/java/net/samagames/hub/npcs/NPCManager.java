@@ -33,7 +33,7 @@ import java.util.logging.Level;
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
 public class NPCManager extends AbstractManager {
-    private static final UUID AURELIEN_SAMA_UUID = UUID.fromString("c59220b1-662f-4aa8-b9d9-72660eb97c10");
+    private static final UUID AURELIEN_SAMA_UUID = UUID.fromString("459e9fd3-0012-469a-bd30-019d1dcf2cc1");
 
     private final List<CustomNPC> npcs;
 
