@@ -6,9 +6,9 @@ import net.samagames.hub.Hub;
 import net.samagames.hub.gui.cosmetics.GuiCosmetics;
 import net.samagames.hub.gui.main.GuiMain;
 import net.samagames.hub.gui.profile.GuiProfile;
+import net.samagames.hub.gui.shop.GuiShop;
 import net.samagames.hub.utils.RestrictedVersion;
 import net.samagames.tools.GlowEffect;
-import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -78,9 +78,7 @@ public class StaticInventory {
         } else if (stack.getType() == Material.ENDER_CHEST) {
             this.hub.getGuiManager().openGui(player, new GuiCosmetics(this.hub));
         } else if (stack.getType() == Material.GOLD_INGOT) {
-            //TODO Boutique
-            ActionBarAPI.sendMessage(player, ChatColor.GOLD + "Prochainement...");
-            //this.hub.getGuiManager().openGui(player, new GuiShop(this.hub));
+            this.hub.getGuiManager().openGui(player, new GuiShop(this.hub));
         } else if (stack.getType() == Material.BARRIER && this.hub.getParkourManager().getPlayerParkour(player.getUniqueId()) != null) {
             this.hub.getParkourManager().getPlayerParkour(player.getUniqueId()).quitPlayer(player);
         } else if (stack.getType() == Material.ENDER_PEARL && this.hub.getParkourManager().getPlayerParkour(player.getUniqueId()) != null) {
