@@ -33,7 +33,7 @@ import java.util.logging.Level;
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
 public class NPCManager extends AbstractManager {
-    private static final UUID AURELIEN_SAMA_UUID = UUID.fromString("459e9fd3-0012-469a-bd30-019d1dcf2cc1");
+    private static final UUID DEFAULT_UUID = UUID.fromString("459e9fd3-0012-469a-bd30-019d1dcf2cc1");
 
     private final List<CustomNPC> npcs;
 
@@ -48,7 +48,7 @@ public class NPCManager extends AbstractManager {
             return;
 
         if (jsonRoot.has("welcome-tutorial")) {
-            CustomNPC welcomeTutorialNPC = SamaGamesAPI.get().getNPCManager().createNPC(LocationUtils.str2loc(jsonRoot.get("welcome-tutorial").getAsString()), AURELIEN_SAMA_UUID, new String[]{
+            CustomNPC welcomeTutorialNPC = SamaGamesAPI.get().getNPCManager().createNPC(LocationUtils.str2loc(jsonRoot.get("welcome-tutorial").getAsString()), DEFAULT_UUID, new String[]{
                     ChatColor.GOLD + "" + ChatColor.BOLD + "Tutoriel de Bienvenue",
                     ChatColor.YELLOW + "" + ChatColor.BOLD + "CLIC DROIT"
             }).setCallback(new WelcomeTutorialNPCAction(hub));
