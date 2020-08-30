@@ -287,7 +287,10 @@ public class JukeboxManager extends AbstractCosmeticManager<JukeboxDiskCosmetic>
 
                 this.hub.getServer().getOnlinePlayers().stream().filter(p -> !this.mutedPlayers.contains(p.getUniqueId())).forEach(p -> this.currentPlaylist.getPlayer().addPlayer(p));
 
-                this.hub.getServer().broadcastMessage(JUKEBOX_TAG + ChatColor.GOLD + this.currentPlaylist.getPlayedBy() + ChatColor.YELLOW + " joue " + ChatColor.GOLD + ChatColor.ITALIC + this.currentPlaylist.getSong().getTitle() + ChatColor.YELLOW + " de " + ChatColor.GOLD + this.currentPlaylist.getSong().getAuthor());
+                if (this.currentPlaylist.getSong().getAuthor() != null && !this.currentPlaylist.getSong().getAuthor().equals(""))
+                    this.hub.getServer().broadcastMessage(JUKEBOX_TAG + ChatColor.GOLD + this.currentPlaylist.getPlayedBy() + ChatColor.YELLOW + " joue " + ChatColor.GOLD + ChatColor.ITALIC + this.currentPlaylist.getSong().getTitle() + ChatColor.YELLOW + " de " + ChatColor.GOLD + this.currentPlaylist.getSong().getAuthor());
+                else
+                    this.hub.getServer().broadcastMessage(JUKEBOX_TAG + ChatColor.GOLD + this.currentPlaylist.getPlayedBy() + ChatColor.YELLOW + " joue " + ChatColor.GOLD + ChatColor.ITALIC + this.currentPlaylist.getSong().getTitle());
                 this.hub.getServer().broadcastMessage(JUKEBOX_TAG + ChatColor.GRAY + ChatColor.ITALIC + "Tapez " + ChatColor.GREEN + "/woot" + ChatColor.GRAY + ChatColor.ITALIC + " pour apprécier ou " + ChatColor.RED + "/meh" + ChatColor.GRAY + ChatColor.ITALIC + " pour indiquer que vous n'aimez pas la musique jouée actuellement et la couper.");
 
                 if (this.barTask == null) {
