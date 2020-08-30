@@ -1,6 +1,6 @@
 package net.samagames.hub.cosmetics.jukebox;
 
-import com.xxmicloxx.NoteBlockAPI.Song;
+import com.xxmicloxx.NoteBlockAPI.model.Song;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.common.AbstractCosmetic;
 

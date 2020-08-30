@@ -1,7 +1,11 @@
 package net.samagames.hub.cosmetics.jukebox;
 
+import com.xxmicloxx.NoteBlockAPI.model.Song;
+import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
 import net.samagames.hub.Hub;
 import net.samagames.hub.cosmetics.common.AbstractCosmeticRegistry;
+
+import java.io.File;
 
 /*
  * This file is part of Hub.
@@ -26,6 +30,20 @@ class JukeboxRegistry extends AbstractCosmeticRegistry<JukeboxDiskCosmetic> {
 
     @Override
     public void register() throws Exception {
+        File songsFolder = new File(this.hub.getDataFolder(), "songs");
+        if (!songsFolder.exists())
+            songsFolder.mkdirs();
+
+        this.hub.getLogger().info("Songs folder: " + songsFolder.getAbsolutePath());
+
+        for (File songFile : songsFolder.listFiles()) {
+            if (songFile.isFile()) {
+                Song song = NBSDecoder.parse(songFile);
+                this.registerElement(new JukeboxDiskCosmetic(this.hub, Integer.parseInt(song.getDescription()), song, Math.round(song.getLength()) + 1));
+                this.hub.getLogger().info("Added song " + song.getTitle() + " by " + song.getAuthor() + " description " + song.getDescription() + " duration " + song.getLength() + " speed " + song.getSpeed());
+            }
+        }
+
 //        JukeboxDiskCosmetic guilesThemeDisk = new JukeboxDiskCosmetic(this.hub, 0, NBSDecoder.parse("GuilesTheme"), 141);
 //        JukeboxDiskCosmetic ryusThemeDisk = new JukeboxDiskCosmetic(this.hub, 1, NBSDecoder.parse("RyusTheme"), 114);
 //        JukeboxDiskCosmetic kensThemeDisk = new JukeboxDiskCosmetic(this.hub, 2, NBSDecoder.parse("KensTheme"), 147);
@@ -48,7 +66,7 @@ class JukeboxRegistry extends AbstractCosmeticRegistry<JukeboxDiskCosmetic> {
 //        JukeboxDiskCosmetic theLostOneWeepingDisk = new JukeboxDiskCosmetic(this.hub, 114, NBSDecoder.parse("TheLostOneWeeping"), 212);
 //        JukeboxDiskCosmetic amenoDisk = new JukeboxDiskCosmetic(this.hub, 141, NBSDecoder.parse("AmenoEra"), 232);
 //        JukeboxDiskCosmetic gameOfThrones = new JukeboxDiskCosmetic(this.hub, 176, NBSDecoder.parse("GameOfThrones"), 122);
-
+//
 //        this.registerElement(guilesThemeDisk);
 //        this.registerElement(ryusThemeDisk);
 //        this.registerElement(kensThemeDisk);

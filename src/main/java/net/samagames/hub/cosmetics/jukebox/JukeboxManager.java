@@ -1,7 +1,7 @@
 package net.samagames.hub.cosmetics.jukebox;
 
-import com.xxmicloxx.NoteBlockAPI.Song;
-import com.xxmicloxx.NoteBlockAPI.SongPlayer;
+import com.xxmicloxx.NoteBlockAPI.model.Song;
+import com.xxmicloxx.NoteBlockAPI.songplayer.SongPlayer;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.api.settings.IPlayerSettings;

@@ -5,7 +5,7 @@ version: 5.0.0
 author: BlueSlime
 website: http://blueslime.fr
 
-depend: [SamaGamesAPI, ProtocolLib, LibsDisguises, EffectLib]
+depend: [ SamaGamesAPI, ProtocolLib, LibsDisguises, EffectLib, NoteBlockAPI ]
 
 commands:
   # Player commands ----------------------------

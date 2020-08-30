@@ -65,8 +65,8 @@ public class GuiCosmetics extends AbstractGui {
         }, DyeColor.GREEN, "pets");
 
         this.randomIcon(4, ChatColor.GRAY + "◢" + ChatColor.WHITE + " Jukebox " + ChatColor.GRAY + "◣", Material.JUKEBOX, new String[]{
-                ChatColor.GOLD + "Prochainement..."
-                //ChatColor.GRAY + "Devenez un véritable SamaDJ !"
+                //ChatColor.GOLD + "Prochainement..."
+                ChatColor.GRAY + "Devenez un véritable DJ !"
         }, DyeColor.WHITE, "jukebox");
 
         this.randomIcon(6, ChatColor.DARK_AQUA + "◼" + ChatColor.AQUA + " Déguisements " + ChatColor.DARK_AQUA + "◼", Material.SKULL_ITEM, new String[]{
@@ -110,9 +110,9 @@ public class GuiCosmetics extends AbstractGui {
 //                this.hub.getGuiManager().openGui(player, new GuiCosmeticsCategory<>(this.hub, "Montures", this.hub.getCosmeticManager().getPetManager(), true));
 //                break;
 
-//            case "jukebox":
-//                this.hub.getGuiManager().openGui(player, new GuiCosmeticsCategory<>(this.hub, "Jukebox", this.hub.getCosmeticManager().getJukeboxManager(), false));
-//                break;
+            case "jukebox":
+                this.hub.getGuiManager().openGui(player, new GuiCosmeticsCategory<>(this.hub, "Jukebox", this.hub.getCosmeticManager().getJukeboxManager(), false));
+                break;
 //
 //            case "disguises":
 //                this.hub.getGuiManager().openGui(player, new GuiCosmeticsCategory<>(this.hub, "Déguisements", this.hub.getCosmeticManager().getDisguiseManager(), true));
