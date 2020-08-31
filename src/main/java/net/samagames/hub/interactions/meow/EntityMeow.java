@@ -23,8 +23,6 @@ import java.util.UUID;
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
 class EntityMeow extends EntityOcelot {
-    private static final UUID OWNER_UUID = UUID.fromString("29b2b527-1b59-45df-b7b0-d5ab20d8731a");
-
     EntityMeow(World world) {
         super(world);
         this.setCatType(2);
@@ -34,7 +32,7 @@ class EntityMeow extends EntityOcelot {
         super.setYawPitch(yaw, pitch);
 
         this.setTamed(true);
-        this.setOwnerUUID(OWNER_UUID);
+        this.setOwnerUUID(UUID.randomUUID());
         this.goalSit.setSitting(true);
         this.persistent = true;
     }

@@ -126,6 +126,9 @@ public class MeowManager extends AbstractInteractionManager<Meow> implements Lis
 
     @Override
     public void loadConfiguration(JsonArray rootJson) {
+        if (rootJson.size() == 0)
+            return;
+
         for (int i = 0; i < rootJson.size(); i++) {
             Location location = LocationUtils.str2loc(rootJson.get(i).getAsString());
             Meow meow = new Meow(this.hub, location);
