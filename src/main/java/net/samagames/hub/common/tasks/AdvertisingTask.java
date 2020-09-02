@@ -39,8 +39,8 @@ class AdvertisingTask extends AbstractTask {
             LINES.add(ChatColor.YELLOW + Servers.DEFAULT.getDisplayName() + " est sur Twitter : " + ChatColor.AQUA + "@" + Servers.DEFAULT.getTwitter() + ChatColor.YELLOW + " !");
         if (!Servers.DEFAULT.getYoutube().equals(""))
             LINES.add(ChatColor.YELLOW + Servers.DEFAULT.getDisplayName() + " est sur YouTube : " + ChatColor.RED + "@" + Servers.DEFAULT.getYoutube() + ChatColor.YELLOW + " !");
-        if (!Servers.DEFAULT.getTeamspeak().equals(""))
-            LINES.add(ChatColor.YELLOW + "Venez discuter sur TeamSpeak : " + ChatColor.GREEN + Servers.DEFAULT.getTeamspeak() + ChatColor.YELLOW + " !");
+//        if (!Servers.DEFAULT.getTeamspeak().equals(""))
+//            LINES.add(ChatColor.YELLOW + "Venez discuter sur TeamSpeak : " + ChatColor.GREEN + Servers.DEFAULT.getTeamspeak() + ChatColor.YELLOW + " !");
         if (!Servers.DEFAULT.getDiscord().equals(""))
             LINES.add(ChatColor.YELLOW + "Venez discuter sur Discord : " + ChatColor.BLUE + Servers.DEFAULT.getDiscord() + ChatColor.YELLOW + " !");
     }
