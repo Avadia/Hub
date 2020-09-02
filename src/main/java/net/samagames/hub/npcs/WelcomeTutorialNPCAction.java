@@ -76,6 +76,17 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
 
         /*
           Chapter III
+          Location: Below the spawn
+         */
+        this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -14.5D, 92.0D, -2.5D, 90.0F, 0.0F), ChatColor.GOLD + "Pourquoi " + Servers.SAMAGAMES.getDisplayName() + " ?", Arrays.asList(
+                Pair.of(Servers.DEFAULT.getDisplayName() + " est bassé sur " + Servers.SAMAGAMES.getDisplayName() + " ;", 75L),
+                Pair.of("un serveur mini-jeux ayant fermé ses portes en 2017 ;", 60L),
+                Pair.of("et qui est passé en open source ;", 40L),
+                Pair.of("pour plus d'informations: https://www.samagames.net/", 42L)
+        )));
+
+        /*
+          Chapter IV
           Location: On a spark of the Uppervoid tnt
          */
         this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -10.5D, 131.0D, 70.5D, 179.2F, 19.7F), ChatColor.GOLD + "Où suis-je ?", Arrays.asList(
@@ -86,7 +97,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
         )));
 
         /*
-          Chapter IV
+          Chapter V
           Location: On front of the DoubleRunner's signs
          */
         this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -80.5D, 111.0D, -10.5D, 180.0F, 0.0F), ChatColor.GOLD + "Comment jouer ?", Arrays.asList(
@@ -98,7 +109,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
         )));
 
         /*
-          Chapter V
+          Chapter VI
           Location: At the spawn before the Dimensions's yodel
          */
         this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -9.5D, 103.0D, -11.5D, 138.5F, 31.5F), ChatColor.GOLD + "Vroom vroom ?", Arrays.asList(
@@ -108,7 +119,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
         )));
 
         /*
-          Chapter VI
+          Chapter VII
           Location: In front of a tornado
          */
         this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), 10.0D, 70.5D, -25.5D, -58.5F, 23.2F), ChatColor.GOLD + "Et si je suis perdu ?", Arrays.asList(
@@ -118,7 +129,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
         )));
 
         /*
-          Chapter VII
+          Chapter VIII
           Location: In front of Meow
          */
         this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -13.5D, 101.0D, -2.5D, 121.0F, 28.0F), ChatColor.GOLD + "Qui est Meow ?", Arrays.asList(
@@ -129,7 +140,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
         )));
 
         /*
-          Chapter VIII
+          Chapter IX
           Location: At the spawn
          */
         this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -11.5D, 106.0D, -1.5D, -90.0F, 90.0F), ChatColor.GOLD + "C'est tout ?", Arrays.asList(
