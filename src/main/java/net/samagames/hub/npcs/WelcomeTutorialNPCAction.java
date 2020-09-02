@@ -100,7 +100,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
           Chapter V
           Location: On front of the DoubleRunner's signs
          */
-        this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -80.5D, 111.0D, -10.5D, 180.0F, 0.0F), ChatColor.GOLD + "Comment jouer ?", Arrays.asList(
+        this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -59.5D, 96.0D, 43.5D, 90.0F, 0.0F), ChatColor.GOLD + "Comment jouer ?", Arrays.asList(
                 Pair.of("Voici des panneaux de jeu.", 50L),
                 Pair.of("En cliquant dessus vous serez en attente.", 54L),
                 Pair.of("Quand assez de joueurs seront en attente ;", 35L),
