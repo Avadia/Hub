@@ -11,7 +11,6 @@ import net.samagames.tools.InventoryUtils;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.PlayerUtils;
 import net.samagames.tools.chat.ActionBarAPI;
-import net.samagames.tools.teamspeak.TeamSpeakAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -280,13 +279,7 @@ public class PlayerManager extends AbstractManager {
                 e.printStackTrace();
             }
 
-            // --
-
-            //
-            // This stop the current Thread, has to be put at the end!
-            //
-
-            if (TeamSpeakAPI.isLinked(player.getUniqueId())) {
+            if (SamaGamesAPI.get().getPlayerManager().getPlayerData(player.getUniqueId()).getDiscordID() != 0L) {
                 try {
                     SamaGamesAPI.get().getAchievementManager().getAchievementByID(18).unlock(player.getUniqueId());
                 } catch (DataNotFoundException e) {
