@@ -31,6 +31,7 @@ public class EntityGraou extends EntityOcelot {
 
     public void postInit(float yaw, float pitch) {
         super.setYawPitch(yaw, pitch);
+        super.setHeadRotation(yaw);
 
         this.setTamed(true);
         this.setOwnerUUID(UUID.randomUUID());
