@@ -1,7 +1,9 @@
 package net.samagames.hub.commands.admin;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
+import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.network.IJoinHandler;
+import net.samagames.api.network.JoinResponse;
+import net.samagames.api.network.ResponseType;
 import net.samagames.hub.Hub;
 import net.samagames.hub.commands.AbstractCommand;
 import net.samagames.tools.Titles;
@@ -10,6 +12,8 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 /*
  * This file is part of Hub.
@@ -74,17 +78,51 @@ public class CommandEvacuate extends AbstractCommand {
             });
 
             if (this.timer == 0) {
+                SamaGamesAPI.get().getJoinManager().registerHandler(new IJoinHandler() {
+                    @Override
+                    public JoinResponse requestJoin(UUID player, JoinResponse response) {
+                        JoinResponse joinResponse = new JoinResponse();
+                        joinResponse.disallow("Hub en cours de fermeture...");
+                        joinResponse.disallow(ResponseType.DENY_CANT_RECEIVE);
+                        return joinResponse;
+                    }
+
+                    @Override
+                    public JoinResponse requestPartyJoin(UUID party, UUID player, JoinResponse response) {
+                        JoinResponse joinResponse = new JoinResponse();
+                        joinResponse.disallow("Hub en cours de fermeture...");
+                        joinResponse.disallow(ResponseType.DENY_CANT_RECEIVE);
+                        return joinResponse;
+                    }
+
+                    @Override
+                    public void onLogin(UUID player, String username) {
+
+                    }
+
+                    @Override
+                    public void finishJoin(Player player) {
+
+                    }
+
+                    @Override
+                    public void onModerationJoin(Player player) {
+
+                    }
+
+                    @Override
+                    public void onLogout(Player player) {
+
+                    }
+                }, 1000);
+
                 this.hub.getServer().broadcastMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Fermeture du hub...");
 
                 for (Player p : this.hub.getServer().getOnlinePlayers())
                     p.playSound(p.getLocation(), Sound.ENTITY_WITHER_SPAWN, 0.9F, 1.0F);
             } else if (this.timer == -1) {
-                for (Player p : this.hub.getServer().getOnlinePlayers()) {
-                    ByteArrayDataOutput out = ByteStreams.newDataOutput();
-                    out.writeUTF("Connect");
-                    out.writeUTF(args[0]);
-                    p.sendPluginMessage(this.hub, "BungeeCord", out.toByteArray());
-                }
+                for (Player p : this.hub.getServer().getOnlinePlayers())
+                    SamaGamesAPI.get().getPlayerManager().connectToServer(p.getUniqueId(), args[0]);
             }
 
             this.timer--;
