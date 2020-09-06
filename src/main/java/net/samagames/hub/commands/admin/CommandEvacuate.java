@@ -85,8 +85,6 @@ public class CommandEvacuate extends AbstractCommand {
                     out.writeUTF(args[0]);
                     p.sendPluginMessage(this.hub, "BungeeCord", out.toByteArray());
                 }
-
-                this.hub.getServer().getScheduler().runTaskLaterAsynchronously(this.hub, () -> this.hub.getServer().shutdown(), 3 * 20L);
             }
 
             this.timer--;
