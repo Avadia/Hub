@@ -85,7 +85,7 @@ public class HangoverGamesGame extends AbstractGame {
 
     @Override
     public Location getLobbySpawn() {
-        return new Location(this.hub.getWorld(), -49.5D, 105.0D, -33.0D, 90.0F, 0.0F);
+        return new Location(this.hub.getWorld(), -48.0D, 105.0D, -41.5D, 180.0F, 0.0F);
     }
 
     @Override
