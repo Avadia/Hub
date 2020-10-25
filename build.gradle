@@ -15,7 +15,7 @@ repositories {
     mavenCentral()
     mavenLocal()
 
-    maven { url "http://maven.elmakers.com/repository/" }
+    maven { url "https://maven.pkg.github.com/Slikey/EffectLib" }
 
     maven {
         url = "https://papermc.io/repo/repository/maven-public/"
@@ -57,7 +57,7 @@ dependencies {
         transitive = false
     }
 
-    compileOnly group: 'de.slikey', name: 'EffectLib', version: '6.3'
+    compileOnly group: 'de.slikey.EffectLib', name: 'effectlib', version: '6.3'
     compileOnly(group: 'plugin', name: 'LibsDisguises', version: '10.0.18-SNAPSHOT', changing: true) {
         transitive = false
     }
