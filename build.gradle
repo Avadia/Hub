@@ -3,7 +3,7 @@ apply plugin: 'idea'
 apply plugin: 'maven'
 
 group = 'net.samagames'
-version = '5.0.0'
+version = '5.0.0-SNAPSHOT'
 archivesBaseName = 'Hub'
 
 sourceCompatibility = 1.8
@@ -28,11 +28,27 @@ repositories {
     maven {
         url 'https://jitpack.io'
     }
+
+    maven {
+        url = "https://nexus.avadia.fr/repository/avadia-minecraft-release/"
+        credentials {
+            username avadiaUser
+            password avadiaPassword
+        }
+    }
+
+    maven {
+        url = "https://nexus.avadia.fr/repository/avadia-minecraft-snapshot/"
+        credentials {
+            username avadiaUser
+            password avadiaPassword
+        }
+    }
 }
 
 dependencies {
-    compileOnly group: 'net.samagames', name: 'SamaGamesAPI', version: '5.0.0', changing: true
-    compileOnly group: 'net.samagames', name: 'PersistanceAPI', version: '1.1.0', changing: true
+    compileOnly group: 'net.samagames', name: 'SamaGamesAPI', version: '5.0.0-SNAPSHOT', changing: true
+    compileOnly group: 'net.samagames', name: 'PersistanceAPI', version: '1.1.0-SNAPSHOT', changing: true
 
     compileOnly(group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.12.2-R0.1-SNAPSHOT', changing: true) {
         transitive = false
@@ -42,11 +58,24 @@ dependencies {
     }
 
     compileOnly group: 'de.slikey', name: 'EffectLib', version: '6.3'
-    compileOnly(group: 'LibsDisguises', name: 'LibsDisguises', version: '10.0.12-SNAPSHOT', changing: true) {
+    compileOnly(group: 'plugin', name: 'LibsDisguises', version: '10.0.18-SNAPSHOT', changing: true) {
         transitive = false
     }
     compileOnly group: 'redis.clients', name: 'jedis', version: '3.3.0'
-    compileOnly group: 'us.myles', name: 'viaversion', version: '3.0.1'
-    compileOnly(group: 'fr.farmvivi', name: 'api-common', version: '2.0.0.0')
-    compileOnly group: 'com.github.koca2000', name: 'NoteBlockAPI', version: '1.6.0'
+    compileOnly group: 'us.myles', name: 'viaversion', version: '3.1.1'
+    compileOnly(group: 'fr.farmvivi', name: 'api-common', version: '2.0.0.0-SNAPSHOT', changing: true)
+    compileOnly group: 'com.github.koca2000', name: 'NoteBlockAPI', version: '1.6.1'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: 'https://nexus.avadia.fr/repository/avadia-minecraft-release/') {
+                authentication(userName: avadiaUser, password: avadiaPassword)
+            }
+            snapshotRepository(url: 'https://nexus.avadia.fr/repository/avadia-minecraft-snapshot/') {
+                authentication(userName: avadiaUser, password: avadiaPassword)
+            }
+        }
+    }
 }
