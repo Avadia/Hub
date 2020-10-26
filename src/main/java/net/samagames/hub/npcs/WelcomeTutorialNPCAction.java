@@ -78,7 +78,7 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
           Chapter III
           Location: Below the spawn
          */
-        this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -14.5D, 92.0D, -2.5D, 90.0F, 0.0F), ChatColor.GOLD + "Pourquoi " + Servers.SAMAGAMES.getDisplayName() + " ?", Arrays.asList(
+        this.tutorial.addChapter(new TutorialChapter(new Location(hub.getWorld(), -12.5D, 92.0D, -2.5D, 90.0F, 0.0F), ChatColor.GOLD + "Pk il y a marqué " + Servers.SAMAGAMES.getDisplayName() + " partout ?", Arrays.asList(
                 Pair.of(Servers.DEFAULT.getDisplayName() + " est bassé sur " + Servers.SAMAGAMES.getDisplayName() + " ;", 75L),
                 Pair.of("un serveur mini-jeux ayant fermé ses portes en 2017 ;", 60L),
                 Pair.of("et qui est passé en open source ;", 40L),
