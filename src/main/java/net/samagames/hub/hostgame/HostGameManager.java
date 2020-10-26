@@ -48,7 +48,7 @@ public class HostGameManager extends AbstractManager {
 
             for (JsonElement location : locations) {
                 Location loc = LocationUtils.str2loc(location.getAsString());
-                hub.getLogger().info("Add new location for host game: " + loc);
+                hub.getLogger().info("Add new location for host game: " + location.getAsString());
                 this.positions.add(loc);
             }
         }
