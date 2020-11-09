@@ -4,11 +4,9 @@ import fr.farmvivi.api.commons.Servers;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.exceptions.DataNotFoundException;
 import net.samagames.hub.Hub;
-import net.samagames.hub.events.DoubleJumpListener;
 import net.samagames.tools.npc.NPCInteractCallback;
 import net.samagames.tools.tutorials.TutorialChapter;
 import org.apache.commons.lang3.tuple.Pair;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,7 +16,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Arrays;
 
@@ -190,12 +187,10 @@ class WelcomeTutorialNPCAction implements NPCInteractCallback, Listener {
                 player.getInventory().clear();
                 player.getInventory().setItem(4, QUIT_STACK);
 
-                //Fix fall bug
-                BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Hub.getInstance(), () -> DoubleJumpListener.allowed.remove(player.getUniqueId()), 1L, 1L);
-
                 this.tutorial.start(player.getUniqueId());
 
-                task.cancel();
+                player.setAllowFlight(true);
+                player.setFlying(true);
             }, 10L);
         }
     }
