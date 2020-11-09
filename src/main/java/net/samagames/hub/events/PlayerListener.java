@@ -156,7 +156,7 @@ public class PlayerListener implements Listener {
             return;
 
         if (!SamaGamesAPI.get().getPermissionsManager().hasPermission(event.getEntity(), "network.vipplus"))
-            if (((Player) event.getEntity()).isFlying() && ((Player) event.getEntity()).getInventory().getChestplate() != null && ((Player) event.getEntity()).getInventory().getChestplate().getType() == Material.ELYTRA)
+            if (((Player) event.getEntity()).isFlying() && ((Player) event.getEntity()).getInventory().getChestplate().getType() == Material.ELYTRA)
                 ((Player) event.getEntity()).getInventory().setChestplate(null);
 
         if (event.isGliding() && RestrictedVersion.isLoggedInPost19((Player) event.getEntity())) {
