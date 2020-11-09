@@ -30,11 +30,10 @@ import java.util.UUID;
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
 public class DoubleJumpListener implements Listener {
-    private final List<UUID> allowed;
+    public static final List<UUID> allowed = new ArrayList<>();
     private final Hub hub;
 
     public DoubleJumpListener(Hub hub) {
-        this.allowed = new ArrayList<>();
         this.hub = hub;
     }
 
@@ -51,16 +50,16 @@ public class DoubleJumpListener implements Listener {
 
         if (event.getPlayer().isOnGround()) {
             event.getPlayer().setAllowFlight(true);
-            this.allowed.add(event.getPlayer().getUniqueId());
+            allowed.add(event.getPlayer().getUniqueId());
         }
     }
 
     @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
-        if (!this.allowed.contains(event.getPlayer().getUniqueId()))
+        if (!allowed.contains(event.getPlayer().getUniqueId()))
             return;
 
-        this.allowed.remove(event.getPlayer().getUniqueId());
+        allowed.remove(event.getPlayer().getUniqueId());
 
         if (this.hub.getPlayerManager().isBusy(event.getPlayer()))
             return;
