@@ -21,7 +21,7 @@ import java.util.function.BiConsumer;
  * You should have received a copy of the GNU General Public License
  * along with Hub.  If not, see <http://www.gnu.org/licenses/>.
  */
-class NPCTutorial extends Tutorial {
+public class NPCTutorial extends Tutorial {
     private BiConsumer<Player, Boolean> consumer;
 
     @Override

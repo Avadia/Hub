@@ -1,6 +1,7 @@
 package net.samagames.hub.events;
 
 import net.samagames.hub.Hub;
+import net.samagames.hub.npcs.WelcomeTutorialNPCAction;
 import net.samagames.tools.ParticleEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -58,6 +59,10 @@ public class DoubleJumpListener implements Listener {
     @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         if (!this.allowed.contains(event.getPlayer().getUniqueId()))
+            return;
+
+        //Fix fall to ground bug
+        if (WelcomeTutorialNPCAction.TUTORIAL.isWatchingTutorial(event.getPlayer().getUniqueId()))
             return;
 
         this.allowed.remove(event.getPlayer().getUniqueId());
