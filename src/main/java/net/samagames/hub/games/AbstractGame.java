@@ -159,5 +159,5 @@ public abstract class AbstractGame {
         return this.getShopConfiguration() != null;
     }
 
-    public enum State {OPENED, NEW, POPULAR, SOON, LOCKED}
+    public enum State {OPENED, NEW, POPULAR, BETA, SOON, LOCKED}
 }

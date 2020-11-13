@@ -131,6 +131,10 @@ public class GuiMain extends AbstractGui {
                         prefix = ChatColor.YELLOW + "" + ChatColor.BOLD + "POPULAIRE !";
                         break;
 
+                    case BETA:
+                        prefix = ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "BETA !";
+                        break;
+
                     case SOON:
                         prefix = ChatColor.RED + "" + ChatColor.BOLD + "BIENTOT !";
                         break;

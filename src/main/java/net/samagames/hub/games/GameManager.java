@@ -82,6 +82,8 @@ public class GameManager extends AbstractManager {
 //        this.registerGame(new BackEndGame(hub, "plagiat", "Plagiat", this.hub.getPlayerManager().getSpawn(), null, false));
         this.registerGame(new WerewolfGame(hub));
 
+        this.registerGame(new BlindGamesGame(hub));
+
         // -----
 
         this.registerGame(new BackEndGame(hub, "event", "Événement", this.hub.getPlayerManager().getSpawn(), null, false));
